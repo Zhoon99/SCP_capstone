@@ -23,13 +23,20 @@ public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long taskId;
-
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "projectinuser", joinColumns = @JoinColumn(name = "projectinuser_id"))
-	private List<ProjectInUser> projectinuser;
-//	@ManyToOne(targetEntity = ProjectInUser.class, fetch = FetchType.LAZY)
-//  @JoinColumn(name = "projectinuser_id")
-//	private ProjectInUser projectinuser;
+	
+	@ManyToOne(targetEntity = ProjectInUser.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "projectinuser_id", insertable =false, updatable =false)
+	private ProjectInUser projectinuser;
+	
+	@Column(name="projectinuser_id")
+	private Long projectinuserId;
+	
+	
+//	@OneToMany(fetch = FetchType.LAZY)
+//	@JoinTable(name = "projectinuser", joinColumns = @JoinColumn(name = "projectinuser_id"))
+//	private List<ProjectInUser> projectinuser;
+	
+	
 //	private List<ProjectInUser> projectinuser = new ArrayList<>();
 	
 	@Column(length = 255)
