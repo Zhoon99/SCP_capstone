@@ -10,17 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "projectinuser")
-
 public class ProjectInUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long proejectinuserId;
+    private Long projectinuserId;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

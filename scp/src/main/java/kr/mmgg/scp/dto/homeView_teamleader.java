@@ -7,8 +7,10 @@ import lombok.Data;
 
 @Data
 public class homeView_teamleader {
-	
+
 	private String projectName;
-	//할일 3개, 사람 3개 뽑아오는 곳
+	// 할일 3개, 사람 3개 뽑아오는 곳
 	private List<Task> tasklist;
+
+	private String userCode;
 }
