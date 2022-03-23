@@ -17,22 +17,4 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ProjectinUserService {
 	
-    private ProjectinUserRepository projectinUserRepository;
-    private TaskRepository taskRepository;
-
-    @Transactional
-    public void test1(Long id) {
-        ProjectInUser user = projectinUserRepository.findByProjectinuserId(id);
-        System.out.println(user.getUser().getUserNickname());
-        System.out.println(user.getProject().getProjectName());
-    }
-
-    @Transactional
-    public void test2(Long projectinuser_id) {
-    	List<Task> task = taskRepository.findTop3ByProjectinuserId(projectinuser_id);
-    	for (int i = 0; i < task.size(); i++) {
-    		System.out.println(task.get(i).getTaskContent());
-		}
-        
-    }
 }
