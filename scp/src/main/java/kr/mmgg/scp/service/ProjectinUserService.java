@@ -9,24 +9,24 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.repository.TaskRepository;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class ProjectinUserService {
-    @Autowired
+	
     private ProjectinUserRepository projectinUserRepository;
-
-    @Autowired
     private TaskRepository taskRepository;
 
     @Transactional
     public void test1(Long id) {
-        ProjectInUser user = projectinUserRepository.findByProjectId(id);
+        ProjectInUser user = projectinUserRepository.findByProjectinuserId(id);
         System.out.println(user.getUser().getUserNickname());
         System.out.println(user.getProject().getProjectName());
     }
 
     @Transactional
-    public void test2(Long Id) {
-        System.out.println(taskRepository.findByProjectinuserId(Id));
+    public void test2(Long projectinuser_id) {
+        System.out.println(taskRepository.findTop3ByProjectinuserId(projectinuser_id));
     }
 }
