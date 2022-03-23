@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.mmgg.scp.dto.homeView_teamleader;
 import kr.mmgg.scp.dto.homeView_teammember;
 import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
+import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.repository.ProjectRepository;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.repository.TaskRepository;
@@ -22,16 +24,25 @@ public class homeService {
 	private TaskRepository taskRepository;
 	private ProjectRepository projectRepository;
 
+	@Transactional
 	public List<homeView_teamleader> homeView_leader(Long userId) {
-		ArrayList<homeView_teamleader> list = new ArrayList<homeView_teamleader>();
-		homeView_teamleader homeview_teamleader = new homeView_teamleader();
-		ProjectinUserRepository project = projectinUserRepository;
-		homeview_teamleader.setProjectName(null);
-		homeview_teamleader.setTasklist(null);
-		homeview_teamleader.setUserCode(null);
-		list.add(homeview_teamleader);
+		List<ProjectInUser> list = projectinUserRepository.findByUserId(userId);
+		// List<Task> tList = taskRepository.findTop3ByProjectinuserId(projectinuser_id);
+		List<homeView_teamleader> dtoList = new ArrayList<homeView_teamleader>();
+		for (int i = 0; i < list.size(); i++) {
+			homeView_teamleader dto = new homeView_teamleader();
+			dto.setProjectName(list.get(i).getProject().getProjectName());
+			dto.setUserCode(list.get(i).getProjectinuserCommoncode());
+			// dto.setTasklist(tasklist);
+			dtoList.add(dto);
+		}
+		
+		return null;
+	}
 
-		return list;
+	@Transactional
+	public void test(Long projectid){
+		System.out.println(taskRepository.findTop3ByProjectId(projectid));
 	}
 
 }

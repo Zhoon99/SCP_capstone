@@ -17,5 +17,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 //    @Query(value = "select * from task t join projectinuser p on t.projectinuser_id = p.projectinuser_id where p.project_id = :projectId ORDER by task_createtime LIMIT 3;", nativeQuery = true)
 //    public List<Task> findByTasksList(@Param("projectId") Long projectId);
 //
-    public List<Task> findTop3ByProjectinuserId(Long projectinuser_id);
+    public List<Task> findTop3ByProjectId(Long projectid);
 }
