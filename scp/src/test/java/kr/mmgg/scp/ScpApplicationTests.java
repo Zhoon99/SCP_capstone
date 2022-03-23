@@ -18,7 +18,7 @@ class ScpApplicationTests {
     
 	@Test
 	void test() {
-		projectinUserService.test1(1L);
+//		projectinUserService.test1(1L);
 		projectinUserService.test2(4L);
 	}
 }
