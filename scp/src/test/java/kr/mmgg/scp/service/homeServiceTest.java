@@ -13,7 +13,7 @@ public class homeServiceTest {
 
     @Test
     void testHomeView_leader() {
-        homeService.test(3L);
+        homeService.homeView_leader(9L);
     }
 
 }
