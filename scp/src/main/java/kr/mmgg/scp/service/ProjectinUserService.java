@@ -20,7 +20,7 @@ public class ProjectinUserService {
 
     @Transactional
     public void test1(Long id) {
-        ProjectInUser user = projectinUserRepository.findByProjectId(id);
+        ProjectInUser user = projectinUserRepository.findByProjectinuserId(id);
         System.out.println(user.getUser().getUserNickname());
         System.out.println(user.getProject().getProjectName());
     }
