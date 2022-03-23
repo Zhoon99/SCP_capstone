@@ -10,4 +10,7 @@ public class ProejctinUserService {
     @Autowired
     private ProjectinUserRepository projectinUserRepository;
 
+    public void test1(Long id) {
+        System.out.println(projectinUserRepository.findById(id));
+    }
 }
