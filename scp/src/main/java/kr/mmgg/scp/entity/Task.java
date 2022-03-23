@@ -1,0 +1,37 @@
+package kr.mmgg.scp.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import lombok.Data;
+
+@Entity
+@Data
+public class Task {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long taskId;
+
+	@ManyToOne(targetEntity = ProjectInUser.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "projectinuser_id")
+	private ProjectInUser projectInUser;
+	
+	@Column(length = 255)
+	private String taskContent;
+	@Column(length = 20)
+	private String taskOwner;
+	@Column(length = 20)
+	private String taskRequester;
+	
+	private Integer taskComplete;
+	private Integer taskAccept;
+	
+	private String taskRequestTime;
+	private String taskDeadline;
+}

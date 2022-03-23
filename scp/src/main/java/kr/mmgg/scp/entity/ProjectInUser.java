@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class ProejectInUser {
+public class ProjectInUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long proejectinuserId;
