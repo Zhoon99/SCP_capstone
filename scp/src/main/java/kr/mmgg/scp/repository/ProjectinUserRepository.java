@@ -12,4 +12,5 @@ import kr.mmgg.scp.entity.ProjectInUser;
 public interface ProjectinUserRepository extends JpaRepository<ProjectInUser, Long> {
 
     public List<ProjectInUser> findByUserId(Long id);
+    public List<ProjectInUser> findByProjectId(Long projectid);
 }
