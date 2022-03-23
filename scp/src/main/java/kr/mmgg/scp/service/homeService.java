@@ -19,12 +19,18 @@ public class homeService {
 	
 	public List<homeView_teamleader> homeView_leader(Long projectId) {
 		ArrayList<homeView_teamleader> list = new ArrayList<homeView_teamleader>();
-		
+		homeView_teamleader homeview_teamleader = new homeView_teamleader();
+		homeview_teamleader.setProjectName(null);
+		homeview_teamleader.setTasklist(null);
+		list.add(homeview_teamleader);
 		return list;
 	}
 	public List<homeView_teammember> homeView_member(Long projectId) {
 		ArrayList<homeView_teammember> list = new ArrayList<homeView_teammember>();
-		
+		homeView_teammember homeview_teammember = new homeView_teammember();
+		homeview_teammember.setProjectName(null);
+		homeview_teammember.setTasklist(null);
+		list.add(homeview_teammember);
 		return list;
 	}
 	
