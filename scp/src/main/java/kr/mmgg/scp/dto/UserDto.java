@@ -1,18 +1,23 @@
 package kr.mmgg.scp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import lombok.ToString;
 
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
+@Data
 public class UserDto {
     private Long id;
     private String userNickname;
     private String userEmail;
     private String userSnstype;
+    private String userRole;
+
+    public UserDto(Long id, String userNickname, String userEmail, String userSnstype, String userRole) {
+        this.id = id;
+        this.userNickname = userNickname;
+        this.userEmail = userEmail;
+        this.userSnstype = userSnstype;
+        this.userRole = userRole;
+    }
 
 }

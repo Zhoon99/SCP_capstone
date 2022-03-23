@@ -1,4 +1,4 @@
-package kr.mmgg.scp.entitiy;
+package kr.mmgg.scp.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,14 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lombok.Getter;
+import kr.mmgg.scp.dto.UserDto;
+import lombok.Data;
 
 @Entity
-@Getter
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(length = 20)
     private String userNickname;
@@ -23,4 +24,8 @@ public class User {
 
     @Column(length = 255)
     private String userSnstype;
+
+    @Column(length = 20)
+    private String userRole;
+
 }
