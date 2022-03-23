@@ -27,21 +27,33 @@ public class homeService {
 	@Transactional
 	public List<homeView_teamleader> homeView_leader(Long userId) {
 		List<ProjectInUser> list = projectinUserRepository.findByUserId(userId);
-		List<Task> tList = new ArrayList<>();
-		List<homeView_teamleader> dtoList = new ArrayList<homeView_teamleader>();
+		List<ProjectInUser> plist;
+		List<Task> tlist;
+		ArrayList<homeView_teamleader> dtoList = new ArrayList<homeView_teamleader>();
 		for (int i = 0; i < list.size(); i++) {
-			tList = taskRepository.findTop3ByProjectinuserId(list.get(i).getProjectinuserId());
-			homeView_teamleader dto = new homeView_teamleader();
-			dto.setProjectName(list.get(i).getProject().getProjectName());
-			dto.setUserCode(list.get(i).getProjectinuserCommoncode());
-			dto.setProjectId(list.get(i).getProjectId());
-			dto.setTasklist(tList);
-			dtoList.add(dto);
-			System.out.println(dto.toString());
+			plist = projectinUserRepository.findByProjectId(list.get(i).getProjectId());
+			for (int j = 0; j < plist.size(); j++) {
+				tlist = taskRepository.findByProjectinuserId(plist.get(j).getProjectinuserId());
+					homeView_teamleader dto = new homeView_teamleader();
+					dto.setProjectName(plist.get(j).getProject().getProjectName());
+					dto.setProjectId(plist.get(j).getProjectId());
+					dto.setTasklist(tlist);
+					dto.setUserCode(plist.get(j).getProjectinuserCommoncode());
+					if(!dto.getTasklist().isEmpty()) {
+						dtoList.add(dto);
+					}
+			}
 		}
-		
-		
-		return null;
+		for (int i = 0; i < dtoList.size(); i++) {
+			for (int j = 0; j < dtoList.get(i).getTasklist().size(); j++) {
+				System.out.println(i+"번째 프로젝트 : "+dtoList.get(i).getProjectName());
+				System.out.println(i+"번째 할일 담당자 : "+dtoList.get(i).getTasklist().get(j).getTaskOwner());
+				System.out.println(i+"번째 할일 요청자 : "+dtoList.get(i).getTasklist().get(j).getTaskRequester());
+				System.out.println(i+"번째 할일 : "+dtoList.get(i).getTasklist().get(j).getTaskContent());
+				System.out.println("-----------------------------------------------------------");
+			}
+		}
+		return dtoList;
 	}
 
 }
