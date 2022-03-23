@@ -27,22 +27,21 @@ public class homeService {
 	@Transactional
 	public List<homeView_teamleader> homeView_leader(Long userId) {
 		List<ProjectInUser> list = projectinUserRepository.findByUserId(userId);
-		// List<Task> tList = taskRepository.findTop3ByProjectinuserId(projectinuser_id);
+		List<Task> tList = new ArrayList<>();
 		List<homeView_teamleader> dtoList = new ArrayList<homeView_teamleader>();
 		for (int i = 0; i < list.size(); i++) {
+			tList = taskRepository.findTop3ByProjectinuserId(list.get(i).getProjectinuserId());
 			homeView_teamleader dto = new homeView_teamleader();
 			dto.setProjectName(list.get(i).getProject().getProjectName());
 			dto.setUserCode(list.get(i).getProjectinuserCommoncode());
-			// dto.setTasklist(tasklist);
+			dto.setProjectId(list.get(i).getProjectId());
+			dto.setTasklist(tList);
 			dtoList.add(dto);
+			System.out.println(dto.toString());
 		}
 		
+		
 		return null;
-	}
-
-	@Transactional
-	public void test(Long projectid){
-		System.out.println(taskRepository.findTop3ByProjectId(projectid));
 	}
 
 }

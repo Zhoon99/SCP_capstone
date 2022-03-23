@@ -14,4 +14,6 @@ public class homeView_teamleader {
 	private List<Task> tasklist;
 
 	private String userCode;
+
+	private Long projectId;
 }
