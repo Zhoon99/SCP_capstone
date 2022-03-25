@@ -7,8 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.mmgg.scp.dto.homeView_teamleader;
-import kr.mmgg.scp.dto.homeView_teammember;
+import kr.mmgg.scp.dto.homeViewDto;
 import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
@@ -22,38 +21,31 @@ import lombok.AllArgsConstructor;
 public class homeService {
 	private ProjectinUserRepository projectinUserRepository;
 	private TaskRepository taskRepository;
-	private ProjectRepository projectRepository;
 
+	// 홈화면 DTO
 	@Transactional
-	public List<homeView_teamleader> homeView_leader(Long userId) {
-		List<ProjectInUser> list = projectinUserRepository.findByUserId(userId);
-		List<ProjectInUser> plist;
-		List<Task> tlist;
-		ArrayList<homeView_teamleader> dtoList = new ArrayList<homeView_teamleader>();
-		for (int i = 0; i < list.size(); i++) {
-			plist = projectinUserRepository.findByProjectId(list.get(i).getProjectId());
-			for (int j = 0; j < plist.size(); j++) {
-				tlist = taskRepository.findByProjectinuserId(plist.get(j).getProjectinuserId());
-					homeView_teamleader dto = new homeView_teamleader();
-					dto.setProjectName(plist.get(j).getProject().getProjectName());
-					dto.setProjectId(plist.get(j).getProjectId());
-					dto.setTasklist(tlist);
-					dto.setUserCode(plist.get(j).getProjectinuserCommoncode());
-					if(!dto.getTasklist().isEmpty()) {
-						dtoList.add(dto);
-					}
+	public List<homeViewDto> homeView_leader(Long userId) {
+		List<ProjectInUser> piuUserIdList = projectinUserRepository.findByUserId(userId);
+		List<ProjectInUser> piuProjectIdList;
+		homeViewDto homeViewDto = new homeViewDto();
+		ArrayList<homeViewDto> homeViewDtoList = new ArrayList<homeViewDto>();
+		for (int i = 0; i < piuUserIdList.size(); i++) {
+			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
+			// 할일 담는곳
+			for (ProjectInUser pTask : piuProjectIdList) {
+				if (!pTask.getTasks().isEmpty()) {
+					homeViewDto.setTasklist(pTask.getTasks());
+				}
 			}
+			// 플젝 아이디 이름 해당 사람의 코드 담기
+			homeViewDto.setProjectId(piuUserIdList.get(i).getProjectId());
+			homeViewDto.setProjectName(piuUserIdList.get(i).getProject().getProjectName());
+			homeViewDto.setUserCode(piuUserIdList.get(i).getProjectinuserCommoncode());
+			homeViewDtoList.add(homeViewDto);
+
 		}
-		for (int i = 0; i < dtoList.size(); i++) {
-			for (int j = 0; j < dtoList.get(i).getTasklist().size(); j++) {
-				System.out.println(i+"번째 프로젝트 : "+dtoList.get(i).getProjectName());
-				System.out.println(i+"번째 할일 담당자 : "+dtoList.get(i).getTasklist().get(j).getTaskOwner());
-				System.out.println(i+"번째 할일 요청자 : "+dtoList.get(i).getTasklist().get(j).getTaskRequester());
-				System.out.println(i+"번째 할일 : "+dtoList.get(i).getTasklist().get(j).getTaskContent());
-				System.out.println("-----------------------------------------------------------");
-			}
-		}
-		return dtoList;
+		System.out.println(homeViewDtoList);
+		return homeViewDtoList;
 	}
 
 }

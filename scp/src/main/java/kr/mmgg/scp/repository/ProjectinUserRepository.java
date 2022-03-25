@@ -11,6 +11,9 @@ import kr.mmgg.scp.entity.ProjectInUser;
 @Repository
 public interface ProjectinUserRepository extends JpaRepository<ProjectInUser, Long> {
 
+    // 유저 아이디로 가져오기
     public List<ProjectInUser> findByUserId(Long id);
+
+    // 프로젝트 아이디로 가져오기
     public List<ProjectInUser> findByProjectId(Long projectid);
 }
