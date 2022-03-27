@@ -26,9 +26,10 @@ public class homeService {
 	public List<homeViewDto> homeView_leader(Long userId) {
 		List<ProjectInUser> piuUserIdList = projectinUserRepository.findByUserId(userId);
 		List<ProjectInUser> piuProjectIdList;
-		homeViewDto homeViewDto = new homeViewDto();
+		homeViewDto homeViewDto;
 		ArrayList<homeViewDto> homeViewDtoList = new ArrayList<homeViewDto>();
 		for (int i = 0; i < piuUserIdList.size(); i++) {
+			homeViewDto = new homeViewDto();
 			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
 			// 할일 담는곳
 			for (ProjectInUser pTask : piuProjectIdList) {
@@ -42,7 +43,6 @@ public class homeService {
 			homeViewDto.setUserCode(piuUserIdList.get(i).getProjectinuserCommoncode());
 			homeViewDtoList.add(homeViewDto);
 		}
-		System.out.println(homeViewDtoList);
 		return homeViewDtoList;
 	}
 
