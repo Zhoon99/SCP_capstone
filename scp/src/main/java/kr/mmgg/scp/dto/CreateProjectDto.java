@@ -8,4 +8,5 @@ import lombok.Data;
 public class CreateProjectDto {
     private String title;
     private List<CreateProjectMemberDto> member;
+
 }
