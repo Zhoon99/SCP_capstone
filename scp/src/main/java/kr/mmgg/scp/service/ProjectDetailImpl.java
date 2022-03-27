@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
+import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
+import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
@@ -46,5 +48,17 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		pdMyTask.setTaskList(piuUserIdAndProjectId.getTasks());
 		System.out.println(pdMyTask);
 		return pdMyTask;
+	}
+
+	@Override
+	public ProjectDetailReceiveTaskDto receiveTask() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProjectDetailRequestTaskDto requestTask() {
+		
+		return null;
 	}
 }

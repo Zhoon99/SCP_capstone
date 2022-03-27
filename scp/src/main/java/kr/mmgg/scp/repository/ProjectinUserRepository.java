@@ -19,4 +19,5 @@ public interface ProjectinUserRepository extends JpaRepository<ProjectInUser, Lo
 
     // 프로젝트 아이디와 유저아이디로 가져옴
     public ProjectInUser findByUserIdAndProjectId(Long userId, Long projectId);
+    
 }
