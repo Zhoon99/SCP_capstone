@@ -6,6 +6,6 @@ import kr.mmgg.scp.entity.Task;
 import lombok.Data;
 
 @Data
-public class ProjectDetailAllTaskDto {
-	private List<Task> tasklist;
+public class ProjectDetailReceiveTaskDto {
+	private List<Task> tlist;
 }
