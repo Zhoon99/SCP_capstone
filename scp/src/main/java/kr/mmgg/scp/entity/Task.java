@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -52,4 +53,6 @@ public class Task {
 
 	private String taskRequestTime;
 	private String taskDeadline;
+	
+	private String taskCreatetime;
 }
