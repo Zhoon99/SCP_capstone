@@ -21,7 +21,7 @@ import lombok.ToString;
 
 @Entity
 @Data
-// @ToString(exclude = "projectinuser")
+//@ToString(exclude = "projectinuser")
 public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,9 +50,8 @@ public class Task {
 
 	private Integer taskComplete;
 	private Integer taskAccept;
-
-	private String taskRequestTime;
-	private String taskDeadline;
 	
+	private String taskRequesttime;
+	private String taskDeadline;
 	private String taskCreatetime;
 }
