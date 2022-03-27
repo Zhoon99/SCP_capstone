@@ -20,7 +20,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class homeService {
 	private ProjectinUserRepository projectinUserRepository;
-	private TaskRepository taskRepository;
 
 	// 홈화면 DTO
 	@Transactional
@@ -42,7 +41,6 @@ public class homeService {
 			homeViewDto.setProjectName(piuUserIdList.get(i).getProject().getProjectName());
 			homeViewDto.setUserCode(piuUserIdList.get(i).getProjectinuserCommoncode());
 			homeViewDtoList.add(homeViewDto);
-
 		}
 		System.out.println(homeViewDtoList);
 		return homeViewDtoList;
