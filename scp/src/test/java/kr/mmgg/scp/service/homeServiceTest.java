@@ -9,14 +9,14 @@ import kr.mmgg.scp.repository.ProjectinUserRepository;
 @SpringBootTest
 public class homeServiceTest {
     @Autowired
-    private homeService homeService;
+    private HomeService homeService;
 
     @Autowired
     private ProjectDetailImpl impl;
 
     @Test
     void testallproject() {
-    	impl.allTask(1L);
+        impl.allTask(1L);
     }
 
 }
