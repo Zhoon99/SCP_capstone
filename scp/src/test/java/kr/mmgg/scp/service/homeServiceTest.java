@@ -11,9 +11,12 @@ public class homeServiceTest {
     @Autowired
     private homeService homeService;
 
+    @Autowired
+    private ProjectDetailImpl impl;
+
     @Test
-    void testHomeView_leader() {
-        homeService.homeView_leader(9L);
+    void testallproject() {
+    	impl.allTask(1L);
     }
 
 }

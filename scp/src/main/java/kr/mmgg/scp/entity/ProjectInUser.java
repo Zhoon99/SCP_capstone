@@ -48,5 +48,4 @@ public class ProjectInUser {
 
     @OneToMany(mappedBy = "projectinuser")
     private List<Task> tasks = new ArrayList<>();
-
 }

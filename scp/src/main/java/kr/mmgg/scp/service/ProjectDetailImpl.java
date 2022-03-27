@@ -13,16 +13,28 @@ import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class ProjectDetailImpl implements ProjectDetailService {
-	@Autowired
+
 	private ProjectinUserRepository projectinUserRepository;
 
+	@Transactional
 	@Override
-	public List<ProjectDetailAllTaskDto> allTask() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProjectDetailAllTaskDto> allTask(Long projectId) {
+		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
+		ArrayList<ProjectDetailAllTaskDto> list = new ArrayList<ProjectDetailAllTaskDto>();
+		ProjectDetailAllTaskDto dto;
+		for (int i = 0; i < plist.size(); i++) {
+			dto = new ProjectDetailAllTaskDto();
+			if (!plist.get(i).getTasks().isEmpty()) {
+				dto.setTasklist(plist.get(i).getTasks());
+				list.add(dto);
+			}
+		}
+		return list;
 	}
 
 	// 프로젝트의 자신의 할일 가져오기
