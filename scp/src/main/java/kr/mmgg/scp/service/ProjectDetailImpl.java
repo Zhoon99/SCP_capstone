@@ -34,6 +34,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			if (!plist.get(i).getTasks().isEmpty()) {
 				dto.setTasklist(plist.get(i).getTasks());
 				list.add(dto);
+				System.out.println(dto.toString());
 			}
 		}
 		return list;
@@ -46,7 +47,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId, projectId);
 		ProjectDetailMyTaskDto pdMyTask = new ProjectDetailMyTaskDto();
 		pdMyTask.setTaskList(piuUserIdAndProjectId.getTasks());
-		System.out.println(pdMyTask);
+		System.out.println(pdMyTask.toString());
 		return pdMyTask;
 	}
 

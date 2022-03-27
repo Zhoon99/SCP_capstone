@@ -10,7 +10,13 @@ public class ProjectDetailImplTest {
     private ProjectDetailImpl projectDetailImpl;
 
     @Test
-    void testMyTask() {
-        projectDetailImpl.myTask(3L, 1L);
+    void 전체할일가져오기() {
+    	projectDetailImpl.allTask(1L); 
     }
+    
+    @Test
+    void 내할일가져오기() {
+        projectDetailImpl.myTask(1L, 1L);
+    }
+    
 }
