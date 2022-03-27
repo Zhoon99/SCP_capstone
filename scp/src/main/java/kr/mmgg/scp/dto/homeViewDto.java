@@ -6,7 +6,7 @@ import kr.mmgg.scp.entity.Task;
 import lombok.Data;
 
 @Data
-public class homeViewDto {
+public class HomeViewDto {
 
 	private String projectName;
 

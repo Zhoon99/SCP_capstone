@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.mmgg.scp.dto.homeViewDto;
+import kr.mmgg.scp.dto.HomeViewDto;
 import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
@@ -18,18 +18,18 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class homeService {
+public class HomeService {
 	private ProjectinUserRepository projectinUserRepository;
 
 	// 홈화면 DTO
 	@Transactional
-	public List<homeViewDto> homeView_leader(Long userId) {
+	public List<HomeViewDto> homeView_leader(Long userId) {
 		List<ProjectInUser> piuUserIdList = projectinUserRepository.findByUserId(userId);
 		List<ProjectInUser> piuProjectIdList;
-		homeViewDto homeViewDto;
-		ArrayList<homeViewDto> homeViewDtoList = new ArrayList<homeViewDto>();
+		HomeViewDto homeViewDto;
+		ArrayList<HomeViewDto> homeViewDtoList = new ArrayList<HomeViewDto>();
 		for (int i = 0; i < piuUserIdList.size(); i++) {
-			homeViewDto = new homeViewDto();
+			homeViewDto = new HomeViewDto();
 			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
 			// 할일 담는곳
 			for (ProjectInUser pTask : piuProjectIdList) {
