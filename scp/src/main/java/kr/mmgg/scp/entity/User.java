@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,10 +14,12 @@ import javax.persistence.Table;
 
 import kr.mmgg.scp.dto.UserDto;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
 @Table(name = "user")
+@ToString(exclude = "teaminusers")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
