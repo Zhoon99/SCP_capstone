@@ -6,6 +6,6 @@ import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.entity.Task;
 
 public interface ProjectDetailService {
-	public List<ProjectDetailAllTaskDto> allTask();
+	public List<ProjectDetailAllTaskDto> allTask(Long userId);
 //	public List<ProjectDetailMyTaskDto> myTask();
 }
