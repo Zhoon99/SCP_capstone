@@ -1,10 +1,14 @@
 package kr.mmgg.scp.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import kr.mmgg.scp.dto.UserDto;
@@ -30,4 +34,6 @@ public class User {
     @Column(length = 20)
     private String userRole;
 
+    @OneToMany(mappedBy = "user")
+    private List<Teaminuser> teaminusers = new ArrayList<>();
 }
