@@ -4,13 +4,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import kr.mmgg.scp.repository.ProjectinUserRepository;
+
 @SpringBootTest
-public class ProejctinUserServiceTest {
+public class homeServiceTest {
     @Autowired
-    private ProejctinUserService proejctinUserService;
+    private HomeServicelmpl homeService;
+
+    @Autowired
+    private ProjectDetailImpl impl;
 
     @Test
-    void testTest1() {
-        proejctinUserService.test1(1L);
+    void testallproject() {
+        impl.allTask(1L);
     }
 }

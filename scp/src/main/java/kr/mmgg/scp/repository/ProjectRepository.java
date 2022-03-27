@@ -7,5 +7,5 @@ import kr.mmgg.scp.entity.Project;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-
+	public Project findByProjectId(Long projectId);
 }
