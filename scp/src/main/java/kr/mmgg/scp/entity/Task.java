@@ -1,9 +1,5 @@
 package kr.mmgg.scp.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,17 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 @Entity
 @Data
-//@ToString(exclude = "projectinuser")
+// @ToString(exclude = "projectinuser")
 public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +42,7 @@ public class Task {
 
 	private Integer taskComplete;
 	private Integer taskAccept;
-	
+
 	private String taskRequesttime;
 	private String taskDeadline;
 	private String taskCreatetime;

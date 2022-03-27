@@ -13,9 +13,11 @@ import javax.persistence.Table;
 
 import kr.mmgg.scp.dto.UserDto;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(exclude = "teaminusers")
 @Table(name = "user")
 public class User {
     @Id
