@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Getter @Setter
 @AllArgsConstructor
@@ -19,10 +21,12 @@ public class Teaminuser {
     private String teaminuserCommoncode;
     private Integer teaminuserMaker;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
-
+    
+    @JsonIgnore
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", insertable = false, updatable = false)
     private Team team;

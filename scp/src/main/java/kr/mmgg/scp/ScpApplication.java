@@ -9,5 +9,4 @@ public class ScpApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ScpApplication.class, args);
 	}
-
 }

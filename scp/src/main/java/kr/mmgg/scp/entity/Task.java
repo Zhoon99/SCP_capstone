@@ -15,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -26,7 +28,8 @@ public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long taskId;
-
+	
+	@JsonIgnore
 	@ManyToOne(targetEntity = ProjectInUser.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "projectinuser_id", insertable = false, updatable = false)
 	private ProjectInUser projectinuser;
