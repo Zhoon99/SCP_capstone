@@ -43,7 +43,6 @@ public class ProjectController {
     @RequestMapping(value = "/mytask/{userId}/{projectId}", method = RequestMethod.GET)
     public ResponseEntity<ProjectDetailMyTaskDto> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
         ProjectDetailMyTaskDto pdmtList = projectDetailImpl.myTask(userId, projectId);
-        System.out.println(pdmtList);
         return (pdmtList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdmtList)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
