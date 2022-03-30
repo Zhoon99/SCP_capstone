@@ -6,24 +6,17 @@ import kr.mmgg.scp.dto.CreateProjectDto;
 import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.RequestTask;
-import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
-import kr.mmgg.scp.repository.ProjectRepository;
-import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import kr.mmgg.scp.service.ProjectDetailImpl;
-import kr.mmgg.scp.service.ProjectDetailService;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
-import javax.websocket.server.PathParam;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RestController
 @AllArgsConstructor
 public class ProjectController {
+
     private HomeServicelmpl homeServiceImpl;
     private ProjectDetailImpl projectDetailImpl;
 
@@ -63,12 +57,22 @@ public class ProjectController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    // @Transactional
+    // @RequestMapping(value = "/sendtask", method = RequestMethod.POST)
+    // public ResponseEntity<List<Task>> sendTask(@RequestBody
+    // ProjectDetailSendTaskDto dto) {
+    // List<Task> tList = projectDetailImpl.sendTask(dto);
+    // return (tList != null) ? ResponseEntity.status(HttpStatus.OK).body(tList)
+    // : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    // }
     @Transactional
     @RequestMapping(value = "/sendtask", method = RequestMethod.POST)
-    public ResponseEntity<List<Task>> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
-        List<Task> tList = projectDetailImpl.sendTask(dto);
-        return (tList != null) ? ResponseEntity.status(HttpStatus.OK).body(tList)
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<ProjectDetailSendTaskDto> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
+        if (projectDetailImpl.sendTask(dto)) {
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping(value = "/sendtask")

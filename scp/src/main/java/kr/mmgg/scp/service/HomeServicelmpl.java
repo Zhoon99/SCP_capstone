@@ -47,7 +47,8 @@ public class HomeServicelmpl implements HomeService {
 		}
 		return homeViewDtoList;
 	}
-
+	
+	// 프로젝트 생성
 	@Override
 	@Transactional
 	public List<ProjectInUser> projectCreate(CreateProjectDto dto) {
