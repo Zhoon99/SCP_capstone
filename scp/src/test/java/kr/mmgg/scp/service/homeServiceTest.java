@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class homeServiceTest {
     @Autowired
-    private HomeServicelmpl homeService;
+    private HomeServicelmpl homeServiceImpl;
 
     @Autowired
     private ProjectDetailImpl impl;
