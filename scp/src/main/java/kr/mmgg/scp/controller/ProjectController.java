@@ -60,8 +60,8 @@ public class ProjectController {
     }
     
     @RequestMapping(value = "/sendtask", method = RequestMethod.POST)
-    public ResponseEntity<List<ProjectDetailSendTaskDto>> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
-    	List<ProjectDetailSendTaskDto> pdstList;
-    	return null;
+    public void sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
+    	System.out.println(dto);
+    	projectDetailImpl.sendTask(dto);
     }
 }

@@ -19,5 +19,5 @@ public interface ProjectDetailService {
 	
 	public ProjectDetailRequestTaskDto requestTask();
 	
-	public void sendTask(Task sendTask);
+	public void sendTask(ProjectDetailSendTaskDto dto);
 }

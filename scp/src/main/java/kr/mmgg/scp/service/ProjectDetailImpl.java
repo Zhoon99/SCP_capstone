@@ -66,9 +66,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 
 	//미완성 commit
 	@Override
-	public void sendTask(Task sendTask) {
-		sendTask.setTaskAccept(0);
-		sendTask.setTaskComplete(0);
-		taskRepository.save(sendTask);
+	public void sendTask(ProjectDetailSendTaskDto dto) {
+		System.out.println(dto);
+//		taskRepository.save(dto.getTasklist());
 	}
 }

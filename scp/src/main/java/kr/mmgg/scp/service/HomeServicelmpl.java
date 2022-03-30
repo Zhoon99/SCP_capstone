@@ -32,7 +32,8 @@ public class HomeServicelmpl implements HomeService {
 		for (int i = 0; i < piuUserIdList.size(); i++) {
 			homeViewDto = new HomeViewDto();
 			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
-			// 할일 담는곳
+			// 할일 담는곳 
+			
 			for (ProjectInUser pTask : piuProjectIdList) {
 				if (!pTask.getTasks().isEmpty()) { 
 					homeViewDto.setTasklist(pTask.getTasks());
