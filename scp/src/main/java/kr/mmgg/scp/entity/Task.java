@@ -1,9 +1,5 @@
 package kr.mmgg.scp.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,13 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
-import lombok.ToString;
 
 @Entity
 @Data
@@ -27,6 +21,7 @@ public class Task {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long taskId;
 
+	@JsonIgnore
 	@ManyToOne(targetEntity = ProjectInUser.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "projectinuser_id", insertable = false, updatable = false)
 	private ProjectInUser projectinuser;
@@ -51,8 +46,7 @@ public class Task {
 	private Integer taskComplete;
 	private Integer taskAccept;
 
-	private String taskRequestTime;
+	private String taskRequesttime;
 	private String taskDeadline;
-	
 	private String taskCreatetime;
 }

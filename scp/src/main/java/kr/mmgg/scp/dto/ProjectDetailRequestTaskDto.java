@@ -7,5 +7,5 @@ import lombok.Data;
 
 @Data
 public class ProjectDetailRequestTaskDto {
-	private List<Task> tlist;
+	private List<Task> tasklist;
 }

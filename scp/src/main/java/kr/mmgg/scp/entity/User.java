@@ -11,11 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import kr.mmgg.scp.dto.UserDto;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(exclude = "teaminusers")
 @Table(name = "user")
 public class User {
     @Id
@@ -34,6 +38,8 @@ public class User {
     @Column(length = 20)
     private String userRole;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Teaminuser> teaminusers = new ArrayList<>();
+
 }
