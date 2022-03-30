@@ -1,6 +1,8 @@
 package kr.mmgg.scp.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
+import kr.mmgg.scp.service.ProjectDetailImpl;
+import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.CreateProjectDto;
 import kr.mmgg.scp.entity.Project;
@@ -16,16 +18,14 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @AllArgsConstructor
 public class ProjectController {
     private HomeServicelmpl homeService;
+    private final ProjectDetailImpl projectDetail;
 
     @PostMapping(value = "/createproject")
     public ResponseEntity<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto dto) {
