@@ -12,9 +12,11 @@ import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
+import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
+import kr.mmgg.scp.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -22,6 +24,7 @@ import lombok.AllArgsConstructor;
 public class ProjectDetailImpl implements ProjectDetailService {
 
 	private ProjectinUserRepository projectinUserRepository;
+	private TaskRepository taskRepository;
 
 	@Transactional
 	@Override
@@ -59,5 +62,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	public ProjectDetailRequestTaskDto requestTask() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	//미완성 commit
+	@Override
+	public void sendTask(Task sendTask) {
+		sendTask.setTaskAccept(0);
+		sendTask.setTaskComplete(0);
+		taskRepository.save(sendTask);
 	}
 }

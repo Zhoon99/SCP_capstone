@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.mmgg.scp.dto.CreateProjectDto;
 import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
+import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.repository.ProjectRepository;
@@ -56,5 +57,11 @@ public class ProjectController {
     	List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);
 		return (pdatList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdatList)
 				: ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+    
+    @RequestMapping(value = "/sendtask", method = RequestMethod.POST)
+    public ResponseEntity<List<ProjectDetailSendTaskDto>> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
+    	List<ProjectDetailSendTaskDto> pdstList;
+    	return null;
     }
 }
