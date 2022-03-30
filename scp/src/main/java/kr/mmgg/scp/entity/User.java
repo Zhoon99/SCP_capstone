@@ -18,8 +18,8 @@ import lombok.ToString;
 
 @Entity
 @Data
-@Table(name = "user")
 @ToString(exclude = "teaminusers")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class User {
 
     @Column(length = 20)
     private String userRole;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Teaminuser> teaminusers = new ArrayList<>();

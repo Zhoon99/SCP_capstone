@@ -2,6 +2,7 @@ package kr.mmgg.scp.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +15,7 @@ import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.RequestTask;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -30,7 +32,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	private ProjectinUserRepository projectinUserRepository;
 	private TaskRepository taskRepository;
 	private UserRepository userRepository;
-	
+
 	// 프로젝트안의 전체 할일 가져오기
 	@Transactional
 	@Override
@@ -43,6 +45,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			if (!plist.get(i).getTasks().isEmpty()) {
 				dto.setTasklist(plist.get(i).getTasks());
 				list.add(dto);
+				// System.out.println(dto.toString());
 			}
 		}
 		return list;
@@ -55,10 +58,11 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId, projectId);
 		ProjectDetailMyTaskDto pdMyTask = new ProjectDetailMyTaskDto();
 		pdMyTask.setTaskList(piuUserIdAndProjectId.getTasks());
+		// System.out.println(piuUserIdAndProjectId);
 		return pdMyTask;
 	}
-	
-	//해당 프로젝트안에서 받은 할일 확인하기
+
+	// 해당 프로젝트안에서 받은 할일 확인하기
 	@Override
 	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserId) {
 		List<Task> tlist = taskRepository.findByProjectinuserIdAndTaskAccept(projectinuserId, 0);
@@ -66,18 +70,37 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		ProjectDetailReceiveTaskDto pdrtTask;
 		for (int i = 0; i < tlist.size(); i++) {
 			pdrtTask = new ProjectDetailReceiveTaskDto();
-			if(tlist.get(i).getProjectinuser().getProjectId() == projectId) {
+			if (tlist.get(i).getProjectinuser().getProjectId() == projectId) {
 				pdrtTask.setTask(tlist.get(i));
 				pdrtList.add(pdrtTask);
 			}
 		}
 		return pdrtList;
 	}
-	//해당 프로젝트 안의 보낸 할일 확인하기
+
+	// 해당 프로젝트 안의 보낸 할일 확인하기
 	@Override
-	public ProjectDetailRequestTaskDto requestTask() {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional
+	public List<RequestTask> requestTask(Long projectId, Long userid) {
+		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
+		User user = userRepository.findByUserId(userid);
+		List<RequestTask> list = new ArrayList<>();
+		RequestTask dto;
+		// 해당 프로젝트의 모든 할일 가져오기
+		for (int i = 0; i < plist.size(); i++) {
+			dto = new RequestTask();
+			if (!plist.get(i).getTasks().isEmpty()) {
+				// requester와 proejctinuserid가 같으면 저장
+				// TODO: 닉네임이 겹칠 경우 큰일남......
+				for (Task task : plist.get(i).getTasks()) {
+					if (task.getTaskRequester().equals(user.getUserNickname())) {
+						dto.setReqTask(task);
+						list.add(dto);
+					}
+				}
+			}
+		}
+		return list;
 	}
 
 	// 해당 프로젝트 안의 할일 요청하기
@@ -87,8 +110,9 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		Task task = new Task();
 		dateTime datetime = new dateTime();
 		task.setTaskId(null);
-		task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname()); //받는 사람
-		task.setTaskRequester(projectinUserRepository.findById(dto.getProjectinuserId()).get().getUser().getUserNickname()); // 보낸 사람
+		task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname()); // 받는 사람
+		task.setTaskRequester(
+				projectinUserRepository.findById(dto.getProjectinuserId()).get().getUser().getUserNickname()); // 보낸 사람
 		task.setProjectinuserId(dto.getProjectinuserId());
 		task.setTaskContent(dto.getTaskContent());
 		task.setTaskCreatetime(datetime.dateTime());
@@ -96,8 +120,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		task.setTaskDeadline(dto.getTaskDeadline());
 		task.setTaskAccept(0);
 		task.setTaskComplete(0);
-		
-		if(taskRepository.save(task) != null) {
+
+		if (taskRepository.save(task) != null) {
 			return true;
 		} else {
 			return false;

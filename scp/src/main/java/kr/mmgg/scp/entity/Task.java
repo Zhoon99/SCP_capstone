@@ -1,6 +1,5 @@
 package kr.mmgg.scp.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,16 +12,15 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
-import lombok.ToString;
 
 @Entity
 @Data
-//@ToString(exclude = "projectinuser")
+// @ToString(exclude = "projectinuser")
 public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long taskId;
-	
+
 	@JsonIgnore
 	@ManyToOne(targetEntity = ProjectInUser.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "projectinuser_id", insertable = false, updatable = false)
@@ -47,7 +45,7 @@ public class Task {
 
 	private Integer taskComplete;
 	private Integer taskAccept;
-	
+
 	private String taskRequesttime;
 	private String taskDeadline;
 	private String taskCreatetime;

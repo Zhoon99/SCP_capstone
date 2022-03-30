@@ -1,5 +1,5 @@
-##Post "/project/crateproject"
-###input
+## Post "/project/crateproject"
+### input
 ```
 {
     "title": "String",
@@ -19,7 +19,7 @@
 }
 ```
 
-###output
+### output
 ```
 [
     {
@@ -44,8 +44,8 @@
     }
 ]
 ```
-##GET /alltask/{projectId}
-###output
+## GET /alltask/{projectId}
+### output
 ```
 [
 	{
@@ -67,8 +67,8 @@
 	}
 ]
 ```
-##GET /mytask/{userId}/{projectId}
-###output
+## GET /mytask/{userId}/{projectId}
+### output
 ```
 {
 	"taskList":
@@ -88,8 +88,8 @@
 	]
 }
 ```
-##POST /sendtask
-###input
+## POST /sendtask
+### input
 ```
 {
   "userId": Long,
@@ -110,8 +110,8 @@
   ]  
 }
 ```
-##GET /receivetask/{projectId}/{projectinuserId}
-###output
+## GET /receivetask/{projectId}/{projectinuserId}
+### output
 ```
 [
 	{
