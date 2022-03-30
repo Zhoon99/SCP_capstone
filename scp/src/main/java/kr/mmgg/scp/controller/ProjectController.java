@@ -8,6 +8,7 @@ import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.RequestTask;
 import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
@@ -47,7 +48,7 @@ public class ProjectController {
     }
 
     @Transactional // 영속성 컨텐츠로인해 안해주면 no session 에러남 (서비스뿐만아니라 컨트롤러단에서도 관리해줘야됨)
-    @RequestMapping(value = "/mytask/{userId}/{projectId}", method = RequestMethod.GET)
+    @GetMapping(value = "/mytask/{userId}/{projectId}")
     public ResponseEntity<ProjectDetailMyTaskDto> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
         ProjectDetailMyTaskDto pdmtList = projectDetailImpl.myTask(userId, projectId);
         return (pdmtList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdmtList)
@@ -70,8 +71,21 @@ public class ProjectController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @GetMapping(value = "/sendtask")
+    public void sendTask() {
+
+    }
+
+    @GetMapping(value = "/requestask/{projectId}/{userid}")
+    public ResponseEntity<List<RequestTask>> requesttask(@PathVariable Long projectId,
+            @PathVariable Long userid) {
+        List<RequestTask> list = projectDetailImpl.requestTask(projectId, userid);
+        return (list != null) ? ResponseEntity.status(HttpStatus.OK).body(list)
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     @Transactional
-    @RequestMapping(value = "/receivetask/{projectId}/{projectinuserID}", method = RequestMethod.POST)
+    @RequestMapping(value = "/receivetask/{projectId}/{projectinuserID}", method = RequestMethod.GET)
     public ResponseEntity<List<ProjectDetailReceiveTaskDto>> receivetask(@PathVariable Long projectId,
             @PathVariable Long projectinuserID) {
         List<ProjectDetailReceiveTaskDto> pdrtList = projectDetailImpl.receiveTask(projectId, projectinuserID);
