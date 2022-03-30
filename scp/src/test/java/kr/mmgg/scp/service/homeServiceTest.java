@@ -9,13 +9,13 @@ import kr.mmgg.scp.repository.ProjectinUserRepository;
 @SpringBootTest
 public class homeServiceTest {
     @Autowired
-    private HomeServicelmpl homeService;
+    private HomeServicelmpl homeServiceImpl;
 
     @Autowired
     private ProjectDetailImpl impl;
 
     @Test
-    void testallproject() {
-        impl.allTask(1L);
+    void 홈뷰테스트() {
+    	homeServiceImpl.homeView(5L);
     }
 }
