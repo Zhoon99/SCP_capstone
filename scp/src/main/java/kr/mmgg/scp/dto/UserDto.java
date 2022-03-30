@@ -1,6 +1,9 @@
 package kr.mmgg.scp.dto;
 
+import kr.mmgg.scp.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
@@ -12,12 +15,12 @@ public class UserDto {
     private String userSnstype;
     private String userRole;
 
-    public UserDto(Long id, String userNickname, String userEmail, String userSnstype, String userRole) {
-        this.id = id;
-        this.userNickname = userNickname;
-        this.userEmail = userEmail;
-        this.userSnstype = userSnstype;
-        this.userRole = userRole;
+    public UserDto(User user) {
+        this.id = user.getUserId();
+        this.userNickname = user.getUserNickname();
+        this.userEmail = user.getUserEmail();
+        this.userSnstype = user.getUserSnstype();
+        this.userRole = user.getUserRole();
     }
 
 }
