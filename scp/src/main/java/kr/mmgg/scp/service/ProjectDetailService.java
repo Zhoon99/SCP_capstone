@@ -15,9 +15,9 @@ public interface ProjectDetailService {
 
 	public List<ProjectDetailAllTaskDto> allTask(Long userId);
 	
-	public ProjectDetailReceiveTaskDto receiveTask();
+	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserID);
 	
 	public ProjectDetailRequestTaskDto requestTask();
 	
-	public void sendTask(ProjectDetailSendTaskDto dto);
+	public List<Task> sendTask(ProjectDetailSendTaskDto dto);
 }

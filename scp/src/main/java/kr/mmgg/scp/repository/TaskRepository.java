@@ -18,4 +18,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 //    public List<Task> findByTasksList(@Param("projectId") Long projectId);
 //
     public List<Task> findByProjectinuserId(Long projectinuser_id);
+
+	public List<Task> findByProjectinuserIdAndTaskAccept(Long projectinuserId, Integer TaskAccept);
 }

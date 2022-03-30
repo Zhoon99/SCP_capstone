@@ -88,25 +88,46 @@
 	]
 }
 ```
-##test /sendTask
+##POST /sendtask
+###input
 ```
 {
-  "projectName" : "프로젝트1",
-  "projectId" : 1,
+  "userId": Long,
   "tasklist" :
   [
   	{
       	"taskId" : null,
-  		"projectinuserId": 5,
-  		"taskRequester" : "공연성(김기태교수님소속)",
-  		"taskOwner" : "김기태교수님",
-  		"taskContent" : "테스트입니다.",
-  		"taskComplete" : 0,
-  		"taskAccept" : 0,
-  		"taskRequesttime" : "2022-03-28 08:00:00",
-  		"taskDeadline" : "2022-03-28 08:00:00",
-  		"taskCreatetime" : "2022-03-28 08:00:00"
+  		"projectinuserId": Long,
+  		"taskRequester" : String,
+  		"taskOwner" : String,
+  		"taskContent" : String,
+  		"taskComplete" : boolean(Integer),
+  		"taskAccept" : boolean(Integer),
+  		"taskRequesttime" : datetime,
+  		"taskDeadline" : datetime,
+  		"taskCreatetime" : datetime
 	}
   ]  
 }
+```
+##GET /receivetask/{projectId}/{projectinuserId}
+###input
+```
+[
+	{
+		"task":
+		{
+			"taskId": Long
+			"projectinuserId": Long,
+			"taskContent": String
+			"taskOwner": String,
+			"taskRequester": String,
+			"taskComplete": boolean(Integer),
+			"taskAccept": boolean(Integer),
+			"taskRequesttime": datetime,
+			"taskDeadline": datetime,
+			"taskCreatetime": datetime
+		}
+	}
+]
 ```

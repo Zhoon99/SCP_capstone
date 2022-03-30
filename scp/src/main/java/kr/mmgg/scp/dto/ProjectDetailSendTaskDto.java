@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class ProjectDetailSendTaskDto {
-	private Long ProjectId;
-	private String ProjectName;
+	private Long userId;
 	private List<Task> tasklist;
 }
