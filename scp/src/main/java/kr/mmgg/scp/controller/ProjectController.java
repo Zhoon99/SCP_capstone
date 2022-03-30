@@ -42,7 +42,7 @@ public class ProjectController {
         return (piuList != null) ? ResponseEntity.status(HttpStatus.OK).body(piuList)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-    
+    @Transactional // 영속성 컨텐츠로인해 안해주면 no session 에러남 (서비스뿐만아니라 컨트롤러단에서도 관리해줘야됨)
     @RequestMapping(value = "/mytask/{userId}/{projectId}", method = RequestMethod.GET)
     public ResponseEntity<ProjectDetailMyTaskDto> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
         ProjectDetailMyTaskDto pdmtList = projectDetailImpl.myTask(userId, projectId);
@@ -50,7 +50,7 @@ public class ProjectController {
         return (pdmtList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdmtList)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-    
+    @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
     public ResponseEntity<List<ProjectDetailAllTaskDto>> allTask(@PathVariable Long projectId) {
     	List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);

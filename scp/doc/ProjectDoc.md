@@ -6,14 +6,14 @@
     "member":
     [
         {
-        "userId":Long,
-        "projectinuserMaker":Integer,
-        "projectinuserCommoncode":"String"
+        	"userId":Long,
+        	"projectinuserMaker":Integer,
+        	"projectinuserCommoncode":"String"
         },
         {
-        "userId":Long,
-        "projectinuserMaker":Integer,
-        "projectinuserCommoncode":"String"
+        	"userId":Long,
+        	"projectinuserMaker":Integer,
+        	"projectinuserCommoncode":"String"
         }
     ] 
 }
@@ -28,7 +28,7 @@
         "userId": Long,
         "project": null,
         "projectId": Long,
-        "projectinuserCommoncode": "String",
+        "projectinuserCommoncode": String,
         "projectinuserMaker": Integer,
         "tasks":[]
     },
@@ -38,9 +38,53 @@
         "userId": Long,
         "project": null,
         "projectId": Long,
-        "projectinuserCommoncode": "String",
+        "projectinuserCommoncode": String,
         "projectinuserMaker": Integer,
         "tasks":[]
     }
 ]
+```
+##GET /alltask/{projectId}
+###output
+```
+[
+	{
+		"tasklist":
+		[
+			{
+				"taskId": Long,
+				"projectinuserId": Long,
+				"taskContent": String,
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			}
+		]
+	}
+]
+```
+##GET /mytask/{userId}/{projectId}
+###output
+```
+{
+	"taskList":
+	[
+		{
+			"taskId": Long,
+			"projectinuserId": Long,
+			"taskContent": String,
+			"taskOwner": String,
+			"taskRequester": String,
+			"taskComplete": boolean(Integer),
+			"taskAccept": boolean(Integer),
+			"taskRequesttime": datetime,
+			"taskDeadline": datetime,
+			"taskCreatetime": datetime
+		}
+	]
+}
 ```
