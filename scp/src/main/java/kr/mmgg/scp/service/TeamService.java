@@ -1,6 +1,7 @@
 package kr.mmgg.scp.service;
 
 import kr.mmgg.scp.dto.TeamDto;
+import kr.mmgg.scp.dto.TeamHomeDto;
 import kr.mmgg.scp.dto.TeaminuserDto;
 import kr.mmgg.scp.entity.Team;
 import kr.mmgg.scp.entity.Teaminuser;
@@ -22,44 +23,58 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final TeaminuserRepository teaminuserRepository;
 
+    // /**
+    //  * 내가 만든 팀 ID
+    //  */
+    // @Transactional
+    // public List<Team> getMyTeams(Long userId) {
+    //     if(userId != null) { //존재하는 아이디 체크로 바꾸기
+    //         List<Team> myTeams = teamRepository.getMyTeams(userId);
+    //         return myTeams;
+    //     } else {
+    //         throw new IllegalStateException("유저 아이디가 없습니다.");
+    //     }
+    // }
+
+    // /**
+    //  * 다른 사람이 만든 팀 ID
+    //  */
+    // @Transactional
+    // public List<Team> getSharedTeams(Long userId) {
+    //     if(userId != null) {
+    //         List<Team> sharedTeams = teamRepository.getSharedTeams(userId);
+    //         return sharedTeams;
+    //     } else {
+    //         throw new IllegalStateException("유저 아이디가 없습니다.");
+    //     }
+    // }
+
     /**
-     * 내가 만든 팀 ID
+     * 내가 만든 팀 맴버
      */
     @Transactional
-    public List<Team> getMyTeams(Long userId) {
-        if(userId != null) { //존재하는 아이디 체크로 바꾸기
-            List<Team> myTeams = teamRepository.getMyTeams(userId);
-            return myTeams;
-        } else {
-            throw new IllegalStateException("유저 아이디가 없습니다.");
+    public TeamHomeDto getMyTeamMembers(Long userId) {
+        List<Team> myTeams = teamRepository.getMyTeams(userId);
+        TeamHomeDto teamHomeDto = new TeamHomeDto();
+        for(Team i : myTeams) {
+            List<Teaminuser> teamMembers = teaminuserRepository.findTop3ByTeamId(i.getTeamId());
+            teamHomeDto = new TeamHomeDto(i.getTeamName(), teamMembers);
         }
+        return teamHomeDto;
     }
 
     /**
-     * 다른 사람이 만든 팀 ID
+     * 다른 사람이 만든 팀 맴버
      */
     @Transactional
-    public List<Team> getSharedTeams(Long userId) {
-        if(userId != null) {
-            List<Team> sharedTeams = teamRepository.getSharedTeams(userId);
-            return sharedTeams;
-        } else {
-            throw new IllegalStateException("유저 아이디가 없습니다.");
+    public TeamHomeDto getSharedTeamMembers(Long userId) {
+        List<Team> myTeams = teamRepository.getSharedTeams(userId);
+        TeamHomeDto teamHomeDto = new TeamHomeDto();
+        for(Team i : myTeams) {
+            List<Teaminuser> teamMembers = teaminuserRepository.findTop3ByTeamId(i.getTeamId());
+            teamHomeDto = new TeamHomeDto(i.getTeamName(), teamMembers);
         }
-    }
-
-    /**
-     * 팀 맴버 가져오기
-     */
-    @Transactional
-    public List<Teaminuser> getTeamMembers(Long teamId) {
-        if(teamId != null) {
-            //List<TeamUserDTO> teamMembers = teamRepository.getTeamMembers(teamId);
-            List<Teaminuser> teamMembers = teaminuserRepository.findTop3ByTeamId(teamId);
-            return teamMembers;
-        } else {
-            throw new IllegalStateException("유저 아이디가 없습니다.");
-        }
+        return teamHomeDto;
     }
 
     /**
