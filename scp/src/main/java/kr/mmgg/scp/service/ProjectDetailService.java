@@ -6,6 +6,7 @@ import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
+import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.entity.Task;
 
 public interface ProjectDetailService {
@@ -14,7 +15,9 @@ public interface ProjectDetailService {
 
 	public List<ProjectDetailAllTaskDto> allTask(Long userId);
 	
-	public ProjectDetailReceiveTaskDto receiveTask();
+	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserID);
 	
 	public ProjectDetailRequestTaskDto requestTask();
+	
+	public List<Task> sendTask(ProjectDetailSendTaskDto dto);
 }
