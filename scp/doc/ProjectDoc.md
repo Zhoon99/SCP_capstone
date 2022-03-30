@@ -111,7 +111,7 @@
 }
 ```
 ##GET /receivetask/{projectId}/{projectinuserId}
-###input
+###output
 ```
 [
 	{

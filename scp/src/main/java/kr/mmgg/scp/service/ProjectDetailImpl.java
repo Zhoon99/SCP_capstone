@@ -56,7 +56,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		return pdMyTask;
 	}
 	
-	//해당 프로젝트안에서 받은 할일 보기
+	//해당 프로젝트안에서 받은 할일 확인하기
 	@Override
 	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserId) {
 		List<Task> tlist = taskRepository.findByProjectinuserIdAndTaskAccept(projectinuserId, 0);
@@ -71,7 +71,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		}
 		return pdrtList;
 	}
-
+	//해당 프로젝트 안의 보낸 할일 확인하기
 	@Override
 	public ProjectDetailRequestTaskDto requestTask() {
 		// TODO Auto-generated method stub
