@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
@@ -19,6 +20,7 @@ import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.repository.TaskRepository;
 import kr.mmgg.scp.repository.UserRepository;
+import kr.mmgg.scp.util.dateTime;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -81,9 +83,24 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 해당 프로젝트 안의 할일 요청하기
 	@Override
 	@Transactional
-	public List<Task> sendTask(ProjectDetailSendTaskDto dto) {
-		List<Task> tlist = dto.getTasklist();
-		User user = userRepository.findByUserId(dto.getUserId()); // 유저번호는 일단 받아둠
-		return taskRepository.saveAll(tlist);
+	public boolean sendTask(ProjectDetailSendTaskDto dto) {
+		Task task = new Task();
+		dateTime datetime = new dateTime();
+		task.setTaskId(null);
+		task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname()); //받는 사람
+		task.setTaskRequester(projectinUserRepository.findById(dto.getProjectinuserId()).get().getUser().getUserNickname()); // 보낸 사람
+		task.setProjectinuserId(dto.getProjectinuserId());
+		task.setTaskContent(dto.getTaskContent());
+		task.setTaskCreatetime(datetime.dateTime());
+		task.setTaskRequesttime(datetime.dateTime());
+		task.setTaskDeadline(dto.getTaskDeadline());
+		task.setTaskAccept(0);
+		task.setTaskComplete(0);
+		
+		if(taskRepository.save(task) != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

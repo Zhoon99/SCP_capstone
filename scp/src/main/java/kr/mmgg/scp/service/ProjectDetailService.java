@@ -2,6 +2,8 @@ package kr.mmgg.scp.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
@@ -19,5 +21,5 @@ public interface ProjectDetailService {
 	
 	public ProjectDetailRequestTaskDto requestTask();
 	
-	public List<Task> sendTask(ProjectDetailSendTaskDto dto);
+	public boolean sendTask(ProjectDetailSendTaskDto dto);
 }
