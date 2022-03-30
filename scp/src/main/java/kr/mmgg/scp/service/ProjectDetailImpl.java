@@ -15,7 +15,8 @@ import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
-import kr.mmgg.scp.dto.RequestTask;
+import kr.mmgg.scp.dto.RequestTaskDto;
+import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -81,14 +82,14 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 해당 프로젝트 안의 보낸 할일 확인하기
 	@Override
 	@Transactional
-	public List<RequestTask> requestTask(Long projectId, Long userid) {
+	public List<RequestTaskDto> requestTask(Long projectId, Long userid) {
 		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
 		User user = userRepository.findByUserId(userid);
-		List<RequestTask> list = new ArrayList<>();
-		RequestTask dto;
+		List<RequestTaskDto> list = new ArrayList<>();
+		RequestTaskDto dto;
 		// 해당 프로젝트의 모든 할일 가져오기
 		for (int i = 0; i < plist.size(); i++) {
-			dto = new RequestTask();
+			dto = new RequestTaskDto();
 			if (!plist.get(i).getTasks().isEmpty()) {
 				// requester와 proejctinuserid가 같으면 저장
 				// TODO: 닉네임이 겹칠 경우 큰일남......
@@ -126,5 +127,19 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		} else {
 			return false;
 		}
+	}
+
+	// sendtask 유저 막기
+	@Override
+	@Transactional
+	public List<UserDto> gUsers(Long projectId) {
+		List<ProjectInUser> projectInUsers = projectinUserRepository.findByProjectId(projectId);
+		List<UserDto> users = new ArrayList<>();
+		UserDto user;
+		for (ProjectInUser projectInUser : projectInUsers) {
+			user = new UserDto(projectInUser.getUser());
+			users.add(user);
+		}
+		return users;
 	}
 }

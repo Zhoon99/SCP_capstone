@@ -28,7 +28,7 @@ public class homeServiceTest {
     @Test
     @Transactional
     void testHomeView() {
-        List<HomeViewDto> dto = homeService.homeView(1L);
+        List<HomeViewDto> dto = homeServiceImpl.homeView(1L);
         log.info(dto.toString());
     }
 
@@ -40,7 +40,7 @@ public class homeServiceTest {
         List<CreateProjectMemberDto> memberDtoList = new ArrayList<>();
         memberDtoList.add(memberDto);
         CreateProjectDto projectDto = new CreateProjectDto("테스트 타이틀", memberDtoList);
-        List<ProjectInUser> dto = homeService.projectCreate(projectDto);
+        List<ProjectInUser> dto = homeServiceImpl.projectCreate(projectDto);
         log.info(dto.toString());
     }
 }

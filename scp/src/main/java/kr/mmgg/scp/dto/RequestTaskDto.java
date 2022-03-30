@@ -4,6 +4,6 @@ import kr.mmgg.scp.entity.Task;
 import lombok.Data;
 
 @Data
-public class RequestTask {
+public class RequestTaskDto {
     private Task reqTask;
 }
