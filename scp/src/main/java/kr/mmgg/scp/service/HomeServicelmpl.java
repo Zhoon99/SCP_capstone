@@ -2,19 +2,16 @@ package kr.mmgg.scp.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import kr.mmgg.scp.dto.HomeViewDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.mmgg.scp.dto.CreateProjectDto;
-import kr.mmgg.scp.dto.HomeViewDto;
 import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
-import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.repository.ProjectRepository;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
-import kr.mmgg.scp.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 
 @Service

@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -19,16 +19,16 @@ public class Teaminuser {
     private String teaminuserCommoncode;
     private Integer teaminuserMaker;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User user;
-
-    @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", insertable = false, updatable = false)
-    private Team team;
-
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "team_id")
     private Long teamId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id", insertable = false, updatable = false)
+    private Team team;
 }
