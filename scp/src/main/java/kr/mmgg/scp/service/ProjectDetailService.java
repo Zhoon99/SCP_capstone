@@ -27,4 +27,6 @@ public interface ProjectDetailService {
 	public boolean sendTask(ProjectDetailSendTaskDto dto);
 
 	public List<UserDto> gUsers(Long projectId);
+
+	public void whetherTask(Long userId, Long taskId);
 }
