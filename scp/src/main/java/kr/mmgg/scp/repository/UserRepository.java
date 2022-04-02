@@ -11,5 +11,5 @@ import kr.mmgg.scp.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     public User findByUserEmail(String email);
 
-    public User findByUserId(Long userId);
+    public Optional<User> findByUserId(Long userId);
 }

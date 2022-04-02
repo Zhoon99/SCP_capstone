@@ -23,6 +23,8 @@ import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.repository.TaskRepository;
 import kr.mmgg.scp.repository.UserRepository;
+import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.ErrorCode;
 import kr.mmgg.scp.util.dateTime;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,13 +42,17 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Transactional
 	@Override
 	public List<ProjectDetailAllTaskDto> allTask(Long projectId) {
-		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
+		Optional<List<ProjectInUser>> plist = projectinUserRepository.findByProjectId(projectId);
+		if (!plist.isPresent() || plist.get().isEmpty()) {
+			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
+		}
+
 		ArrayList<ProjectDetailAllTaskDto> list = new ArrayList<ProjectDetailAllTaskDto>();
 		ProjectDetailAllTaskDto dto;
-		for (int i = 0; i < plist.size(); i++) {
+		for (int i = 0; i < plist.get().size(); i++) {
 			dto = new ProjectDetailAllTaskDto();
-			if (!plist.get(i).getTasks().isEmpty()) {
-				dto.setTasklist(plist.get(i).getTasks());
+			if (!plist.get().get(i).getTasks().isEmpty()) {
+				dto.setTasklist(plist.get().get(i).getTasks());
 				list.add(dto);
 				// System.out.println(dto.toString());
 			}
@@ -58,9 +64,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	@Transactional
 	public ProjectDetailMyTaskDto myTask(Long userId, Long projectId) {
-		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId, projectId);
+		Optional<ProjectInUser> piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId,
+				projectId);
+		if (!piuUserIdAndProjectId.isPresent()) {
+			throw new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND);
+		}
 		ProjectDetailMyTaskDto pdMyTask = new ProjectDetailMyTaskDto();
-		pdMyTask.setTaskList(piuUserIdAndProjectId.getTasks());
+		pdMyTask.setTaskList(piuUserIdAndProjectId.get().getTasks());
 		// System.out.println(piuUserIdAndProjectId);
 		return pdMyTask;
 	}
@@ -80,23 +90,28 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		}
 		return pdrtList;
 	}
-	
 
 	// 해당 프로젝트 안의 보낸 할일 확인하기
 	@Override
 	@Transactional
 	public List<RequestTaskDto> requestTask(Long projectId, Long userid) {
-		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
-		User user = userRepository.findByUserId(userid);
+		Optional<List<ProjectInUser>> plist = projectinUserRepository.findByProjectId(projectId);
+
+		User user = userRepository.findByUserId(userid)
+				.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+		if (!plist.isPresent() || plist.get().isEmpty()) {
+			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
+		}
+
 		List<RequestTaskDto> list = new ArrayList<>();
 		RequestTaskDto dto;
 		// 해당 프로젝트의 모든 할일 가져오기
-		for (int i = 0; i < plist.size(); i++) {
+		for (int i = 0; i < plist.get().size(); i++) {
 			dto = new RequestTaskDto();
-			if (!plist.get(i).getTasks().isEmpty()) {
+			if (!plist.get().get(i).getTasks().isEmpty()) {
 				// requester와 proejctinuserid가 같으면 저장
 				// TODO: 닉네임이 겹칠 경우 큰일남......
-				for (Task task : plist.get(i).getTasks()) {
+				for (Task task : plist.get().get(i).getTasks()) {
 					if (task.getTaskRequester().equals(user.getUserNickname())) {
 						dto.setReqTask(task);
 						list.add(dto);
@@ -136,22 +151,25 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	@Transactional
 	public List<UserDto> gUsers(Long projectId) {
-		List<ProjectInUser> projectInUsers = projectinUserRepository.findByProjectId(projectId);
+		Optional<List<ProjectInUser>> projectInUsers = projectinUserRepository.findByProjectId(projectId);
+		if (!projectInUsers.isPresent() || projectInUsers.get().isEmpty()) {
+			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
+		}
 		List<UserDto> users = new ArrayList<>();
 		UserDto user;
-		for (ProjectInUser projectInUser : projectInUsers) {
+		for (ProjectInUser projectInUser : projectInUsers.get()) {
 			user = new UserDto(projectInUser.getUser());
 			users.add(user);
 		}
 		return users;
 	}
 
-<<<<<<< HEAD
 	// 할일 완료여부 체크
 	@Override
 	@Transactional
 	public void whetherTask(Long userId, Long taskId) {
-		Task task = taskRepository.findByTaskId(taskId);
+		Task task = taskRepository.findByTaskId(taskId)
+				.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 		if (userId == task.getProjectinuser().getUserId()) {
 			if (task.getTaskComplete() == 0) {
 				task.setTaskComplete(1);
@@ -159,24 +177,25 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				task.setTaskComplete(0);
 			}
 			taskRepository.save(task);
+		} else {
+			throw new CustomException(ErrorCode.TASK_NOT_MATCH);
 		}
-		log.info(task.toString());
-=======
-	//해당 프로젝트 안의 할일 수락 및 거절 하기
+	}
+
+	// 해당 프로젝트 안의 할일 수락 및 거절 하기
 	@Override
 	public boolean recevieTask(Long taskId, Integer selected) {
 		Task task = taskRepository.getById(taskId);
-		if(selected == -1 && taskRepository.save(task) != null) {
+		if (selected == -1 && taskRepository.save(task) != null) {
 			task.setTaskAccept(-1);
 			taskRepository.save(task);
 			return true;
-		} else if(selected == 1 && taskRepository.save(task) != null){
+		} else if (selected == 1 && taskRepository.save(task) != null) {
 			task.setTaskAccept(1);
 			taskRepository.save(task);
 			return true;
 		} else {
 			return false;
 		}
->>>>>>> origin/dustjd
 	}
 }

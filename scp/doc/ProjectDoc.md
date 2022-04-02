@@ -2,6 +2,8 @@
 ### input
 ``` json
 {
+   statusCode: 200
+   msg: String
     "title": "String",
     "member":
     [
@@ -22,6 +24,8 @@
 ### output
 ``` json
 [
+   statusCode: 200
+   msg: String
     {
         "projectinuserId": Long,
         "user": null,
@@ -48,6 +52,8 @@
 ### output
 ``` json
 [
+   statusCode: 200
+   msg: String
 	{
 		"tasklist":
 		[
@@ -71,6 +77,8 @@
 ### output
 ``` json
 {
+   statusCode: 200
+   msg: String
 	"taskList":
 	[
 		{
@@ -92,6 +100,8 @@
 ### input
 ``` json
 {
+   statusCode: 200
+   msg: String
   "userId": Long,
   "tasklist" :
   [
@@ -113,7 +123,9 @@
 ## GET /receivetask/{projectId}/{projectinuserId}
 ### output
 ``` json
-[
+{
+	statusCode: 200
+	msg: String
 	{
 		"task":
 		{
@@ -129,5 +141,5 @@
 			"taskCreatetime": datetime
 		}
 	}
-]
+}
 ```

@@ -1,6 +1,7 @@
 package kr.mmgg.scp.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,5 +18,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     public List<Task> findByProjectinuserIdAndTaskAccept(Long projectinuserId, Integer TaskAccept);
 
-    public Task findByTaskId(Long taskId);
+    public Optional<Task> findByTaskId(Long taskId);
 }
