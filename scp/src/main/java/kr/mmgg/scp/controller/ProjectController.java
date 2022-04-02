@@ -8,6 +8,7 @@ import kr.mmgg.scp.dto.CreateProjectDto;
 import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
+import kr.mmgg.scp.dto.ProjectDetailReceiveTaskSelectDto;
 import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.RequestTaskDto;
 import kr.mmgg.scp.dto.UserDto;
@@ -84,7 +85,16 @@ public class ProjectController {
         return (pdrtList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdrtList)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-
+    
+    @RequestMapping(value = "/receivetask/{taskId}/{selected}", method = RequestMethod.PATCH)
+    public ResponseEntity<List<ProjectDetailReceiveTaskSelectDto>> receivetask(@PathVariable Long taskId, @PathVariable Integer selected){
+    	if(projectDetailImpl.recevieTask(taskId, selected)) {
+    	    return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+    
     // SCP-304 보낸 요청 확인
     // TODO: 프로젝트와 유저가 없으면 오류
     @GetMapping(value = "/requestask/{projectId}/{userid}")
