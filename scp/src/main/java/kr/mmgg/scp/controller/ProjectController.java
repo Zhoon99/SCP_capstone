@@ -72,7 +72,7 @@ public class ProjectController {
     @PatchMapping(value = "/whethertask/{userId}/{taskId}")
     public ResponseEntity<?> whetherTask(@PathVariable Long userId, @PathVariable Long taskId) {
         projectDetailImpl.whetherTask(userId, taskId);
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     // SCP-303 받은 요청 확인

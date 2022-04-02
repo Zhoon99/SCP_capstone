@@ -33,7 +33,7 @@ public class HomeServicelmpl implements HomeService {
 		if (piuUserIdList.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND);
 		}
-		Optional<List<ProjectInUser>> piuProjectIdList;
+		List<ProjectInUser> piuProjectIdList;
 		HomeViewDto homeViewDto;
 		ArrayList<HomeViewDto> homeViewDtoList = new ArrayList<HomeViewDto>();
 		for (int i = 0; i < piuUserIdList.size(); i++) {
@@ -41,7 +41,7 @@ public class HomeServicelmpl implements HomeService {
 			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
 
 			// 할일 담는곳
-			for (ProjectInUser pTask : piuProjectIdList.get()) {
+			for (ProjectInUser pTask : piuProjectIdList) {
 				if (!pTask.getTasks().isEmpty()) {
 					homeViewDto.setTasklist(pTask.getTasks());
 				}

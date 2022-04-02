@@ -42,17 +42,17 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Transactional
 	@Override
 	public List<ProjectDetailAllTaskDto> allTask(Long projectId) {
-		Optional<List<ProjectInUser>> plist = projectinUserRepository.findByProjectId(projectId);
-		if (!plist.isPresent() || plist.get().isEmpty()) {
+		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
+		if (plist.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
 		}
 
 		ArrayList<ProjectDetailAllTaskDto> list = new ArrayList<ProjectDetailAllTaskDto>();
 		ProjectDetailAllTaskDto dto;
-		for (int i = 0; i < plist.get().size(); i++) {
+		for (int i = 0; i < plist.size(); i++) {
 			dto = new ProjectDetailAllTaskDto();
-			if (!plist.get().get(i).getTasks().isEmpty()) {
-				dto.setTasklist(plist.get().get(i).getTasks());
+			if (!plist.get(i).getTasks().isEmpty()) {
+				dto.setTasklist(plist.get(i).getTasks());
 				list.add(dto);
 				// System.out.println(dto.toString());
 			}
@@ -64,13 +64,10 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	@Transactional
 	public ProjectDetailMyTaskDto myTask(Long userId, Long projectId) {
-		Optional<ProjectInUser> piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId,
-				projectId);
-		if (!piuUserIdAndProjectId.isPresent()) {
-			throw new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND);
-		}
+		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId,
+				projectId).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND));
 		ProjectDetailMyTaskDto pdMyTask = new ProjectDetailMyTaskDto();
-		pdMyTask.setTaskList(piuUserIdAndProjectId.get().getTasks());
+		pdMyTask.setTaskList(piuUserIdAndProjectId.getTasks());
 		// System.out.println(piuUserIdAndProjectId);
 		return pdMyTask;
 	}
@@ -79,6 +76,9 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserId) {
 		List<Task> tlist = taskRepository.findByProjectinuserIdAndTaskAccept(projectinuserId, 0);
+		if(tlist.isEmpty()){
+			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
+		}
 		ArrayList<ProjectDetailReceiveTaskDto> pdrtList = new ArrayList<ProjectDetailReceiveTaskDto>();
 		ProjectDetailReceiveTaskDto pdrtTask;
 		for (int i = 0; i < tlist.size(); i++) {
@@ -95,23 +95,24 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	@Transactional
 	public List<RequestTaskDto> requestTask(Long projectId, Long userid) {
-		Optional<List<ProjectInUser>> plist = projectinUserRepository.findByProjectId(projectId);
-
+		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
+		// 유저를 가져오고 유저가 없을 시 에러
 		User user = userRepository.findByUserId(userid)
 				.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-		if (!plist.isPresent() || plist.get().isEmpty()) {
+		if (plist.isEmpty()) {
+			// 프로젝트가 없을 시 에러
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
 		}
 
 		List<RequestTaskDto> list = new ArrayList<>();
 		RequestTaskDto dto;
 		// 해당 프로젝트의 모든 할일 가져오기
-		for (int i = 0; i < plist.get().size(); i++) {
+		for (int i = 0; i < plist.size(); i++) {
 			dto = new RequestTaskDto();
-			if (!plist.get().get(i).getTasks().isEmpty()) {
+			if (!plist.get(i).getTasks().isEmpty()) {
 				// requester와 proejctinuserid가 같으면 저장
 				// TODO: 닉네임이 겹칠 경우 큰일남......
-				for (Task task : plist.get().get(i).getTasks()) {
+				for (Task task : plist.get(i).getTasks()) {
 					if (task.getTaskRequester().equals(user.getUserNickname())) {
 						dto.setReqTask(task);
 						list.add(dto);
@@ -143,7 +144,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		if (taskRepository.save(task) != null) {
 			return true;
 		} else {
-			return false;
+			// TODO: 에러 핸들러 만들기
+			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
 		}
 	}
 
@@ -151,13 +153,14 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	@Transactional
 	public List<UserDto> gUsers(Long projectId) {
-		Optional<List<ProjectInUser>> projectInUsers = projectinUserRepository.findByProjectId(projectId);
-		if (!projectInUsers.isPresent() || projectInUsers.get().isEmpty()) {
+		List<ProjectInUser> projectInUsers = projectinUserRepository.findByProjectId(projectId);
+		// 프로젝트 
+		if (projectInUsers.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
 		}
 		List<UserDto> users = new ArrayList<>();
 		UserDto user;
-		for (ProjectInUser projectInUser : projectInUsers.get()) {
+		for (ProjectInUser projectInUser : projectInUsers) {
 			user = new UserDto(projectInUser.getUser());
 			users.add(user);
 		}
@@ -183,6 +186,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	}
 
 	// 해당 프로젝트 안의 할일 수락 및 거절 하기
+	// TODO: 에러 처리 해야함
 	@Override
 	public boolean recevieTask(Long taskId, Integer selected) {
 		Task task = taskRepository.getById(taskId);

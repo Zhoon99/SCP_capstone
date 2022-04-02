@@ -1,11 +1,9 @@
-## Post "/project/crateproject"
+# Post "/project/crateproject"
 ### input
 ``` json
 {
-   statusCode: 200
-   msg: String
     "title": "String",
-    "member":
+    "member": 
     [
         {
         	"userId":Long,
@@ -23,37 +21,19 @@
 
 ### output
 ``` json
-[
-   statusCode: 200
-   msg: String
-    {
-        "projectinuserId": Long,
-        "user": null,
-        "userId": Long,
-        "project": null,
-        "projectId": Long,
-        "projectinuserCommoncode": String,
-        "projectinuserMaker": Integer,
-        "tasks":[]
-    },
-    {
-        "projectinuserId": Long,
-        "user": null,
-        "userId": Long,
-        "project": null,
-        "projectId": Long,
-        "projectinuserCommoncode": String,
-        "projectinuserMaker": Integer,
-        "tasks":[]
-    }
-]
+{
+	"status": 200,
+	"message": "message"
+}
 ```
-## GET /alltask/{projectId}
+
+# GET /alltask/{projectId}
 ### output
 ``` json
-[
-   statusCode: 200
-   msg: String
+{
+	"status": 200,
+	"message": "message",
+	"result":
 	{
 		"tasklist":
 		[
@@ -68,78 +48,207 @@
 				"taskRequesttime": datetime,
 				"taskDeadline": datetime,
 				"taskCreatetime": datetime
+			},
+			{
+				"taskId": Long,
+				"projectinuserId": Long,
+				"taskContent": String,
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
 			}
 		]
 	}
-]
+}
 ```
-## GET /mytask/{userId}/{projectId}
+# GET /mytask/{userId}/{projectId}
 ### output
 ``` json
 {
-   statusCode: 200
-   msg: String
-	"taskList":
-	[
-		{
-			"taskId": Long,
-			"projectinuserId": Long,
-			"taskContent": String,
-			"taskOwner": String,
-			"taskRequester": String,
-			"taskComplete": boolean(Integer),
-			"taskAccept": boolean(Integer),
-			"taskRequesttime": datetime,
-			"taskDeadline": datetime,
-			"taskCreatetime": datetime
-		}
-	]
+	"status": 200,
+	"message": "message",
+	"result" :
+	{
+		"taskList":
+		[
+			{
+				"taskId": Long,
+				"projectinuserId": Long,
+				"taskContent": String,
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			},
+			{
+				"taskId": Long,
+				"projectinuserId": Long,
+				"taskContent": String,
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			}
+
+		]
+	}
 }
 ```
-## POST /sendtask
+# Patch /whethertask/{userId}/{taskId}
+### output
+``` json
+{
+	"status": 200,
+	"message": "message",
+}
+```
+# GET /receivetask/{projectId}/{projectinuserId}
+### output
+``` json
+{
+	"status": 200,
+	"message": "message",
+	"result" :
+	{
+		"taskList":
+		[
+			{
+				"taskId": Long
+				"projectinuserId": Long,
+				"taskContent": String
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			},
+			{
+				"taskId": Long
+				"projectinuserId": Long,
+				"taskContent": String
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			}
+		]
+	}
+}
+```
+# PATCH /receivetask/{taskId}/{selected}
+### output
+``` json
+	"status": 200,
+	"message": "message"
+```
+
+# GET /requestask/{projectId}/{userId}
+### output
+``` json
+{
+	"status": 200,
+	"message": "message",
+	"result":
+	{
+		"taskList":
+		[
+			{
+				"taskId": Long
+				"projectinuserId": Long,
+				"taskContent": String
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			},
+			{
+				"taskId": Long
+				"projectinuserId": Long,
+				"taskContent": String
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			}
+		]
+	}
+}
+```
+# GET /sendtask/{projectId}
+### output
+``` json
+{
+	"status": 200,
+	"message": "message",
+	"result":
+	{
+		"userList":
+		[
+			{
+				"id": Long,
+				"userNickname": "String",
+				"userEmail": "String",
+				"userSnstype": "String",
+				"userRole": "String"
+			},
+			{
+				"id": Long,
+				"userNickname": "String",
+				"userEmail": "String",
+				"userSnstype": "String",
+				"userRole": "String"
+			}
+		]
+	}
+}
+```
+# POST /sendtask
 ### input
 ``` json
 {
-   statusCode: 200
-   msg: String
-  "userId": Long,
-  "tasklist" :
-  [
-  	{
-      	"taskId" : null,
-  		"projectinuserId": Long,
-  		"taskRequester" : String,
-  		"taskOwner" : String,
-  		"taskContent" : String,
-  		"taskComplete" : boolean(Integer),
-  		"taskAccept" : boolean(Integer),
-  		"taskRequesttime" : datetime,
-  		"taskDeadline" : datetime,
-  		"taskCreatetime" : datetime
-	}
-  ]  
+	"userId": Long,
+	"tasklist" :
+	[
+		{
+	    	"taskId" : null,
+			"projectinuserId": Long,
+			"taskRequester" : String,
+			"taskOwner" : String,
+			"taskContent" : String,
+			"taskComplete" : boolean(Integer),
+			"taskAccept" : boolean(Integer),
+			"taskRequesttime" : datetime,
+			"taskDeadline" : datetime,
+			"taskCreatetime" : datetime
+		}
+	]  
 }
 ```
-## GET /receivetask/{projectId}/{projectinuserId}
-### output
-``` json
+### ouput
+``` json 
 {
-	statusCode: 200
-	msg: String
-	{
-		"task":
-		{
-			"taskId": Long
-			"projectinuserId": Long,
-			"taskContent": String
-			"taskOwner": String,
-			"taskRequester": String,
-			"taskComplete": boolean(Integer),
-			"taskAccept": boolean(Integer),
-			"taskRequesttime": datetime,
-			"taskDeadline": datetime,
-			"taskCreatetime": datetime
-		}
-	}
+	"status": 200,
+	"message": "message"
 }
 ```
