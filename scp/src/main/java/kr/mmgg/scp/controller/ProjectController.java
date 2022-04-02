@@ -48,6 +48,7 @@ public class ProjectController {
     }
 
     // SCP-301 프로젝트 모든 할일
+    // TODO: 프로젝트가 없으면 오류 날리기
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
     public ResponseEntity<List<ProjectDetailAllTaskDto>> allTask(@PathVariable Long projectId) {
@@ -56,8 +57,7 @@ public class ProjectController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    // TODO: 체크하면 compelete PATCH시키기
-    // TODO: 다른 사람이 요청 보낼 떄 거부
+    // TODO: 없는 user이거나 없는 project이면 오류 날리기
     // SCP-302 프로젝트 자신 할일
     @Transactional // 영속성 컨텐츠로인해 안해주면 no session 에러남 (서비스뿐만아니라 컨트롤러단에서도 관리해줘야됨)
     @GetMapping(value = "/mytask/{userId}/{projectId}")
@@ -65,6 +65,13 @@ public class ProjectController {
         ProjectDetailMyTaskDto pdmtList = projectDetailImpl.myTask(userId, projectId);
         return (pdmtList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdmtList)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    // TODO: 없는 유저 또는 없는 TASK로 날라 올때 오류 날려야함
+    @PatchMapping(value = "/whethertask/{userId}/{taskId}")
+    public ResponseEntity<?> whetherTask(@PathVariable Long userId, @PathVariable Long taskId) {
+        projectDetailImpl.whetherTask(userId, taskId);
+        return ResponseEntity.ok("ok");
     }
 
     // SCP-303 받은 요청 확인
@@ -89,6 +96,7 @@ public class ProjectController {
     }
     
     // SCP-304 보낸 요청 확인
+    // TODO: 프로젝트와 유저가 없으면 오류
     @GetMapping(value = "/requestask/{projectId}/{userid}")
     public ResponseEntity<List<RequestTaskDto>> requesttask(@PathVariable Long projectId,
             @PathVariable Long userid) {
@@ -98,6 +106,7 @@ public class ProjectController {
     }
 
     // SCP-305 프로젝트 할일 요청시 프로젝트 안 사람들 불러오기
+    // TODO: 프로젝트가 없으면 오류
     @Transactional
     @GetMapping(value = "/sendtask/{projectId}")
     public ResponseEntity<List<UserDto>> sendTask(@PathVariable Long projectId) {

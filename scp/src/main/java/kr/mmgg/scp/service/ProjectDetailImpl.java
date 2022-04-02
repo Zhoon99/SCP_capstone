@@ -25,9 +25,11 @@ import kr.mmgg.scp.repository.TaskRepository;
 import kr.mmgg.scp.repository.UserRepository;
 import kr.mmgg.scp.util.dateTime;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ProjectDetailImpl implements ProjectDetailService {
 
 	private ProjectinUserRepository projectinUserRepository;
@@ -144,6 +146,22 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		return users;
 	}
 
+<<<<<<< HEAD
+	// 할일 완료여부 체크
+	@Override
+	@Transactional
+	public void whetherTask(Long userId, Long taskId) {
+		Task task = taskRepository.findByTaskId(taskId);
+		if (userId == task.getProjectinuser().getUserId()) {
+			if (task.getTaskComplete() == 0) {
+				task.setTaskComplete(1);
+			} else {
+				task.setTaskComplete(0);
+			}
+			taskRepository.save(task);
+		}
+		log.info(task.toString());
+=======
 	//해당 프로젝트 안의 할일 수락 및 거절 하기
 	@Override
 	public boolean recevieTask(Long taskId, Integer selected) {
@@ -159,5 +177,6 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		} else {
 			return false;
 		}
+>>>>>>> origin/dustjd
 	}
 }
