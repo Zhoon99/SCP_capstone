@@ -21,6 +21,8 @@ public interface ProjectDetailService {
 	public List<ProjectDetailAllTaskDto> allTask(Long userId);
 
 	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserID);
+	
+	public boolean recevieTask(Long taskId, Integer selected);
 
 	public List<RequestTaskDto> requestTask(Long projectinuserID, Long userId);
 

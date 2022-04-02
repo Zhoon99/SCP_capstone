@@ -78,6 +78,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		}
 		return pdrtList;
 	}
+	
 
 	// 해당 프로젝트 안의 보낸 할일 확인하기
 	@Override
@@ -141,5 +142,22 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			users.add(user);
 		}
 		return users;
+	}
+
+	//해당 프로젝트 안의 할일 수락 및 거절 하기
+	@Override
+	public boolean recevieTask(Long taskId, Integer selected) {
+		Task task = taskRepository.getById(taskId);
+		if(selected == -1 && taskRepository.save(task) != null) {
+			task.setTaskAccept(-1);
+			taskRepository.save(task);
+			return true;
+		} else if(selected == 1 && taskRepository.save(task) != null){
+			task.setTaskAccept(1);
+			taskRepository.save(task);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
