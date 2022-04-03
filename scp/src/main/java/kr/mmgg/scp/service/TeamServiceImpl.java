@@ -1,7 +1,7 @@
 package kr.mmgg.scp.service;
 
-import kr.mmgg.scp.dto.TeamHomeDto;
-import kr.mmgg.scp.dto.TeamMembersDto;
+import kr.mmgg.scp.dto.response.TeamHomeDto;
+import kr.mmgg.scp.dto.response.TeamMembersDto;
 import kr.mmgg.scp.entity.Team;
 import kr.mmgg.scp.repository.TeamRepository;
 import kr.mmgg.scp.repository.TeaminuserRepository;

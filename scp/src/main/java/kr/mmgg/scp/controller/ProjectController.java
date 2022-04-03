@@ -1,6 +1,5 @@
 package kr.mmgg.scp.controller;
 
-import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.service.ProjectDetailImpl;
 import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.ErrorCode;
@@ -8,14 +7,14 @@ import kr.mmgg.scp.util.ErrorResponse;
 
 import org.springframework.web.bind.annotation.*;
 
-import kr.mmgg.scp.dto.CreateProjectDto;
-import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailReceiveTaskSelectDto;
-import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
-import kr.mmgg.scp.dto.RequestTaskDto;
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.request.CreateProjectDto;
+import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
+import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -44,6 +43,7 @@ public class ProjectController {
     private ProjectDetailImpl projectDetailImpl;
 
     // SCP-300 프로젝트 추가
+    // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
     public ResponseEntity<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto dto) {
         List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);

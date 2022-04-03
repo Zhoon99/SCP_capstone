@@ -10,13 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
-import kr.mmgg.scp.dto.RequestTaskDto;
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailRequestTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -76,7 +76,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserId) {
 		List<Task> tlist = taskRepository.findByProjectinuserIdAndTaskAccept(projectinuserId, 0);
-		if(tlist.isEmpty()){
+		if (tlist.isEmpty()) {
 			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
 		}
 		ArrayList<ProjectDetailReceiveTaskDto> pdrtList = new ArrayList<ProjectDetailReceiveTaskDto>();
@@ -154,7 +154,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Transactional
 	public List<UserDto> gUsers(Long projectId) {
 		List<ProjectInUser> projectInUsers = projectinUserRepository.findByProjectId(projectId);
-		// 프로젝트 
+		// 프로젝트
 		if (projectInUsers.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
 		}

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest

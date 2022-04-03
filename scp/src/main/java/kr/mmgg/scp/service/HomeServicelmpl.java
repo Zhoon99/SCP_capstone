@@ -5,11 +5,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import kr.mmgg.scp.dto.HomeViewDto;
+import kr.mmgg.scp.dto.request.CreateProjectDto;
+import kr.mmgg.scp.dto.response.HomeViewDto;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.mmgg.scp.dto.CreateProjectDto;
 import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.repository.ProjectRepository;
