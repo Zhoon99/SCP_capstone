@@ -8,6 +8,7 @@ import kr.mmgg.scp.util.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.resultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
@@ -15,6 +16,7 @@ import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
+import kr.mmgg.scp.dto.response.tasklist;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -54,10 +56,10 @@ public class ProjectController {
     // SCP-301 프로젝트 모든 할일
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
-    public ResponseEntity<?> allTask(@PathVariable Long projectId) {
-        List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);
-        return (!pdatList.isEmpty() || pdatList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdatList)
-                : ErrorResponse.toResponseEntity(ErrorCode.PAGE_NOT_FOUND);
+    public resultDto allTask(@PathVariable Long projectId) {
+    	tasklist<List<ProjectDetailAllTaskDto>> pdatList = projectDetailImpl.allTask(projectId);
+        resultDto rDto = new resultDto(200,"Success",pdatList);
+        return rDto;
     }
 
     // SCP-302 프로젝트 자신 할일

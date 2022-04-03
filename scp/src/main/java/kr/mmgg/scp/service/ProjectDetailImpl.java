@@ -17,6 +17,7 @@ import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
+import kr.mmgg.scp.dto.response.tasklist;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -41,7 +42,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 프로젝트안의 전체 할일 가져오기
 	@Transactional
 	@Override
-	public List<ProjectDetailAllTaskDto> allTask(Long projectId) {
+	public tasklist<List<ProjectDetailAllTaskDto>> allTask(Long projectId) {
 		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
 		if (plist.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
@@ -52,12 +53,23 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		for (int i = 0; i < plist.size(); i++) {
 			dto = new ProjectDetailAllTaskDto();
 			if (!plist.get(i).getTasks().isEmpty()) {
-				dto.setTasklist(plist.get(i).getTasks());
+				dto.setProjectinuserId(plist.get(i).getProjectinuserId());
+				for (int j = 0; j < plist.get(i).getTasks().size(); j++) {
+					dto.setTaskId(plist.get(i).getTasks().get(j).getTaskId());
+					dto.setTaskContent(plist.get(i).getTasks().get(j).getTaskContent());
+					dto.setTaskOwner(plist.get(i).getTasks().get(j).getTaskOwner());
+					dto.setTaskComplete(plist.get(i).getTasks().get(j).getTaskComplete());
+					dto.setTaskAccept(plist.get(i).getTasks().get(j).getTaskAccept());
+					dto.setTaskRequesttime(plist.get(i).getTasks().get(j).getTaskRequesttime());
+					dto.setTaskDeadline(plist.get(i).getTasks().get(j).getTaskDeadline());
+					dto.setCreatetime(plist.get(i).getTasks().get(j).getTaskCreatetime());
+				}
 				list.add(dto);
-				// System.out.println(dto.toString());
 			}
 		}
-		return list;
+		tasklist<List<ProjectDetailAllTaskDto>> tasklist = new tasklist<List<ProjectDetailAllTaskDto>>();
+		tasklist.setTasklist(list);
+		return tasklist;
 	}
 
 	// 프로젝트의 자신의 할일 가져오기
