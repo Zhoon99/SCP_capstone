@@ -1,4 +1,4 @@
-package kr.mmgg.scp.dto;
+package kr.mmgg.scp.dto.response;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public class ProjectDetailSendTaskDto {
 	private Long projectinuserId;
 	private String taskContent;
 	private String taskDeadline;
-//	private List<Task> tasklist;
+	// private List<Task> tasklist;
 }

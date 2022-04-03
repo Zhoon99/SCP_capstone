@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TeaminuserRepository extends JpaRepository<Teaminuser, Long> {
+
     List<Teaminuser> findTop3ByTeamId(Long teamId);
 }

@@ -1,18 +1,22 @@
 package kr.mmgg.scp.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import kr.mmgg.scp.dto.request.CreateProjectDto;
+import kr.mmgg.scp.dto.response.HomeViewDto;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import kr.mmgg.scp.dto.CreateProjectDto;
-import kr.mmgg.scp.dto.HomeViewDto;
 import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.repository.ProjectRepository;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
+import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.ErrorCode;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -26,16 +30,19 @@ public class HomeServicelmpl implements HomeService {
 	@Override
 	public List<HomeViewDto> homeView(Long userId) {
 		List<ProjectInUser> piuUserIdList = projectinUserRepository.findByUserId(userId);
+		if (piuUserIdList.isEmpty()) {
+			throw new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND);
+		}
 		List<ProjectInUser> piuProjectIdList;
 		HomeViewDto homeViewDto;
 		ArrayList<HomeViewDto> homeViewDtoList = new ArrayList<HomeViewDto>();
 		for (int i = 0; i < piuUserIdList.size(); i++) {
 			homeViewDto = new HomeViewDto();
 			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
-			// 할일 담는곳 
-			
+
+			// 할일 담는곳
 			for (ProjectInUser pTask : piuProjectIdList) {
-				if (!pTask.getTasks().isEmpty()) { 
+				if (!pTask.getTasks().isEmpty()) {
 					homeViewDto.setTasklist(pTask.getTasks());
 				}
 			}
@@ -47,7 +54,7 @@ public class HomeServicelmpl implements HomeService {
 		}
 		return homeViewDtoList;
 	}
-	
+
 	// 프로젝트 생성
 	@Override
 	@Transactional

@@ -1,4 +1,4 @@
-package kr.mmgg.scp.dto;
+package kr.mmgg.scp.dto.response;
 
 import java.util.List;
 

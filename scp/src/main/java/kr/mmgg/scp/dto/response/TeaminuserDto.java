@@ -1,4 +1,4 @@
-package kr.mmgg.scp.dto;
+package kr.mmgg.scp.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TeamDto {
+public class TeaminuserDto {
 
+    private Long userId;
     private Long teamId;
-    private String teamName;
+    private String teaminuserCommoncode;
+    private Integer teaminuserMaker;
 }
