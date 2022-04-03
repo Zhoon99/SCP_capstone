@@ -8,12 +8,12 @@ import lombok.Data;
 @Data
 public class HomeViewDto {
 
-	private String projectName;
+    private String projectName;
 
-	// 할일 3개, 사람 3개 뽑아오는 곳
-	private List<Task> tasklist;
+    // 할일 3개, 사람 3개 뽑아오는 곳
+    private List<Task> tasklist;
 
-	private String userCode;
+    private String userCode;
 
-	private Long projectId;
+    private Long projectId;
 }

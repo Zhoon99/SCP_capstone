@@ -10,22 +10,19 @@ import java.util.List;
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
-    //jpa는 메소드명으로 group By 못 함
-    @Query(value = "SELECT t.*\n" +
-            "FROM team t\n" +
-            "INNER JOIN teaminuser tu\n" +
-            "ON t.team_id = tu.team_id\n" +
-            "WHERE tu.user_id = :userId\n" +
-            "AND tu.teaminuser_maker = 1\n" +
-            "GROUP BY t.team_id", nativeQuery = true)
+    @Query(value = "SELECT t\n" +
+            "FROM Team t\n" +
+            "INNER JOIN Teaminuser tu\n" +
+            "ON t.teamId = tu.teamId\n" +
+            "WHERE tu.userId = :userId\n" +
+            "AND tu.teaminuserMaker = 1")
     List<Team> getMyTeams(Long userId);
 
-    @Query(value = "SELECT t.*\n" +
-            "FROM team t\n" +
-            "INNER JOIN teaminuser tu\n" +
-            "ON t.team_id = tu.team_id\n" +
-            "WHERE tu.user_id = :userId\n" +
-            "AND tu.teaminuser_maker = 0\n" +
-            "GROUP BY t.team_id", nativeQuery = true)
+    @Query(value = "SELECT t\n" +
+            "FROM Team t\n" +
+            "INNER JOIN Teaminuser tu\n" +
+            "ON t.teamId = tu.teamId\n" +
+            "WHERE tu.userId = :userId\n" +
+            "AND tu.teaminuserMaker <> 1")
     List<Team> getSharedTeams(Long userId);
 }

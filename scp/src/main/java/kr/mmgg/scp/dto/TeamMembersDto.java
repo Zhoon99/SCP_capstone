@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TeamDto {
+public class TeamMembersDto {
 
-    private Long teamId;
-    private String teamName;
+    private Long userId;
+    private String userNickname;
+    private String teaminuserCommoncode;
+    private Integer teaminuserMaker;
 }
