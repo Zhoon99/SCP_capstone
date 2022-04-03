@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -26,6 +28,7 @@ public class ProjectInUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectinuserId;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
@@ -33,6 +36,7 @@ public class ProjectInUser {
     @Column(name = "user_id")
     private Long userId;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = Project.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", insertable = false, updatable = false)
     private Project project;
@@ -45,7 +49,8 @@ public class ProjectInUser {
 
     @Column
     private Integer projectinuserMaker;
-
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "projectinuser")
     private List<Task> tasks = new ArrayList<>();
 

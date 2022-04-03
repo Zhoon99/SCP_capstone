@@ -1,4 +1,4 @@
-package kr.mmgg.scp.dto;
+package kr.mmgg.scp.dto.response;
 
 import java.util.List;
 
@@ -7,5 +7,5 @@ import lombok.Data;
 
 @Data
 public class ProjectDetailRequestTaskDto {
-	private List<Task> tlist;
+	private List<Task> tasklist;
 }

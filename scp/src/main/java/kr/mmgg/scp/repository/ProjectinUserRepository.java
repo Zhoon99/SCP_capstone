@@ -1,6 +1,7 @@
 package kr.mmgg.scp.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +19,6 @@ public interface ProjectinUserRepository extends JpaRepository<ProjectInUser, Lo
     public List<ProjectInUser> findByProjectId(Long projectid);
 
     // 프로젝트 아이디와 유저아이디로 가져옴
-    public ProjectInUser findByUserIdAndProjectId(Long userId, Long projectId);
-    
+    public Optional<ProjectInUser> findByUserIdAndProjectId(Long userId, Long projectId);
+
 }
