@@ -17,7 +17,6 @@ import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
-import kr.mmgg.scp.dto.response.tasklist;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -25,6 +24,7 @@ import kr.mmgg.scp.service.HomeServicelmpl;
 import kr.mmgg.scp.service.ProjectDetailImpl;
 import lombok.AllArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -58,9 +58,11 @@ public class ProjectController {
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
     public ResultDto<?> allTask(@PathVariable Long projectId) {
-        tasklist<List<ProjectDetailAllTaskDto>> pdatList = projectDetailImpl.allTask(projectId);
-        ResultDto<tasklist<List<ProjectDetailAllTaskDto>>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, pdatList);
+        HashMap<String,List<ProjectDetailAllTaskDto>> map = new HashMap<>();
+        List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);
+        map.put("task", pdatList);
+        ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
         return rDto;
     }
 
