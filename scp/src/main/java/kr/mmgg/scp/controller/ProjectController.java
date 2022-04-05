@@ -2,12 +2,14 @@ package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.service.ProjectDetailImpl;
 import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
 import kr.mmgg.scp.util.ErrorResponse;
 
 import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
@@ -22,6 +24,7 @@ import kr.mmgg.scp.service.HomeServicelmpl;
 import kr.mmgg.scp.service.ProjectDetailImpl;
 import lombok.AllArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -54,10 +57,13 @@ public class ProjectController {
     // SCP-301 프로젝트 모든 할일
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
-    public ResponseEntity<?> allTask(@PathVariable Long projectId) {
+    public ResultDto<?> allTask(@PathVariable Long projectId) {
+        HashMap<String,List<ProjectDetailAllTaskDto>> map = new HashMap<>();
         List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);
-        return (!pdatList.isEmpty() || pdatList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdatList)
-                : ErrorResponse.toResponseEntity(ErrorCode.PAGE_NOT_FOUND);
+        map.put("task", pdatList);
+        ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
+        return rDto;
     }
 
     // SCP-302 프로젝트 자신 할일
