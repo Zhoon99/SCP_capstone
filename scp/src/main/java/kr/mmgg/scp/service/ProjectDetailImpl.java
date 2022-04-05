@@ -17,7 +17,6 @@ import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
-import kr.mmgg.scp.dto.response.tasklist;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -42,13 +41,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 프로젝트안의 전체 할일 가져오기
 	@Transactional
 	@Override
-	public tasklist<List<ProjectDetailAllTaskDto>> allTask(Long projectId) {
+	public List<ProjectDetailAllTaskDto> allTask(Long projectId) {
 		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
 		if (plist.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
 		}
 
-		ArrayList<ProjectDetailAllTaskDto> list = new ArrayList<ProjectDetailAllTaskDto>();
+		List<ProjectDetailAllTaskDto> list = new ArrayList<ProjectDetailAllTaskDto>();
 		ProjectDetailAllTaskDto dto;
 		for (int i = 0; i < plist.size(); i++) {
 			dto = new ProjectDetailAllTaskDto();
@@ -67,9 +66,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				list.add(dto);
 			}
 		}
-		tasklist<List<ProjectDetailAllTaskDto>> tasklist = new tasklist<List<ProjectDetailAllTaskDto>>();
-		tasklist.setTasklist(list);
-		return tasklist;
+		return list;
 	}
 
 	// 프로젝트의 자신의 할일 가져오기

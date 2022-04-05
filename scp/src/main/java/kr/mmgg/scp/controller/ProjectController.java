@@ -2,13 +2,14 @@ package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.service.ProjectDetailImpl;
 import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
 import kr.mmgg.scp.util.ErrorResponse;
 
 import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
-import kr.mmgg.scp.dto.resultDto;
+import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
@@ -16,7 +17,6 @@ import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
-import kr.mmgg.scp.dto.response.tasklist;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -24,6 +24,7 @@ import kr.mmgg.scp.service.HomeServicelmpl;
 import kr.mmgg.scp.service.ProjectDetailImpl;
 import lombok.AllArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -56,9 +57,12 @@ public class ProjectController {
     // SCP-301 프로젝트 모든 할일
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
-    public resultDto allTask(@PathVariable Long projectId) {
-    	tasklist<List<ProjectDetailAllTaskDto>> pdatList = projectDetailImpl.allTask(projectId);
-        resultDto rDto = new resultDto(200,"Success",pdatList);
+    public ResultDto<?> allTask(@PathVariable Long projectId) {
+        HashMap<String,List<ProjectDetailAllTaskDto>> map = new HashMap<>();
+        List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);
+        map.put("task", pdatList);
+        ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
         return rDto;
     }
 

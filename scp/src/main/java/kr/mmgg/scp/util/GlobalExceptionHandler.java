@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { CustomException.class })
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
-        System.out.println("여긴 아니겠지??" + e);
         switch (e.getErrorCode().getHttpStatus().value()) {
             case 404:
                 return ErrorResponse.toResponseEntity(e.getErrorCode());
