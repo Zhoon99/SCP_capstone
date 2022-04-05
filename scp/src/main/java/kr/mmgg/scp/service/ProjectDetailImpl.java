@@ -72,13 +72,24 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 프로젝트의 자신의 할일 가져오기
 	@Override
 	@Transactional
-	public ProjectDetailMyTaskDto myTask(Long userId, Long projectId) {
-		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId,
-				projectId).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND));
-		ProjectDetailMyTaskDto pdMyTask = new ProjectDetailMyTaskDto();
-		pdMyTask.setTaskList(piuUserIdAndProjectId.getTasks());
-		// System.out.println(piuUserIdAndProjectId);
-		return pdMyTask;
+	public List<ProjectDetailMyTaskDto> myTask(Long userId, Long projectId) {
+		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId, projectId).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND));
+		List<ProjectDetailMyTaskDto> list = new ArrayList<ProjectDetailMyTaskDto>();
+		ProjectDetailMyTaskDto dto = null;
+		for (int i = 0; i < piuUserIdAndProjectId.getTasks().size(); i++) {
+			dto = new ProjectDetailMyTaskDto();
+			dto.setProjectinuserId(piuUserIdAndProjectId.getTasks().get(i).getProjectinuserId());
+			dto.setTaskId(piuUserIdAndProjectId.getTasks().get(i).getTaskId());
+			dto.setTaskContent(piuUserIdAndProjectId.getTasks().get(i).getTaskContent());
+			dto.setTaskOwner(piuUserIdAndProjectId.getTasks().get(i).getTaskOwner());
+			dto.setTaskComplete(piuUserIdAndProjectId.getTasks().get(i).getTaskComplete());
+			dto.setTaskAccept(piuUserIdAndProjectId.getTasks().get(i).getTaskAccept());
+			dto.setTaskRequesttime(piuUserIdAndProjectId.getTasks().get(i).getTaskRequesttime());
+			dto.setTaskDeadline(piuUserIdAndProjectId.getTasks().get(i).getTaskDeadline());
+			dto.setCreatetime(piuUserIdAndProjectId.getTasks().get(i).getTaskCreatetime());
+			list.add(dto);
+		}
+		return list;
 	}
 
 	// 해당 프로젝트안에서 받은 할일 확인하기
@@ -93,7 +104,15 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		for (int i = 0; i < tlist.size(); i++) {
 			pdrtTask = new ProjectDetailReceiveTaskDto();
 			if (tlist.get(i).getProjectinuser().getProjectId() == projectId) {
-				pdrtTask.setTask(tlist.get(i));
+				pdrtTask.setProjectinuserId(tlist.get(i).getProjectinuserId());
+				pdrtTask.setTaskId(tlist.get(i).getTaskId());
+				pdrtTask.setTaskContent(tlist.get(i).getTaskContent());
+				pdrtTask.setTaskOwner(tlist.get(i).getTaskOwner());
+				pdrtTask.setTaskComplete(tlist.get(i).getTaskComplete());
+				pdrtTask.setTaskAccept(tlist.get(i).getTaskAccept());
+				pdrtTask.setTaskRequesttime(tlist.get(i).getTaskRequesttime());
+				pdrtTask.setTaskDeadline(tlist.get(i).getTaskDeadline());
+				pdrtTask.setCreatetime(tlist.get(i).getTaskCreatetime());
 				pdrtList.add(pdrtTask);
 			}
 		}
@@ -123,7 +142,15 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				// TODO: 닉네임이 겹칠 경우 큰일남......
 				for (Task task : plist.get(i).getTasks()) {
 					if (task.getTaskRequester().equals(user.getUserNickname())) {
-						dto.setReqTask(task);
+						dto.setProjectinuserId(task.getProjectinuserId());
+						dto.setTaskId(task.getTaskId());
+						dto.setTaskContent(task.getTaskContent());
+						dto.setTaskOwner(task.getTaskOwner());
+						dto.setTaskComplete(task.getTaskComplete());
+						dto.setTaskAccept(task.getTaskAccept());
+						dto.setTaskRequesttime(task.getTaskRequesttime());
+						dto.setTaskDeadline(task.getTaskDeadline());
+						dto.setCreatetime(task.getTaskCreatetime());
 						list.add(dto);
 					}
 				}

@@ -16,7 +16,7 @@ import kr.mmgg.scp.entity.User;
 
 public interface ProjectDetailService {
 
-	public ProjectDetailMyTaskDto myTask(Long userId, Long projectId);
+	public List<ProjectDetailMyTaskDto> myTask(Long userId, Long projectId);
 
 	public List<ProjectDetailAllTaskDto> allTask(Long userId);
 
