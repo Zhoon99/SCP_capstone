@@ -1,26 +1,22 @@
 package kr.mmgg.scp.service;
 
+import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.entity.User;
-import kr.mmgg.scp.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 
-import org.springframework.stereotype.Service;
+public interface UserService {
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
+    public UserDto getUserByUserId(Long userId);
 
-    private final UserRepository userRepository;
+    public UserDto getUserIdByEmail(String userEmail);
 
-    /**
-     * 이메일로 유저 id 가져오기
-     */
-    public Long getUserIdByEmail(String userEmail) {
-        User emailUser = userRepository.findByUserEmail(userEmail);
-        if(emailUser != null) {
-            return emailUser.getUserId();
-        } else {
-            return null;
-        }
-    }
+    /*default UserDto toUserDto(User user) {
+        UserDto userDto = UserDto.builder()
+                .id(user.getUserId())
+                .userNickname(user.getUserNickname())
+                .userEmail(user.getUserEmail())
+                .userSnstype(user.getUserSnstype())
+                .userRole(user.getUserRole())
+                .build();
+        return userDto;
+    }*/
 }
