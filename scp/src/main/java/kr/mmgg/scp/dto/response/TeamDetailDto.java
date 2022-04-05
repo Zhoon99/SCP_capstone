@@ -5,14 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TeaminuserDto {
+public class TeamDetailDto {
 
-    private Long userId;
     private Long teamId;
-    private String teaminuserCommoncode;
-    private Integer teaminuserMaker;
+    private String teamName;
+    private List<TeamMembersDto> teamMembers;
 }
