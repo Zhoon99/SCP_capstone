@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import kr.mmgg.scp.dto.CreateProjectDto;
-import kr.mmgg.scp.dto.CreateProjectMemberDto;
-import kr.mmgg.scp.dto.HomeViewDto;
+import kr.mmgg.scp.dto.request.CreateProjectDto;
+import kr.mmgg.scp.dto.request.CreateProjectMemberDto;
+import kr.mmgg.scp.dto.response.HomeViewDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import lombok.extern.slf4j.Slf4j;

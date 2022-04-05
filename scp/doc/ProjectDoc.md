@@ -1,9 +1,9 @@
-## Post "/project/crateproject"
+# Post "/project/crateproject"
 ### input
-```
+``` json
 {
     "title": "String",
-    "member":
+    "member": 
     [
         {
         	"userId":Long,
@@ -20,34 +20,20 @@
 ```
 
 ### output
+``` json
+{
+	"status": 200,
+	"message": "message"
+}
 ```
-[
-    {
-        "projectinuserId": Long,
-        "user": null,
-        "userId": Long,
-        "project": null,
-        "projectId": Long,
-        "projectinuserCommoncode": String,
-        "projectinuserMaker": Integer,
-        "tasks":[]
-    },
-    {
-        "projectinuserId": Long,
-        "user": null,
-        "userId": Long,
-        "project": null,
-        "projectId": Long,
-        "projectinuserCommoncode": String,
-        "projectinuserMaker": Integer,
-        "tasks":[]
-    }
-]
-```
-## GET /alltask/{projectId}
+
+# GET /alltask/{projectId}
 ### output
-```
-[
+``` json
+{
+	"status": 200,
+	"message": "message",
+	"result":
 	{
 		"tasklist":
 		[
@@ -62,72 +48,207 @@
 				"taskRequesttime": datetime,
 				"taskDeadline": datetime,
 				"taskCreatetime": datetime
+			},
+			{
+				"taskId": Long,
+				"projectinuserId": Long,
+				"taskContent": String,
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
 			}
 		]
 	}
-]
+}
 ```
-## GET /mytask/{userId}/{projectId}
+# GET /mytask/{userId}/{projectId}
 ### output
-```
+``` json
 {
-	"taskList":
+	"status": 200,
+	"message": "message",
+	"result" :
+	{
+		"taskList":
+		[
+			{
+				"taskId": Long,
+				"projectinuserId": Long,
+				"taskContent": String,
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			},
+			{
+				"taskId": Long,
+				"projectinuserId": Long,
+				"taskContent": String,
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			}
+
+		]
+	}
+}
+```
+# Patch /whethertask/{userId}/{taskId}
+### output
+``` json
+{
+	"status": 200,
+	"message": "message",
+}
+```
+# GET /receivetask/{projectId}/{projectinuserId}
+### output
+``` json
+{
+	"status": 200,
+	"message": "message",
+	"result" :
+	{
+		"taskList":
+		[
+			{
+				"taskId": Long
+				"projectinuserId": Long,
+				"taskContent": String
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			},
+			{
+				"taskId": Long
+				"projectinuserId": Long,
+				"taskContent": String
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			}
+		]
+	}
+}
+```
+# PATCH /receivetask/{taskId}/{selected}
+### output
+``` json
+	"status": 200,
+	"message": "message"
+```
+
+# GET /requestask/{projectId}/{userId}
+### output
+``` json
+{
+	"status": 200,
+	"message": "message",
+	"result":
+	{
+		"taskList":
+		[
+			{
+				"taskId": Long
+				"projectinuserId": Long,
+				"taskContent": String
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			},
+			{
+				"taskId": Long
+				"projectinuserId": Long,
+				"taskContent": String
+				"taskOwner": String,
+				"taskRequester": String,
+				"taskComplete": boolean(Integer),
+				"taskAccept": boolean(Integer),
+				"taskRequesttime": datetime,
+				"taskDeadline": datetime,
+				"taskCreatetime": datetime
+			}
+		]
+	}
+}
+```
+# GET /sendtask/{projectId}
+### output
+``` json
+{
+	"status": 200,
+	"message": "message",
+	"result":
+	{
+		"userList":
+		[
+			{
+				"id": Long,
+				"userNickname": "String",
+				"userEmail": "String",
+				"userSnstype": "String",
+				"userRole": "String"
+			},
+			{
+				"id": Long,
+				"userNickname": "String",
+				"userEmail": "String",
+				"userSnstype": "String",
+				"userRole": "String"
+			}
+		]
+	}
+}
+```
+# POST /sendtask
+### input
+``` json
+{
+	"userId": Long,
+	"tasklist" :
 	[
 		{
-			"taskId": Long,
+	    	"taskId" : null,
 			"projectinuserId": Long,
-			"taskContent": String,
-			"taskOwner": String,
-			"taskRequester": String,
-			"taskComplete": boolean(Integer),
-			"taskAccept": boolean(Integer),
-			"taskRequesttime": datetime,
-			"taskDeadline": datetime,
-			"taskCreatetime": datetime
+			"taskRequester" : String,
+			"taskOwner" : String,
+			"taskContent" : String,
+			"taskComplete" : boolean(Integer),
+			"taskAccept" : boolean(Integer),
+			"taskRequesttime" : datetime,
+			"taskDeadline" : datetime,
+			"taskCreatetime" : datetime
 		}
-	]
+	]  
 }
 ```
-## POST /sendtask
-### input
-```
+### ouput
+``` json 
 {
-  "userId": Long,
-  "tasklist" :
-  [
-  	{
-      	"taskId" : null,
-  		"projectinuserId": Long,
-  		"taskRequester" : String,
-  		"taskOwner" : String,
-  		"taskContent" : String,
-  		"taskComplete" : boolean(Integer),
-  		"taskAccept" : boolean(Integer),
-  		"taskRequesttime" : datetime,
-  		"taskDeadline" : datetime,
-  		"taskCreatetime" : datetime
-	}
-  ]  
+	"status": 200,
+	"message": "message"
 }
-```
-## GET /receivetask/{projectId}/{projectinuserId}
-### output
-```
-[
-	{
-		"task":
-		{
-			"taskId": Long
-			"projectinuserId": Long,
-			"taskContent": String
-			"taskOwner": String,
-			"taskRequester": String,
-			"taskComplete": boolean(Integer),
-			"taskAccept": boolean(Integer),
-			"taskRequesttime": datetime,
-			"taskDeadline": datetime,
-			"taskCreatetime": datetime
-		}
-	}
-]
 ```

@@ -10,24 +10,28 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import kr.mmgg.scp.dto.ProjectDetailAllTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailMyTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailReceiveTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailRequestTaskDto;
-import kr.mmgg.scp.dto.ProjectDetailSendTaskDto;
-import kr.mmgg.scp.dto.RequestTaskDto;
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailRequestTaskDto;
+import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.repository.TaskRepository;
 import kr.mmgg.scp.repository.UserRepository;
+import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.ErrorCode;
 import kr.mmgg.scp.util.dateTime;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ProjectDetailImpl implements ProjectDetailService {
 
 	private ProjectinUserRepository projectinUserRepository;
@@ -39,6 +43,10 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	public List<ProjectDetailAllTaskDto> allTask(Long projectId) {
 		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
+		if (plist.isEmpty()) {
+			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
+		}
+
 		ArrayList<ProjectDetailAllTaskDto> list = new ArrayList<ProjectDetailAllTaskDto>();
 		ProjectDetailAllTaskDto dto;
 		for (int i = 0; i < plist.size(); i++) {
@@ -56,7 +64,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	@Transactional
 	public ProjectDetailMyTaskDto myTask(Long userId, Long projectId) {
-		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId, projectId);
+		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId,
+				projectId).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND));
 		ProjectDetailMyTaskDto pdMyTask = new ProjectDetailMyTaskDto();
 		pdMyTask.setTaskList(piuUserIdAndProjectId.getTasks());
 		// System.out.println(piuUserIdAndProjectId);
@@ -67,6 +76,9 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserId) {
 		List<Task> tlist = taskRepository.findByProjectinuserIdAndTaskAccept(projectinuserId, 0);
+		if (tlist.isEmpty()) {
+			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
+		}
 		ArrayList<ProjectDetailReceiveTaskDto> pdrtList = new ArrayList<ProjectDetailReceiveTaskDto>();
 		ProjectDetailReceiveTaskDto pdrtTask;
 		for (int i = 0; i < tlist.size(); i++) {
@@ -84,7 +96,14 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Transactional
 	public List<RequestTaskDto> requestTask(Long projectId, Long userid) {
 		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
-		User user = userRepository.findByUserId(userid);
+		// 유저를 가져오고 유저가 없을 시 에러
+		User user = userRepository.findByUserId(userid)
+				.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+		if (plist.isEmpty()) {
+			// 프로젝트가 없을 시 에러
+			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
+		}
+
 		List<RequestTaskDto> list = new ArrayList<>();
 		RequestTaskDto dto;
 		// 해당 프로젝트의 모든 할일 가져오기
@@ -125,7 +144,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		if (taskRepository.save(task) != null) {
 			return true;
 		} else {
-			return false;
+			// TODO: 에러 핸들러 만들기
+			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
 		}
 	}
 
@@ -134,6 +154,10 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Transactional
 	public List<UserDto> gUsers(Long projectId) {
 		List<ProjectInUser> projectInUsers = projectinUserRepository.findByProjectId(projectId);
+		// 프로젝트
+		if (projectInUsers.isEmpty()) {
+			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
+		}
 		List<UserDto> users = new ArrayList<>();
 		UserDto user;
 		for (ProjectInUser projectInUser : projectInUsers) {
@@ -141,5 +165,41 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			users.add(user);
 		}
 		return users;
+	}
+
+	// 할일 완료여부 체크
+	@Override
+	@Transactional
+	public void whetherTask(Long userId, Long taskId) {
+		Task task = taskRepository.findByTaskId(taskId)
+				.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+		if (userId == task.getProjectinuser().getUserId()) {
+			if (task.getTaskComplete() == 0) {
+				task.setTaskComplete(1);
+			} else {
+				task.setTaskComplete(0);
+			}
+			taskRepository.save(task);
+		} else {
+			throw new CustomException(ErrorCode.TASK_NOT_MATCH);
+		}
+	}
+
+	// 해당 프로젝트 안의 할일 수락 및 거절 하기
+	// TODO: 에러 처리 해야함
+	@Override
+	public boolean recevieTask(Long taskId, Integer selected) {
+		Task task = taskRepository.getById(taskId);
+		if (selected == -1 && taskRepository.save(task) != null) {
+			task.setTaskAccept(-1);
+			taskRepository.save(task);
+			return true;
+		} else if (selected == 1 && taskRepository.save(task) != null) {
+			task.setTaskAccept(1);
+			taskRepository.save(task);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
