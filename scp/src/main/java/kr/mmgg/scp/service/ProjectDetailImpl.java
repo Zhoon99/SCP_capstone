@@ -1,7 +1,9 @@
 package kr.mmgg.scp.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -10,12 +12,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.response.ProjectUpdateGetDto;
+import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoMemberDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
@@ -24,6 +29,7 @@ import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.repository.TaskRepository;
 import kr.mmgg.scp.repository.UserRepository;
 import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
 import kr.mmgg.scp.util.dateTime;
 import lombok.AllArgsConstructor;
@@ -41,7 +47,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 프로젝트안의 전체 할일 가져오기
 	@Transactional
 	@Override
-	public List<ProjectDetailAllTaskDto> allTask(Long projectId) {
+	public ResultDto<List<ProjectDetailAllTaskDto>> allTask(Long projectId) {
 		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
 		if (plist.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
@@ -66,7 +72,9 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				list.add(dto);
 			}
 		}
-		return list;
+		ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
+		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, list, "allTask");
+		return rDto;
 	}
 
 	// 프로젝트의 자신의 할일 가져오기
@@ -210,5 +218,31 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		} else {
 			return false;
 		}
+	}
+
+
+
+	// 업데이트 페이지에 들어갈 정보
+	@Override
+	@Transactional
+	public ResultDto<ProjectUpdateGetDto> updateProjectGetInfo(Long projectid) {
+		List<ProjectInUser> pInUsers = projectinUserRepository.findByProjectId(projectid);
+		// TODO: 에러추가
+		if(pInUsers.isEmpty()){
+			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
+		}
+		ProjectUpdateGetDto pUpdateGetDto = new ProjectUpdateGetDto();
+		List<ProjectUpdateGetInfoMemberDto> users = new ArrayList<>();
+		for (ProjectInUser pInUser : pInUsers){ 
+			ProjectUpdateGetInfoMemberDto user = new ProjectUpdateGetInfoMemberDto();
+			user.setNickName(pInUser.getUser().getUserNickname());
+			user.setUserId(pInUser.getUser().getUserId());
+			users.add(user);
+		}
+		pUpdateGetDto.setProjectName(pInUsers.get(0).getProject().getProjectName());
+		pUpdateGetDto.setUsers(users);
+		ResultDto<ProjectUpdateGetDto> rDto = new ResultDto<ProjectUpdateGetDto>();
+		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, pUpdateGetDto,"projectInfo");
+		return rDto;
 	}
 }

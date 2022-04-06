@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
+import kr.mmgg.scp.dto.request.UpdateProjectAddMemberDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.response.ProjectUpdateGetDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
@@ -54,15 +56,30 @@ public class ProjectController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @GetMapping(value = "/updateproject/{projectId}")
+    @Transactional
+    public ResultDto<ProjectUpdateGetDto> updateProjectGetInfo(@PathVariable Long projectId){
+        ResultDto<ProjectUpdateGetDto> rDto = projectDetailImpl.updateProjectGetInfo(projectId);
+        return rDto;
+    }
+
+    // @PatchMapping(value = "/updateproject/deleteuser/{projectinuserId}")
+    // public ResultDto<?> updateProject(@PathVariable Long projectinuserId){
+    //     projectDetailImpl.updateProject(projectinuserId);
+    //     return null;
+    // }
+    
+    // @PatchMapping(value = "/updateproject/adduser")
+    // public ResultDto<?> updateProject(@RequestBody UpdateProjectAddMemberDto uAddMember){
+
+    //     return null;
+    // }
+
     // SCP-301 프로젝트 모든 할일
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
-    public ResultDto<?> allTask(@PathVariable Long projectId) {
-        HashMap<String,List<ProjectDetailAllTaskDto>> map = new HashMap<>();
-        List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);
-        map.put("task", pdatList);
-        ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
+    public ResultDto<List<ProjectDetailAllTaskDto>> allTask(@PathVariable Long projectId) {
+        ResultDto<List<ProjectDetailAllTaskDto>> rDto = projectDetailImpl.allTask(projectId);
         return rDto;
     }
 
