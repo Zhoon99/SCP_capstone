@@ -246,8 +246,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 
 	@Override
 	@Transactional
-	public ResultDto<?> updateProjectDeleteMember(Long projectinuserId) {
-		ProjectInUser pInUser = projectinUserRepository.findById(projectinuserId)
+	public ResultDto<?> updateProjectDeleteMember(Long userId, Long projectId) {
+		ProjectInUser pInUser = projectinUserRepository.findByUserIdAndProjectId(userId, projectId)
 				.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND));
 		projectinUserRepository.delete(pInUser);
 		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);

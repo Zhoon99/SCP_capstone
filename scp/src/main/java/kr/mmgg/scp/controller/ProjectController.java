@@ -62,9 +62,9 @@ public class ProjectController {
         return rDto;
     }
 
-    @PatchMapping(value = "updateproject/deletemember/{projectinuserId}")
-    public ResultDto<?> updateProjectDeletemember(@PathVariable Long projectinuserId) {
-        ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
+    @PatchMapping(value = "updateproject/deletemember/{userId}/{projectId}")
+    public ResultDto<?> updateProjectDeletemember(@PathVariable Long userId, @PathVariable Long projectinuserId) {
+        ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(userId, projectinuserId);
         return rDto;
     }
 
