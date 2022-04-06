@@ -19,7 +19,7 @@ import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
-import kr.mmgg.scp.dto.response.ProjectUpdateGetDto;
+import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoMemberDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
@@ -220,20 +220,18 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		}
 	}
 
-
-
 	// 업데이트 페이지에 들어갈 정보
 	@Override
 	@Transactional
-	public ResultDto<ProjectUpdateGetDto> updateProjectGetInfo(Long projectid) {
+	public ResultDto<ProjectUpdateGetInfoDto> updateProjectGetInfo(Long projectid) {
 		List<ProjectInUser> pInUsers = projectinUserRepository.findByProjectId(projectid);
 		// TODO: 에러추가
-		if(pInUsers.isEmpty()){
+		if (pInUsers.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
 		}
-		ProjectUpdateGetDto pUpdateGetDto = new ProjectUpdateGetDto();
+		ProjectUpdateGetInfoDto pUpdateGetDto = new ProjectUpdateGetInfoDto();
 		List<ProjectUpdateGetInfoMemberDto> users = new ArrayList<>();
-		for (ProjectInUser pInUser : pInUsers){ 
+		for (ProjectInUser pInUser : pInUsers) {
 			ProjectUpdateGetInfoMemberDto user = new ProjectUpdateGetInfoMemberDto();
 			user.setNickName(pInUser.getUser().getUserNickname());
 			user.setUserId(pInUser.getUser().getUserId());
@@ -241,8 +239,18 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		}
 		pUpdateGetDto.setProjectName(pInUsers.get(0).getProject().getProjectName());
 		pUpdateGetDto.setUsers(users);
-		ResultDto<ProjectUpdateGetDto> rDto = new ResultDto<ProjectUpdateGetDto>();
-		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, pUpdateGetDto,"projectInfo");
+		ResultDto<ProjectUpdateGetInfoDto> rDto = new ResultDto<ProjectUpdateGetInfoDto>();
+		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, pUpdateGetDto, "projectInfo");
 		return rDto;
 	}
+
+	@Override
+	@Transactional
+	public ResultDto<?> updateProjectDeleteMember(Long projectinuserId) {
+		ProjectInUser pInUser = projectinUserRepository.findById(projectinuserId)
+				.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND));
+		projectinUserRepository.delete(pInUser);
+		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
+	}
+
 }

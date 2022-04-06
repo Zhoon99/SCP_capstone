@@ -12,7 +12,7 @@ import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
-import kr.mmgg.scp.dto.response.ProjectUpdateGetDto;
+import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
@@ -35,7 +35,7 @@ public interface ProjectDetailService {
 
 	public void whetherTask(Long userId, Long taskId);
 
-	// public ResultDto updateProject(Long projectinuserId);
+	public ResultDto<?> updateProjectDeleteMember(Long projectinuserId);
 
-	public ResultDto<ProjectUpdateGetDto> updateProjectGetInfo(Long ProjectId);
+	public ResultDto<ProjectUpdateGetInfoDto> updateProjectGetInfo(Long ProjectId);
 }

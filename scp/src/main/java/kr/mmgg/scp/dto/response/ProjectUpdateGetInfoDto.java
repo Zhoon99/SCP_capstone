@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class ProjectUpdateGetDto {
+public class ProjectUpdateGetInfoDto {
     private List<ProjectUpdateGetInfoMemberDto> users;
     private String ProjectName;
 }
