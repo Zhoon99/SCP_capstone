@@ -1,17 +1,11 @@
 package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.service.ProjectDetailImpl;
-import kr.mmgg.scp.util.CustomException;
-import kr.mmgg.scp.util.CustomStatusCode;
-import kr.mmgg.scp.util.ErrorCode;
-import kr.mmgg.scp.util.ErrorResponse;
-
 import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
-import kr.mmgg.scp.dto.request.UpdateProjectAddMemberDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
@@ -20,13 +14,9 @@ import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
-import kr.mmgg.scp.entity.Task;
-import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.service.HomeServicelmpl;
-import kr.mmgg.scp.service.ProjectDetailImpl;
 import lombok.AllArgsConstructor;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -46,7 +36,7 @@ public class ProjectController {
 
     private HomeServicelmpl homeServiceImpl;
     private ProjectDetailImpl projectDetailImpl;
-
+    
     // SCP-300 프로젝트 추가
     // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
@@ -56,16 +46,23 @@ public class ProjectController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    
     @GetMapping(value = "/updateproject/{projectId}")
     public ResultDto<ProjectUpdateGetInfoDto> updateProjectGetInfo(@PathVariable Long projectId) {
         ResultDto<ProjectUpdateGetInfoDto> rDto = projectDetailImpl.updateProjectGetInfo(projectId);
         return rDto;
     }
 
-    @PatchMapping(value = "updateproject/deletemember/{userId}/{projectId}")
-    public ResultDto<?> updateProjectDeletemember(@PathVariable Long userId, @PathVariable Long projectinuserId) {
-        ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(userId, projectinuserId);
+    @PatchMapping(value = "updateproject/deletemember/{projectinuserId}")
+    public ResultDto<?> updateProjectDeletemember(@PathVariable Long projectinuserId) {
+        ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
         return rDto;
+    }
+
+    @PatchMapping(value = "")
+    public ResultDto<?> updateProjectMember(){
+
+        return null;
     }
 
     // @PatchMapping(value = "/updateproject/deleteuser/{projectinuserId}")

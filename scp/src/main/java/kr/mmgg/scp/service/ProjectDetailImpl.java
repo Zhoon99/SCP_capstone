@@ -233,6 +233,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		List<ProjectUpdateGetInfoMemberDto> users = new ArrayList<>();
 		for (ProjectInUser pInUser : pInUsers) {
 			ProjectUpdateGetInfoMemberDto user = new ProjectUpdateGetInfoMemberDto();
+			user.setProjectinuserId(pInUser.getProjectinuserId());
 			user.setNickName(pInUser.getUser().getUserNickname());
 			user.setUserId(pInUser.getUser().getUserId());
 			users.add(user);
@@ -246,11 +247,10 @@ public class ProjectDetailImpl implements ProjectDetailService {
 
 	@Override
 	@Transactional
-	public ResultDto<?> updateProjectDeleteMember(Long userId, Long projectId) {
-		ProjectInUser pInUser = projectinUserRepository.findByUserIdAndProjectId(userId, projectId)
+	public ResultDto<?> updateProjectDeleteMember(Long ProjectinuserId) {
+		ProjectInUser pInUser = projectinUserRepository.findById(ProjectinuserId)
 				.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND));
 		projectinUserRepository.delete(pInUser);
 		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
 	}
-
 }

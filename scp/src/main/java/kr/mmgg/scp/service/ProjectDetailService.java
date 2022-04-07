@@ -35,7 +35,7 @@ public interface ProjectDetailService {
 
 	public void whetherTask(Long userId, Long taskId);
 
-	public ResultDto<?> updateProjectDeleteMember(Long projectinuserId, Long userId);
+	public ResultDto<?> updateProjectDeleteMember(Long projectinuserId);
 
 	public ResultDto<ProjectUpdateGetInfoDto> updateProjectGetInfo(Long ProjectId);
 }
