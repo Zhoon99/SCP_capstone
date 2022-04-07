@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.request.CreateProjectMemberDto;
@@ -22,16 +23,19 @@ public class homeServiceTest {
     @Autowired
     private HomeServicelmpl homeServiceImpl;
 
+
     @Autowired
     private ProjectDetailImpl impl;
 
+    private MockMvc mvc;
     @Test
     @Transactional
     void testHomeView() {
         List<HomeViewDto> dto = homeServiceImpl.homeView(1L);
         log.info(dto.toString());
-    }
 
+    }
+    
     @Transactional
     @Test
     void testCreateProject() {

@@ -1,27 +1,25 @@
 package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.service.ProjectDetailImpl;
-import kr.mmgg.scp.util.CustomException;
-import kr.mmgg.scp.util.ErrorCode;
-import kr.mmgg.scp.util.ErrorResponse;
+import kr.mmgg.scp.util.CustomStatusCode;
 
 import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
-import kr.mmgg.scp.entity.Task;
-import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.service.HomeServicelmpl;
-import kr.mmgg.scp.service.ProjectDetailImpl;
 import lombok.AllArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -51,22 +49,53 @@ public class ProjectController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @GetMapping(value = "/updateproject/{projectId}")
+    public ResultDto<ProjectUpdateGetInfoDto> updateProjectGetInfo(@PathVariable Long projectId) {
+        ResultDto<ProjectUpdateGetInfoDto> rDto = projectDetailImpl.updateProjectGetInfo(projectId);
+        return rDto;
+    }
+
+    @PatchMapping(value = "updateproject/deletemember/{projectinuserId}")
+    public ResultDto<?> updateProjectDeletemember(@PathVariable Long projectinuserId) {
+        ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
+        return rDto;
+    }
+
+    @PatchMapping(value = "")
+    public ResultDto<?> updateProjectMember() {
+
+        return null;
+    }
+
+    // @PatchMapping(value = "/updateproject/deleteuser/{projectinuserId}")
+    // public ResultDto<?> updateProject(@PathVariable Long projectinuserId){
+    // projectDetailImpl.updateProject(projectinuserId);
+    // return null;
+    // }
+
+    // @PatchMapping(value = "/updateproject/adduser")
+    // public ResultDto<?> updateProject(@RequestBody UpdateProjectAddMemberDto
+    // uAddMember){
+
+    // return null;
+    // }
+
     // SCP-301 프로젝트 모든 할일
+    // ResultDto 완성
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
-    public ResponseEntity<?> allTask(@PathVariable Long projectId) {
-        List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);
-        return (!pdatList.isEmpty() || pdatList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdatList)
-                : ErrorResponse.toResponseEntity(ErrorCode.PAGE_NOT_FOUND);
+    public ResultDto<List<ProjectDetailAllTaskDto>> allTask(@PathVariable Long projectId) {
+        ResultDto<List<ProjectDetailAllTaskDto>> rDto = projectDetailImpl.allTask(projectId);
+        return rDto;
     }
 
     // SCP-302 프로젝트 자신 할일
+    // ResultDto 완성
     @Transactional // 영속성 컨텐츠로인해 안해주면 no session 에러남 (서비스뿐만아니라 컨트롤러단에서도 관리해줘야됨)
     @GetMapping(value = "/mytask/{userId}/{projectId}")
-    public ResponseEntity<ProjectDetailMyTaskDto> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
-        ProjectDetailMyTaskDto pdmtList = projectDetailImpl.myTask(userId, projectId);
-        return (pdmtList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdmtList)
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResultDto<?> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
+        HashMap<String, List<ProjectDetailMyTaskDto>> map = new HashMap<>();
+        return null;
     }
 
     @PatchMapping(value = "/whethertask/{userId}/{taskId}")
@@ -76,53 +105,63 @@ public class ProjectController {
     }
 
     // SCP-303 받은 요청 확인
+    // ResultDto 완성
     @Transactional
     @RequestMapping(value = "/receivetask/{projectId}/{projectinuserID}", method = RequestMethod.GET)
-    public ResponseEntity<List<ProjectDetailReceiveTaskDto>> receivetask(@PathVariable Long projectId,
-            @PathVariable Long projectinuserID) {
+    public ResultDto<?> receivetask(@PathVariable Long projectId, @PathVariable Long projectinuserID) {
+        HashMap<String, List<ProjectDetailReceiveTaskDto>> map = new HashMap<>();
         List<ProjectDetailReceiveTaskDto> pdrtList = projectDetailImpl.receiveTask(projectId, projectinuserID);
-        return (!pdrtList.isEmpty() || pdrtList != null) ? ResponseEntity.status(HttpStatus.OK).body(pdrtList)
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        map.put("tasklist", pdrtList);
+        ResultDto<List<ProjectDetailReceiveTaskDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
+        return rDto;
     }
 
+    // TODO: 서비스 부분에서 resultDto 만들것 **
+    // ResultDto 완성
     @RequestMapping(value = "/receivetask/{taskId}/{selected}", method = RequestMethod.PATCH)
-    public ResponseEntity<List<ProjectDetailReceiveTaskSelectDto>> receivetask(@PathVariable Long taskId,
-            @PathVariable Integer selected) {
-        if (projectDetailImpl.recevieTask(taskId, selected)) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResultDto<?> receivetask(@PathVariable Long taskId, @PathVariable Integer selected) {
+        ResultDto<?> rDto = new ResultDto<>();
+        projectDetailImpl.recevieTask(taskId, selected);
+        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null);
+        return rDto;
     }
 
     // SCP-304 보낸 요청 확인
     // TODO: 프로젝트와 유저가 없으면 오류
+    // ResultDto 완성
     @GetMapping(value = "/requestask/{projectId}/{userid}")
-    public ResponseEntity<List<RequestTaskDto>> requesttask(@PathVariable Long projectId,
-            @PathVariable Long userid) {
+    public ResultDto<?> requesttask(@PathVariable Long projectId, @PathVariable Long userid) {
+        HashMap<String, List<RequestTaskDto>> map = new HashMap<>();
         List<RequestTaskDto> list = projectDetailImpl.requestTask(projectId, userid);
-        return (!list.isEmpty() || list != null) ? ResponseEntity.status(HttpStatus.OK).body(list)
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        map.put("tasklist", list);
+        ResultDto<List<RequestTaskDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
+        return rDto;
     }
 
     // SCP-305 프로젝트 할일 요청시 프로젝트 안 사람들 불러오기
+    // ResultDto 완성
     @Transactional
     @GetMapping(value = "/sendtask/{projectId}")
-    public ResponseEntity<List<UserDto>> sendTask(@PathVariable Long projectId) {
+    public ResultDto<List<UserDto>> sendTask(@PathVariable Long projectId) {
+        HashMap<String, List<UserDto>> map = new HashMap<>();
         List<UserDto> users = projectDetailImpl.gUsers(projectId);
-        return (!users.isEmpty() || users != null) ? ResponseEntity.status(HttpStatus.OK).body(users)
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        map.put("userlist", users);
+        ResultDto<List<UserDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
+        return rDto;
     }
 
     // SCP-305 프로젝트 할일 보내는 작업
+    // ResultDto 완성
     @Transactional
     @RequestMapping(value = "/sendtask", method = RequestMethod.POST)
-    public ResponseEntity<ProjectDetailSendTaskDto> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
-        if (projectDetailImpl.sendTask(dto)) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
+    public ResultDto<?> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
+        projectDetailImpl.sendTask(dto);
+        ResultDto<?> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null);
+        return rDto;
 
+    }
 }

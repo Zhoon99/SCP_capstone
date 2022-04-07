@@ -18,21 +18,21 @@ public class ProjectDetailImplTest {
     @Autowired
     private ProjectDetailImpl projectDetailImpl;
 
-    @Test
-    @Transactional
-    void 전체할일가져오기() {
-        List<ProjectDetailAllTaskDto> dtoList = projectDetailImpl.allTask(1L);
-        log.info(dtoList.toString());
-        List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(1L);
-        for (int i = 0; i < pdatList.size(); i++) {
-            System.out.println(pdatList.get(i).getTasklist());
-        }
-    }
+    // @Test
+    // @Transactional
+    // void 전체할일가져오기() {
+    // List<ProjectDetailAllTaskDto> dtoList = projectDetailImpl.allTask(1L);
+    // log.info(dtoList.toString());
+    // List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(1L);
+    // for (int i = 0; i < pdatList.size(); i++) {
+    // System.out.println(pdatList.get(i).getTasklist());
+    // }
+    // }
 
     @Test
     @Transactional
     void 내할일가져오기() {
-        ProjectDetailMyTaskDto test = projectDetailImpl.myTask(1L, 1L);
+        ProjectDetailMyTaskDto test = (ProjectDetailMyTaskDto) projectDetailImpl.myTask(1L, 1L);
         log.info(test.toString());
         System.out.println(projectDetailImpl.myTask(1L, 1L));
     }

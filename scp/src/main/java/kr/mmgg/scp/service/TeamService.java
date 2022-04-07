@@ -1,5 +1,8 @@
 package kr.mmgg.scp.service;
 
+import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.TeamDto;
+import kr.mmgg.scp.dto.response.TeamDetailDto;
 import kr.mmgg.scp.dto.response.TeamHomeDto;
 import kr.mmgg.scp.dto.response.TeamMembersDto;
 import kr.mmgg.scp.entity.Team;
@@ -7,39 +10,34 @@ import kr.mmgg.scp.entity.Teaminuser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public interface TeamService {
 
-    public Map<String, Object> TeamHome(Long userId);
+    public ResultDto<TeamHomeDto> TeamHome(Long userId);
 
-    public List<TeamHomeDto> getTeamMembers(Long userId, List<Team> teams);
+    public List<TeamDetailDto> getTeamMembers(Long userId, List<TeamDto> teams);
 
-    // /**
-    // * 내가 만든 팀 ID
-    // */
-    // @Transactional
-    // public List<Team> getMyTeams(Long userId) {
-    // if(userId != null) { //존재하는 아이디 체크로 바꾸기
-    // List<Team> myTeams = teamRepository.getMyTeams(userId);
-    // return myTeams;
-    // } else {
-    // throw new IllegalStateException("유저 아이디가 없습니다.");
-    // }
-    // }
+    public ResultDto<Long> insertTeam(TeamDetailDto teamDetailDto);
 
-    // /**
-    // * 다른 사람이 만든 팀 ID
-    // */
-    // @Transactional
-    // public List<Team> getSharedTeams(Long userId) {
-    // if(userId != null) {
-    // List<Team> sharedTeams = teamRepository.getSharedTeams(userId);
-    // return sharedTeams;
-    // } else {
-    // throw new IllegalStateException("유저 아이디가 없습니다.");
-    // }
-    // }
+    public void remove(Long teamId);
+
+    public ResultDto<TeamDetailDto> getTeamInfo(Long teamId);
+
+    public void modifyTeam(TeamDetailDto teamDetailDto);
+
+    default List<TeamDto> toTeamList(List<Team> team) {
+        List<TeamDto> teamDtoList = new ArrayList<>();
+        if(team.size() > 0) {
+            for(Team i : team) {
+                TeamDto teamDto = TeamDto.builder()
+                        .teamId(i.getTeamId())
+                        .teamName(i.getTeamName())
+                        .build();
+                teamDtoList.add(teamDto);
+            }
+        }
+        return teamDtoList;
+    }
 
     /**
      * Teaminuser 리스트를 TeamMembersDto 리스트로 변환
@@ -47,8 +45,8 @@ public interface TeamService {
     default List<TeamMembersDto> toTeamMembersDtoList(List<Teaminuser> teaminusers) {
 
         List<TeamMembersDto> teamMembersDtoList = new ArrayList<>();
-        if (teaminusers.size() > 0) {
-            for (Teaminuser i : teaminusers) {
+        if(teaminusers.size() > 0) {
+            for(Teaminuser i : teaminusers) {
                 TeamMembersDto teamMembersDto = TeamMembersDto.builder()
                         .userId(i.getUserId())
                         .userNickname(i.getUser().getUserNickname())
