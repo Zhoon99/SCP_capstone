@@ -23,15 +23,15 @@ public interface ProjectDetailService {
 
 	public ResultDto<List<ProjectDetailAllTaskDto>> allTask(Long userId);
 
-	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserID);
+	public ResultDto<?> receiveTask(Long projectId, Long projectinuserID);
 
-	public void recevieTask(Long taskId, Integer selected);
+	public ResultDto<?> receiveTask(Long taskId, Integer selected);
 
-	public List<RequestTaskDto> requestTask(Long projectinuserID, Long userId);
+	public ResultDto<List<RequestTaskDto>> requestTask(Long projectinuserID, Long userId);
 
-	public void sendTask(ProjectDetailSendTaskDto dto);
+	public ResultDto<?> sendTask(ProjectDetailSendTaskDto dto);
 
-	public List<UserDto> gUsers(Long projectId);
+	public ResultDto<List<UserDto>> gUsers(Long projectId);
 
 	public void whetherTask(Long userId, Long taskId);
 
