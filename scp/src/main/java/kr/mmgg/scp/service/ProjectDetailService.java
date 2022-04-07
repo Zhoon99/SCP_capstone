@@ -19,17 +19,17 @@ import kr.mmgg.scp.entity.User;
 
 public interface ProjectDetailService {
 
-	public ProjectDetailMyTaskDto myTask(Long userId, Long projectId);
+	public List<ProjectDetailMyTaskDto> myTask(Long userId, Long projectId);
 
 	public ResultDto<List<ProjectDetailAllTaskDto>> allTask(Long userId);
 
 	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserID);
 
-	public boolean recevieTask(Long taskId, Integer selected);
+	public void recevieTask(Long taskId, Integer selected);
 
 	public List<RequestTaskDto> requestTask(Long projectinuserID, Long userId);
 
-	public boolean sendTask(ProjectDetailSendTaskDto dto);
+	public void sendTask(ProjectDetailSendTaskDto dto);
 
 	public List<UserDto> gUsers(Long projectId);
 

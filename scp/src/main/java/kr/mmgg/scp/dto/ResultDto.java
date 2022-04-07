@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import kr.mmgg.scp.util.CustomStatusCode;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -32,7 +32,7 @@ public class ProjectDetailImplTest {
     @Test
     @Transactional
     void 내할일가져오기() {
-        ProjectDetailMyTaskDto test = projectDetailImpl.myTask(1L, 1L);
+        ProjectDetailMyTaskDto test = (ProjectDetailMyTaskDto) projectDetailImpl.myTask(1L, 1L);
         log.info(test.toString());
         System.out.println(projectDetailImpl.myTask(1L, 1L));
     }
