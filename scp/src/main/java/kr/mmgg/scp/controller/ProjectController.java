@@ -121,23 +121,20 @@ public class ProjectController {
     // ResultDto 완성
     @RequestMapping(value = "/receivetask/{taskId}/{selected}", method = RequestMethod.PATCH)
     public ResultDto<?> receivetask(@PathVariable Long taskId, @PathVariable Integer selected) {
-        ResultDto<?> rDto = new ResultDto<>();
-        projectDetailImpl.recevieTask(taskId, selected);
-        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null);
-        return rDto;
+//        ResultDto<?> rDto = new ResultDto<>();
+//        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null);
+        return projectDetailImpl.receiveTask(taskId, selected);
     }
 
     // SCP-304 보낸 요청 확인
     // TODO: 프로젝트와 유저가 없으면 오류
     // ResultDto 완성
     @GetMapping(value = "/requestask/{projectId}/{userid}")
-    public ResultDto<?> requesttask(@PathVariable Long projectId, @PathVariable Long userid) {
-        HashMap<String, List<RequestTaskDto>> map = new HashMap<>();
-        List<RequestTaskDto> list = projectDetailImpl.requestTask(projectId, userid);
-        map.put("tasklist", list);
-        ResultDto<List<RequestTaskDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
-        return rDto;
+    public ResultDto<?> requestask(@PathVariable Long projectId, @PathVariable Long userid) {
+//        HashMap<String, List<RequestTaskDto>> map = new HashMap<>();
+//        List<RequestTaskDto> list = projectDetailImpl.requestTask(projectId, userid);
+//        map.put("tasklist", list);
+        return projectDetailImpl.requestTask(projectId, userid);
     }
 
     // SCP-305 프로젝트 할일 요청시 프로젝트 안 사람들 불러오기
@@ -145,12 +142,9 @@ public class ProjectController {
     @Transactional
     @GetMapping(value = "/sendtask/{projectId}")
     public ResultDto<List<UserDto>> sendTask(@PathVariable Long projectId) {
-        HashMap<String, List<UserDto>> map = new HashMap<>();
-        List<UserDto> users = projectDetailImpl.gUsers(projectId);
-        map.put("userlist", users);
-        ResultDto<List<UserDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
-        return rDto;
+//        HashMap<String, List<UserDto>> map = new HashMap<>();
+//        map.put("userlist", users);
+        return projectDetailImpl.gUsers(projectId);
     }
 
     // SCP-305 프로젝트 할일 보내는 작업
@@ -158,10 +152,6 @@ public class ProjectController {
     @Transactional
     @RequestMapping(value = "/sendtask", method = RequestMethod.POST)
     public ResultDto<?> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
-        projectDetailImpl.sendTask(dto);
-        ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null);
-        return rDto;
-
+        return projectDetailImpl.sendTask(dto);
     }
 }
