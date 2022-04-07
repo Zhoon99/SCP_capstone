@@ -12,8 +12,14 @@ import lombok.NoArgsConstructor;
 public class ResultDto<T> {
 	private int status;
 	private String message;
-	private HashMap<String, T> result;
+	private HashMap<String, T> result = null;
 	// private HashMap<String,List<T>> resultList;
+
+	public ResultDto<T> makeResult(CustomStatusCode csc) {
+		this.status = csc.getStatus();
+		this.message = csc.getMessage();
+		return this;
+	}
 
 	public ResultDto<T> makeResult(CustomStatusCode csc, T resultDto, String MapName) {
 		this.status = csc.getStatus();
