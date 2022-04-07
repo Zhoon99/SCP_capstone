@@ -262,6 +262,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			user.setProjectinuserId(pInUser.getProjectinuserId());
 			user.setNickName(pInUser.getUser().getUserNickname());
 			user.setUserId(pInUser.getUser().getUserId());
+			user.setProjectinuserCommoncode(pInUser.getProjectinuserCommoncode());
 			users.add(user);
 		}
 		pUpdateGetDto.setProjectName(pInUsers.get(0).getProject().getProjectName());
