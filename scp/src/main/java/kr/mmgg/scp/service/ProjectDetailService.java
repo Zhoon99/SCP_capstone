@@ -22,11 +22,11 @@ public interface ProjectDetailService {
 
 	public List<ProjectDetailReceiveTaskDto> receiveTask(Long projectId, Long projectinuserID);
 
-	public boolean recevieTask(Long taskId, Integer selected);
+	public void recevieTask(Long taskId, Integer selected);
 
 	public List<RequestTaskDto> requestTask(Long projectinuserID, Long userId);
 
-	public boolean sendTask(ProjectDetailSendTaskDto dto);
+	public void sendTask(ProjectDetailSendTaskDto dto);
 
 	public List<UserDto> gUsers(Long projectId);
 

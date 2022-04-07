@@ -162,7 +162,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 해당 프로젝트 안의 할일 요청하기
 	@Override
 	@Transactional
-	public boolean sendTask(ProjectDetailSendTaskDto dto) {
+	public void sendTask(ProjectDetailSendTaskDto dto) {
 		Task task = new Task();
 		dateTime datetime = new dateTime();
 		task.setTaskId(null);
@@ -177,9 +177,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		task.setTaskAccept(0);
 		task.setTaskComplete(0);
 
-		if (taskRepository.save(task) != null) {
-			return true;
-		} else {
+		if (taskRepository.save(task) == null) {
 			// TODO: 에러 핸들러 만들기
 			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
 		}
@@ -224,18 +222,18 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 해당 프로젝트 안의 할일 수락 및 거절 하기
 	// TODO: 에러 처리 해야함
 	@Override
-	public boolean recevieTask(Long taskId, Integer selected) {
-		Task task = taskRepository.getById(taskId);
-		if (selected == -1 && taskRepository.save(task) != null) {
-			task.setTaskAccept(-1);
+	public void recevieTask(Long taskId, Integer selected) {
+		Task task = null;
+		if (selected == -1) {
+			task = taskRepository.findByTaskId(taskId).orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+			task.setTaskAccept(selected);
 			taskRepository.save(task);
-			return true;
-		} else if (selected == 1 && taskRepository.save(task) != null) {
-			task.setTaskAccept(1);
+		} else if (selected == 1) {
+			task = taskRepository.findByTaskId(taskId).orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+			task.setTaskAccept(selected);
 			taskRepository.save(task);
-			return true;
 		} else {
-			return false;
+			throw new CustomException(ErrorCode.INTERNAL_ERROR);
 		}
 	}
 }

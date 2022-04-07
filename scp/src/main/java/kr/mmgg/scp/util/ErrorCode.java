@@ -22,7 +22,7 @@ public enum ErrorCode {
     PAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 페이지가 없습니다."),
     /* 500 Internal Server Error 서버가 처리 방법을 모르는 상황이 발생했습니다. */
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에러"),
-
+    
     ;
 
     private final HttpStatus httpStatus;
