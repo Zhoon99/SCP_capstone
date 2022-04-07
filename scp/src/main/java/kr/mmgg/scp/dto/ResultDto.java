@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ResultDto<T> {
 	private int status;
 	private String message;
-	private HashMap<String, T> result;
+//	private HashMap<String, T> result;
 	// private HashMap<String,List<T>> resultList;
 
 	public ResultDto<T> makeResult(CustomStatusCode csc, T resultDto, String MapName) {
@@ -23,6 +23,14 @@ public class ResultDto<T> {
 		this.result = result;
 		return this;
 	}
+	
+    // private HashMap<String,List<T>> resultList;
+	private HashMap<String, T> result = null;
+    public ResultDto<T> makeResult(CustomStatusCode csc) {
+        this.status = csc.getStatus();
+        this.message = csc.getMessage();
+        return this;
+    }
 
 	// public void makeResult(CustomStatusCode csc, List<T> resultDto,String
 	// MapName) {
