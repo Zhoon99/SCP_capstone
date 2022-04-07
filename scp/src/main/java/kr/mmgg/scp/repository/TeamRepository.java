@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
@@ -25,4 +26,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             "WHERE tu.userId = :userId\n" +
             "AND tu.teaminuserMaker <> 1")
     List<Team> getSharedTeams(Long userId);
+
+    Optional<Team> findByTeamId(Long teamId);
 }

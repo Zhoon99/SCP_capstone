@@ -81,7 +81,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	@Transactional
 	public List<ProjectDetailMyTaskDto> myTask(Long userId, Long projectId) {
-		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId, projectId).orElseThrow(() -> new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND));
+		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId, projectId)
+				.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND));
 		List<ProjectDetailMyTaskDto> list = new ArrayList<ProjectDetailMyTaskDto>();
 		ProjectDetailMyTaskDto dto = null;
 		for (int i = 0; i < piuUserIdAndProjectId.getTasks().size(); i++) {

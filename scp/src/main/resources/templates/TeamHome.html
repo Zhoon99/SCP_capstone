@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <title>Test Page!</title>
+</head>
+
+<style>
+    body {
+        background-color: #d4d1d1;
+    }
+
+    .sidebar {
+        width: 200px;
+        height: 930px;
+        position: fixed;
+        top: 20px;
+        bottom: 0;
+        left: 10px;
+        z-index: 100;
+        padding: 90px 25px 0;
+        border-radius: 10px;
+    }
+
+    .content {
+        width: 1690px;
+        height: 930px;
+        position: fixed;
+        top: 20px;
+        bottom: 0;
+        left: 220px;
+        z-index: 100;
+        background-color: rgb(255, 255, 255);
+        padding: 2rem 2rem 2rem 2rem;
+        box-shadow: 0 0 10px 10px rgba(0, 0, 0, .05);
+        border-radius: 10px;
+    }
+</style>
+
+<body>
+
+<div class="d-flex" id="wrapper">
+
+    <!-- sidebar -->
+    <div class="sidebar text-white bg-warning p-3">
+
+        <ul class="nav nav-pills flex-column mb-auto fw-bold sidebar">
+            <input type="text" id="uid" name="uid" class="form-input" placeholder="userId" style="width: 140px;">
+            <input type="text" id="tid" name="tid" class="form-input my-3" placeholder="TeamId" style="width: 140px;">
+            <li class="nav-item selected my-2">
+                <button type="button" class="btn btn-success btn-lg px-5" onclick="List()">목록</button>
+            </li>
+            <li class="nav-item selected my-2">
+                <button type="button" class="btn btn-primary btn-lg px-5" data-bs-toggle="modal"
+                        data-bs-target="#registerModal" onclick="Register()">등록
+                </button>
+            </li>
+            <li class="nav-item selected my-2">
+                <button type="button" class="btn btn-secondary btn-lg px-5" data-bs-toggle="modal"
+                        data-bs-target="#modifyModal" onclick="Modify()">수정
+                </button>
+            </li>
+            <li class="nav-item selected my-2">
+                <button type="button" class="btn btn-dark btn-lg px-5" onclick="deleteTeam()">삭제</button>
+            </li>
+        </ul>
+    </div>
+
+    <!--resultJSON-->
+    <div class="content">
+        <div id="result">
+
+        </div>
+    </div>
+
+    <!--registerModal-->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title fw-bold">등록하기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="tname" name="tname" placeholder="팀 명">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input id="addMember" type="text" class="form-control" placeholder="추가할 팀원 이메일"
+                               aria-describedby="addMember">
+                        <button class="btn btn-outline-secondary" type="button" onclick="addMember()">
+                            추가하기
+                        </button>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input id="addTeam" type="text" class="form-control" placeholder="추가할 팀 id"
+                               aria-describedby="addTeam">
+                        <button class="btn btn-outline-secondary" type="button" onclick="addTeam()">추가하기
+                        </button>
+                    </div>
+
+                    <hr>
+
+                    <form id="registerTeam">
+                        <ul id="members" class="list-group list-group-flush">
+
+                        </ul>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="registerTeam()">등록
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--modifyModal-->
+    <div class="modal fade" id="modifyModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title fw-bold">등록하기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="modifyTname" name="modifyTname" placeholder="팀 명">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input id="modifyAddMember" type="text" class="form-control" placeholder="추가할 팀원 이메일"
+                               aria-describedby="addMember">
+                        <button class="btn btn-outline-secondary" type="button" onclick="ModifyAddMember()">
+                            추가하기
+                        </button>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input id="modifyAddTeam" type="text" class="form-control" placeholder="추가할 팀 id"
+                               aria-describedby="addTeam">
+                        <button class="btn btn-outline-secondary" type="button" onclick="ModifyAddTeam()">추가하기
+                        </button>
+                    </div>
+
+                    <hr>
+
+                    <form id="modifyTeam">
+                        <ul id="modifyMembers" class="list-group list-group-flush">
+
+                        </ul>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="modifyTeam()">수정
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function LoadJson(uid) {
+            let html = "";
+
+            $.getJSON('/team/home/' + uid, function (data) {
+                $.each(data, function (i, teams) {
+                    html += '<h4>' + i + '</h4>'
+                    html += '<div class="row">'
+                    $.each(teams, function (j, teamMembers) {
+                        html += '<div class="card text-center" style="width: 18rem;">'
+                        html += '<div class="card-body">'
+                        html += '<h5 class="card-title">' + teamMembers.teamName + '(id:' + teamMembers.teamId + ')' + '</h5>'
+                        $.each(teamMembers.teamMembers, function (k, members) {
+                            html += '<p class="card-text">' + members.userNickname + '<br>' + members.teaminuserCommoncode + '</p>'
+                        })
+                        html += '</div>'
+                        html += '</div>'
+                    })
+                    html += '</div>'
+                })
+                $("#result").html(html);
+            })
+        }
+
+        function List() {
+            const uid = document.getElementById('uid').value;
+            if (uid != "") {
+                LoadJson(uid);
+            } else {
+                alert("userId를 입력해주세요.");
+            }
+        }
+
+        function Register() {
+            const ul = document.getElementById('members');
+            document.getElementById('tname').value = "";
+            while (ul.hasChildNodes()) {
+                ul.removeChild(ul.firstChild);
+            }
+            const uid = document.getElementById('uid').value;
+            if (uid != "") {
+                $.getJSON('/team/getUserInfo/' + uid, function (data) {
+                    const li = document.createElement('li');
+                    li.setAttribute("class", "list-group-item");
+                    li.setAttribute("id", "li_" + data.id);
+
+                    const userId = document.createElement('input');
+                    userId.setAttribute("type", "hidden");
+                    userId.setAttribute("id", "id_" + data.id);
+                    userId.setAttribute("value", data.id);
+                    li.appendChild(userId);
+
+                    const userNickname = document.createElement('input');
+                    userNickname.setAttribute("type", "text");
+                    userNickname.setAttribute("id", "userNickname_" + data.id);
+                    userNickname.setAttribute("value", data.userNickname);
+                    userNickname.setAttribute("style", "width: 250px; margin-right: 20px");
+                    userNickname.setAttribute("disabled", "disabled");
+                    li.appendChild(userNickname);
+
+                    const teaminuserCommoncode = document.createElement('input');
+                    teaminuserCommoncode.setAttribute("type", "text");
+                    teaminuserCommoncode.setAttribute("id", "teaminuserCommoncode_" + data.id);
+                    teaminuserCommoncode.setAttribute("value", "s_leader");
+                    teaminuserCommoncode.setAttribute("style", "margin-right: 20px");
+                    li.appendChild(teaminuserCommoncode);
+
+                    const teaminuserMaker = document.createElement('input');
+                    teaminuserMaker.setAttribute("type", "hidden");
+                    teaminuserMaker.setAttribute("id", "teaminuserMaker_" + data.id);
+                    teaminuserMaker.setAttribute("value", "1");
+                    li.appendChild(teaminuserMaker);
+
+                    const deleteMember = document.createElement('button');
+                    deleteMember.setAttribute("type", "button");
+                    deleteMember.setAttribute("class", "btn-close");
+                    deleteMember.setAttribute("id", "deleteMember_" + data.id);
+                    deleteMember.setAttribute("onClick", 'javascript:deleteMember(' + data.id + ');');
+                    li.appendChild(deleteMember);
+
+                    document.getElementById('members').appendChild(li);
+                })
+            } else alert("userId를 입력해주세요.");
+        }
+
+        function addMember() {
+            const email = document.getElementById('addMember').value;
+            if (email != "") {
+                $.getJSON('/team/getUserByEmail/' + email, function (data) {
+                    if (JSON.stringify(data) !== "") {
+                        const li = document.createElement('li');
+                        li.setAttribute("class", "list-group-item");
+                        li.setAttribute("id", "li_" + data.id);
+
+                        const userId = document.createElement('input');
+                        userId.setAttribute("type", "hidden");
+                        userId.setAttribute("id", "id_" + data.id);
+                        userId.setAttribute("value", data.id);
+                        li.appendChild(userId);
+
+                        const userNickname = document.createElement('input');
+                        userNickname.setAttribute("type", "text");
+                        userNickname.setAttribute("id", "userNickname_" + data.id);
+                        userNickname.setAttribute("value", data.userNickname);
+                        userNickname.setAttribute("style", "width: 250px; margin-right: 20px");
+                        userNickname.setAttribute("disabled", "disabled");
+                        li.appendChild(userNickname);
+
+                        const teaminuserCommoncode = document.createElement('input');
+                        teaminuserCommoncode.setAttribute("type", "text");
+                        teaminuserCommoncode.setAttribute("id", "teaminuserCommoncode_" + data.id);
+                        teaminuserCommoncode.setAttribute("value", "s_member");
+                        teaminuserCommoncode.setAttribute("style", "margin-right: 20px");
+                        li.appendChild(teaminuserCommoncode);
+
+                        const teaminuserMaker = document.createElement('input');
+                        teaminuserMaker.setAttribute("type", "hidden");
+                        teaminuserMaker.setAttribute("id", "teaminuserMaker_" + data.id);
+                        teaminuserMaker.setAttribute("value", "0");
+                        li.appendChild(teaminuserMaker);
+
+                        const deleteMember = document.createElement('button');
+                        deleteMember.setAttribute("type", "button");
+                        deleteMember.setAttribute("class", "btn-close");
+                        deleteMember.setAttribute("id", "deleteMember_" + data.id);
+                        deleteMember.setAttribute("onClick", 'javascript:deleteMember(' + data.id + ');');
+                        li.appendChild(deleteMember);
+
+                        document.getElementById('members').appendChild(li);
+                        document.getElementById('addMember').value = "";
+                    } else {
+                        alert("해당 이메일을 가진 유저가 없습니다.");
+                        document.getElementById('addMember').value = "";
+                    }
+                })
+            } else alert("추가할 팀원의 이메일을 입력해주세요.");
+        }
+
+        function registerTeam() {
+            const teamName = document.getElementById('tname').value;
+            if (teamName != "") {
+                let temp = "";
+                $('#members').children().each(function (i, list) {
+                    $('#members').children().eq(i).children().each(function (i, input) {
+                        temp += input.value + ',';
+                    });
+                    temp += '/';
+                });
+                const listSplit = temp.split("/");
+                let inputList = [];
+
+                let member = {};
+                let memberArray = [];
+                for (let i = 0; i < listSplit.length - 1; i++) {
+                    inputList = listSplit[i].split(",");
+
+                    member.userId = inputList[0];
+                    member.userNickname = inputList[1];
+                    member.teaminuserCommoncode = inputList[2];
+                    member.teaminuserMaker = inputList[3];
+                    memberArray.push({...member});
+                }
+
+                let jsonArray = {
+                    teamName: teamName,
+                    teamMembers: memberArray
+                };
+
+                $.ajax({
+                    url: "/team/home",
+                    type: "POST",
+                    data: JSON.stringify(jsonArray),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        const uid = document.getElementById('uid').value;
+                        LoadJson(uid);
+                    },
+                    error: function (request, status, error) {
+                        console.log(error);
+                    }
+                })
+            } else alert("팀 명을 입력해주세요.");
+        }
+
+        function deleteMember(li_id) {
+            const teaminuserCommoncode = document.getElementById('teaminuserCommoncode_' + li_id).value
+            if (teaminuserCommoncode != "s_leader") {
+                $("#li_" + li_id).remove();
+            }
+        }
+
+        function deleteTeam() {
+            const tid = document.getElementById('tid').value;
+            const uid = document.getElementById('uid').value;
+
+            if (tid != "") {
+                $.ajax({
+                    url: "/team/home/" + tid,
+                    method: "DELETE",
+                    success: function (result) {
+                        if (result === 'success') {
+                            LoadJson(uid);
+                        }
+                    },
+                    error: function (request, status, error) {
+                        console.log(error);
+                    }
+                })
+            } else alert("teamId를 입력해주세요.");
+        }
+
+        function Modify() {
+            const ul = document.getElementById('modifyMembers');
+            while (ul.hasChildNodes()) {
+                ul.removeChild(ul.firstChild);
+            }
+            const tid = document.getElementById('tid').value;
+            if (tid != "") {
+                $.getJSON('/team/getTeamModifyInfo/' + tid, function (data) {
+                    document.getElementById('modifyTname').value = data.teamName;
+                    $.each(data.teamMembers, function (index, item) {
+                        const li = document.createElement('li');
+                        li.setAttribute("class", "list-group-item");
+                        li.setAttribute("id", "Mli_" + item.userId);
+
+                        const userId = document.createElement('input');
+                        userId.setAttribute("type", "hidden");
+                        userId.setAttribute("id", "Mid_" + item.userId);
+                        userId.setAttribute("value", item.userId);
+                        li.appendChild(userId);
+
+                        const userNickname = document.createElement('input');
+                        userNickname.setAttribute("type", "text");
+                        userNickname.setAttribute("id", "MuserNickname_" + item.userId);
+                        userNickname.setAttribute("value", item.userNickname);
+                        userNickname.setAttribute("style", "width: 250px; margin-right: 20px");
+                        userNickname.setAttribute("disabled", "disabled");
+                        li.appendChild(userNickname);
+
+                        const teaminuserCommoncode = document.createElement('input');
+                        teaminuserCommoncode.setAttribute("type", "text");
+                        teaminuserCommoncode.setAttribute("id", "MteaminuserCommoncode_" + item.userId);
+                        teaminuserCommoncode.setAttribute("value", item.teaminuserCommoncode);
+                        teaminuserCommoncode.setAttribute("style", "margin-right: 20px");
+                        li.appendChild(teaminuserCommoncode);
+
+                        const teaminuserMaker = document.createElement('input');
+                        teaminuserMaker.setAttribute("type", "hidden");
+                        teaminuserMaker.setAttribute("id", "MteaminuserMaker_" + item.userId);
+                        teaminuserMaker.setAttribute("value", item.teaminuserMaker);
+                        li.appendChild(teaminuserMaker);
+
+                        const deleteMember = document.createElement('button');
+                        deleteMember.setAttribute("type", "button");
+                        deleteMember.setAttribute("class", "btn-close");
+                        deleteMember.setAttribute("id", "MdeleteMember_" + item.userId);
+                        deleteMember.setAttribute("onClick", 'javascript:deleteModifyMember(' + item.userId + ');');
+                        li.appendChild(deleteMember);
+
+                        document.getElementById('modifyMembers').appendChild(li);
+                    })
+                })
+            } else alert("teamId를 입력해주세요.");
+        }
+
+        function deleteModifyMember(Mli_id) {
+            const teaminuserCommoncode = document.getElementById('MteaminuserCommoncode_' + Mli_id).value
+            if (teaminuserCommoncode != "s_leader") {
+                $("#Mli_" + Mli_id).remove();
+            }
+        }
+
+        function ModifyAddMember() {
+            const email = document.getElementById('modifyAddMember').value;
+            if (email != "") {
+                $.getJSON('/team/getUserByEmail/' + email, function (data) {
+                    if (JSON.stringify(data) !== "") {
+                        const li = document.createElement('li');
+                        li.setAttribute("class", "list-group-item");
+                        li.setAttribute("id", "Mli_" + data.id);
+
+                        const userId = document.createElement('input');
+                        userId.setAttribute("type", "hidden");
+                        userId.setAttribute("id", "Mid_" + data.id);
+                        userId.setAttribute("value", data.id);
+                        li.appendChild(userId);
+
+                        const userNickname = document.createElement('input');
+                        userNickname.setAttribute("type", "text");
+                        userNickname.setAttribute("id", "MuserNickname_" + data.id);
+                        userNickname.setAttribute("value", data.userNickname);
+                        userNickname.setAttribute("style", "width: 250px; margin-right: 20px");
+                        userNickname.setAttribute("disabled", "disabled");
+                        li.appendChild(userNickname);
+
+                        const teaminuserCommoncode = document.createElement('input');
+                        teaminuserCommoncode.setAttribute("type", "text");
+                        teaminuserCommoncode.setAttribute("id", "MteaminuserCommoncode_" + data.id);
+                        teaminuserCommoncode.setAttribute("value", "s_member");
+                        teaminuserCommoncode.setAttribute("style", "margin-right: 20px");
+                        li.appendChild(teaminuserCommoncode);
+
+                        const teaminuserMaker = document.createElement('input');
+                        teaminuserMaker.setAttribute("type", "hidden");
+                        teaminuserMaker.setAttribute("id", "MteaminuserMaker_" + data.id);
+                        teaminuserMaker.setAttribute("value", "0");
+                        li.appendChild(teaminuserMaker);
+
+                        const deleteMember = document.createElement('button');
+                        deleteMember.setAttribute("type", "button");
+                        deleteMember.setAttribute("class", "btn-close");
+                        deleteMember.setAttribute("id", "MdeleteMember_" + data.id);
+                        deleteMember.setAttribute("onClick", 'javascript:deleteModifyMember(' + data.id + ');');
+                        li.appendChild(deleteMember);
+
+                        document.getElementById('modifyMembers').appendChild(li);
+                        document.getElementById('modifyAddMember').value = "";
+                    } else {
+                        alert("해당 이메일을 가진 유저가 없습니다.");
+                        document.getElementById('modifyAddMember').value = "";
+                    }
+                })
+            } else alert("추가할 팀원의 이메일을 입력해주세요.");
+        }
+
+        function modifyTeam() {
+            const teamName = document.getElementById('modifyTname').value;
+            const tid = document.getElementById('tid').value;
+            if (teamName != "") {
+                let temp = "";
+                $('#modifyMembers').children().each(function (i, list) {
+                    $('#modifyMembers').children().eq(i).children().each(function (i, input) {
+                        temp += input.value + ',';
+                    });
+                    temp += '/';
+                });
+                const listSplit = temp.split("/");
+                let inputList = [];
+
+                let member = {};
+                let memberArray = [];
+                for (let i = 0; i < listSplit.length - 1; i++) {
+                    inputList = listSplit[i].split(",");
+
+                    member.userId = inputList[0];
+                    member.userNickname = inputList[1];
+                    member.teaminuserCommoncode = inputList[2];
+                    member.teaminuserMaker = inputList[3];
+                    memberArray.push({...member});
+                }
+
+                let jsonArray = {
+                    teamId: tid,
+                    teamName: teamName,
+                    teamMembers: memberArray
+                };
+
+                $.ajax({
+                    url: "/team/home",
+                    type: "PUT",
+                    data: JSON.stringify(jsonArray),
+                    contentType: 'application/json',
+                    dataType: 'text',
+                    success: function (data) {
+                        const uid = document.getElementById('uid').value;
+                        LoadJson(uid);
+                    },
+                    error: function (request, status, error) {
+                        console.log(error);
+                    }
+                })
+            } else alert("팀 명을 입력해주세요.");
+        }
+    </script>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
+</body>
+</html>

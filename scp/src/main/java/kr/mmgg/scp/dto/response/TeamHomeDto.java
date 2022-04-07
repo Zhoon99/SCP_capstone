@@ -12,8 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class TeamHomeDto {
-
-    private Long teamId;
-    private String teamName;
-    private List<TeamMembersDto> teamMembers;
+    private List<TeamDetailDto> myTeams;
+    private List<TeamDetailDto> sharedTeams;
 }
