@@ -55,7 +55,7 @@ public class ProjectController {
         return rDto;
     }
 
-    @PatchMapping(value = "updateproject/deletemember/{projectinuserId}")
+    @PatchMapping(value = "/updateproject/deletemember/{projectinuserId}")
     public ResultDto<?> updateProjectDeletemember(@PathVariable Long projectinuserId) {
         ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
         return rDto;
@@ -85,8 +85,7 @@ public class ProjectController {
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
     public ResultDto<List<ProjectDetailAllTaskDto>> allTask(@PathVariable Long projectId) {
-        ResultDto<List<ProjectDetailAllTaskDto>> rDto = projectDetailImpl.allTask(projectId);
-        return rDto;
+        return projectDetailImpl.allTask(projectId);
     }
 
     // SCP-302 프로젝트 자신 할일
@@ -94,14 +93,14 @@ public class ProjectController {
     @Transactional // 영속성 컨텐츠로인해 안해주면 no session 에러남 (서비스뿐만아니라 컨트롤러단에서도 관리해줘야됨)
     @GetMapping(value = "/mytask/{userId}/{projectId}")
     public ResultDto<?> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
-        HashMap<String, List<ProjectDetailMyTaskDto>> map = new HashMap<>();
-        return null;
+        return projectDetailImpl.myTask(userId, projectId);
     }
-
+    
+    // SCP-302 할일 수락 / 거절
+    // ResultDto 완성
     @PatchMapping(value = "/whethertask/{userId}/{taskId}")
-    public ResponseEntity<?> whetherTask(@PathVariable Long userId, @PathVariable Long taskId) {
-        projectDetailImpl.whetherTask(userId, taskId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResultDto<?> whetherTask(@PathVariable Long userId, @PathVariable Long taskId) {
+        return projectDetailImpl.whetherTask(userId, taskId);
     }
 
     // SCP-303 받은 요청 확인
@@ -109,20 +108,14 @@ public class ProjectController {
     @Transactional
     @RequestMapping(value = "/receivetask/{projectId}/{projectinuserID}", method = RequestMethod.GET)
     public ResultDto<?> receivetask(@PathVariable Long projectId, @PathVariable Long projectinuserID) {
-        HashMap<String, List<ProjectDetailReceiveTaskDto>> map = new HashMap<>();
-        List<ProjectDetailReceiveTaskDto> pdrtList = projectDetailImpl.receiveTask(projectId, projectinuserID);
-        map.put("tasklist", pdrtList);
-        ResultDto<List<ProjectDetailReceiveTaskDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
-        return rDto;
+        return projectDetailImpl.receiveTask(projectId, projectinuserID);
     }
 
+    // SCP-303 받은요청 수락 / 거절
     // TODO: 서비스 부분에서 resultDto 만들것 **
     // ResultDto 완성
     @RequestMapping(value = "/receivetask/{taskId}/{selected}", method = RequestMethod.PATCH)
     public ResultDto<?> receivetask(@PathVariable Long taskId, @PathVariable Integer selected) {
-//        ResultDto<?> rDto = new ResultDto<>();
-//        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null);
         return projectDetailImpl.receiveTask(taskId, selected);
     }
 
@@ -131,9 +124,6 @@ public class ProjectController {
     // ResultDto 완성
     @GetMapping(value = "/requestask/{projectId}/{userid}")
     public ResultDto<?> requestask(@PathVariable Long projectId, @PathVariable Long userid) {
-//        HashMap<String, List<RequestTaskDto>> map = new HashMap<>();
-//        List<RequestTaskDto> list = projectDetailImpl.requestTask(projectId, userid);
-//        map.put("tasklist", list);
         return projectDetailImpl.requestTask(projectId, userid);
     }
 
@@ -142,8 +132,6 @@ public class ProjectController {
     @Transactional
     @GetMapping(value = "/sendtask/{projectId}")
     public ResultDto<List<UserDto>> sendTask(@PathVariable Long projectId) {
-//        HashMap<String, List<UserDto>> map = new HashMap<>();
-//        map.put("userlist", users);
         return projectDetailImpl.gUsers(projectId);
     }
 

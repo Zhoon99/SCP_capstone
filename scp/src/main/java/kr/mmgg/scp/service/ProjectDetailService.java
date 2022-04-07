@@ -18,7 +18,7 @@ import kr.mmgg.scp.entity.User;
 
 public interface ProjectDetailService {
 
-	public List<ProjectDetailMyTaskDto> myTask(Long userId, Long projectId);
+	public ResultDto<List<ProjectDetailMyTaskDto>> myTask(Long userId, Long projectId);
 
 	public ResultDto<List<ProjectDetailAllTaskDto>> allTask(Long userId);
 
@@ -32,7 +32,7 @@ public interface ProjectDetailService {
 
 	public ResultDto<List<UserDto>> gUsers(Long projectId);
 
-	public void whetherTask(Long userId, Long taskId);
+	public ResultDto<?> whetherTask(Long userId, Long taskId);
 
 	public ResultDto<?> updateProjectDeleteMember(Long projectinuserId);
 

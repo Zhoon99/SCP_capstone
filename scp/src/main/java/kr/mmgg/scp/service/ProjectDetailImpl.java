@@ -44,7 +44,9 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	private TaskRepository taskRepository;
 	private UserRepository userRepository;
 
+	// SCP-301 프로젝트 모든 할일
 	// 프로젝트안의 전체 할일 가져오기
+	// ResultDto 완성
 	@Transactional
 	@Override
 	public ResultDto<List<ProjectDetailAllTaskDto>> allTask(Long projectId) {
@@ -73,14 +75,16 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			}
 		}
 		ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
-		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, list, "allTask");
+		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, list, "tasklist");
 		return rDto;
 	}
 
+	// SCP-302 프로젝트 자신 할일
 	// 프로젝트의 자신의 할일 가져오기
+	// ResultDto 완성
 	@Override
 	@Transactional
-	public List<ProjectDetailMyTaskDto> myTask(Long userId, Long projectId) {
+	public ResultDto<List<ProjectDetailMyTaskDto>> myTask(Long userId, Long projectId) {
 		ProjectInUser piuUserIdAndProjectId = projectinUserRepository.findByUserIdAndProjectId(userId, projectId)
 				.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_OR_USER_NOT_FOUND));
 		List<ProjectDetailMyTaskDto> list = new ArrayList<ProjectDetailMyTaskDto>();
@@ -98,10 +102,14 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			dto.setCreatetime(piuUserIdAndProjectId.getTasks().get(i).getTaskCreatetime());
 			list.add(dto);
 		}
-		return list;
+		ResultDto<List<ProjectDetailMyTaskDto>> rDto = new ResultDto<>();
+		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, list, "tasklist");
+		return rDto;
 	}
 
+	// SCP-303 받은 요청 확인
 	// 해당 프로젝트안에서 받은 할일 확인하기
+	// ResultDto 완성
 	@Override
 	public ResultDto<?> receiveTask(Long projectId, Long projectinuserId) {
 		List<Task> tlist = taskRepository.findByProjectinuserIdAndTaskAccept(projectinuserId, 0);
@@ -125,11 +133,14 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				pdrtList.add(pdrtTask);
 			}
 		}
+		ResultDto<List<ProjectDetailReceiveTaskDto>> rDto = new ResultDto<>();
+		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, pdrtList, "tasklist");
 		return rDto;
 	}
 
 	// SCP-304 보낸 요청 확인
 	// 해당 프로젝트 안의 보낸 할일 확인하기
+	// ResultDto 완성
 	@Override
 	@Transactional
 	public ResultDto<List<RequestTaskDto>> requestTask(Long projectId, Long userid) {
@@ -173,7 +184,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	}
 
 	// SCP-305 프로젝트 할일 보내는 작업
-	// 해당 프로젝트 안의 할일 요청하기
+	// ResultDto 완성
 	@Override
 	@Transactional
 	public ResultDto<?> sendTask(ProjectDetailSendTaskDto dto) {
@@ -196,12 +207,12 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
 		} else {
 			ResultDto<?> rDto = new ResultDto<>();
-			return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null, null);
+			return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
 		}
 	}
 
 	// SCP-305 프로젝트 할일 요청시 프로젝트 안 사람들 불러오기
-	// sendtask 유저 막기
+	// ResultDto 완성
 	@Override
 	@Transactional
 	public ResultDto<List<UserDto>> gUsers(Long projectId) {
@@ -222,10 +233,11 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		return rDto;
 	}
 
-	// 할일 완료여부 체크
+	// SCP-302 할일 수락 / 거절
+	// ResultDto 완성
 	@Override
 	@Transactional
-	public void whetherTask(Long userId, Long taskId) {
+	public ResultDto<?> whetherTask(Long userId, Long taskId) {
 		Task task = taskRepository.findByTaskId(taskId)
 				.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 		if (userId == task.getProjectinuser().getUserId()) {
@@ -235,18 +247,21 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				task.setTaskComplete(0);
 			}
 			taskRepository.save(task);
+			ResultDto<?> rDto = new ResultDto<>();
+			rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
+			return rDto;
 		} else {
 			throw new CustomException(ErrorCode.TASK_NOT_MATCH);
 		}
 	}
 
-	// 해당 프로젝트 안의 할일 수락 및 거절 하기
-	// TODO: 에러 처리 해야함
+	// SCP-303 받은요청 수락 / 거절
+	// ResultDto 완성
 	@Override
 	@Transactional
 	public ResultDto<?> receiveTask(Long taskId, Integer selected) {
-		ResultDto<?> rDto = new ResultDto<>();
 		if (selected == -1) {
+			ResultDto<?> rDto = new ResultDto<>();
 			Task task = taskRepository.findByTaskId(taskId)
 					.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 			task.setTaskAccept(selected);
@@ -254,6 +269,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
 			return rDto;
 		} else if (selected == 1) {
+			ResultDto<?> rDto = new ResultDto<>();
 			Task task = taskRepository.findByTaskId(taskId)
 					.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 			task.setTaskAccept(selected);

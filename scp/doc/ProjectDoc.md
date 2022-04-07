@@ -226,24 +226,12 @@
 # POST /sendtask
 ### input
 ``` json
-{
-	"userId": Long,
-	"tasklist" :
-	[
 		{
 	    	"taskId" : null,
 			"projectinuserId": Long,
-			"taskRequester" : String,
-			"taskOwner" : String,
 			"taskContent" : String,
-			"taskComplete" : boolean(Integer),
-			"taskAccept" : boolean(Integer),
-			"taskRequesttime" : datetime,
 			"taskDeadline" : datetime,
-			"taskCreatetime" : datetime
 		}
-	]  
-}
 ```
 ### ouput
 ``` json 
