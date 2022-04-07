@@ -1,19 +1,24 @@
 package kr.mmgg.scp.service;
 
+import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.TeamDto;
+import kr.mmgg.scp.dto.response.TeamDetailDto;
 import kr.mmgg.scp.dto.response.TeamHomeDto;
 import kr.mmgg.scp.dto.response.TeamMembersDto;
 import kr.mmgg.scp.entity.Team;
+import kr.mmgg.scp.entity.Teaminuser;
 import kr.mmgg.scp.repository.TeamRepository;
 import kr.mmgg.scp.repository.TeaminuserRepository;
+import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.CustomStatusCode;
+import kr.mmgg.scp.util.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,109 +29,137 @@ public class TeamServiceImpl implements TeamService {
     private final TeaminuserRepository teaminuserRepository;
 
     /**
-     * 팀 홈 정보 정리해서 가져오기
+     * 팀 홈 정보 정리해서 반환
      */
     @Override
     @Transactional
-    public Map<String, Object> TeamHome(Long userId) {
-        Map<String, Object> teamHome = new HashMap<>();
-        List<TeamHomeDto> myTeams = getTeamMembers(userId, teamRepository.getMyTeams(userId));
-        List<TeamHomeDto> sharedTeams = getTeamMembers(userId, teamRepository.getSharedTeams(userId));
-        teamHome.put("myTeams", myTeams);
-        teamHome.put("sharedTeams", sharedTeams);
+    public ResultDto<TeamHomeDto> TeamHome(Long userId) {
+        List<TeamDetailDto> myTeams = getTeamMembers(userId, toTeamList(teamRepository.getMyTeams(userId)));
+        List<TeamDetailDto> sharedTeams = getTeamMembers(userId, toTeamList(teamRepository.getSharedTeams(userId)));
 
-        return teamHome;
+        TeamHomeDto teamHomeDto = TeamHomeDto.builder().myTeams(myTeams).sharedTeams(sharedTeams).build();
+
+        ResultDto<TeamHomeDto> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamHomeDto, "teamHome");
+        return rDto;
     }
 
     /**
-     * 팀 맴버목록 정리해서 가져오기
+     * 팀 맴버목록 정리해서 "TeamHome" 으로 반환
      */
     @Override
     @Transactional
-    public List<TeamHomeDto> getTeamMembers(Long userId, List<Team> teams) {
-        List<TeamHomeDto> teamAndMembers = new ArrayList<>();
+    public List<TeamDetailDto> getTeamMembers(Long userId, List<TeamDto> teams) {
+        List<TeamDetailDto> teamAndMembers = new ArrayList<>();
 
         if (teams.size() > 0) {
-            for (Team i : teams) {
+            for (TeamDto i : teams) {
                 List<TeamMembersDto> teamMembers = toTeamMembersDtoList(
-                        teaminuserRepository.findTop3ByTeamId(i.getTeamId()));
+                        teaminuserRepository.findTop3ByTeamIdOrderByTeaminuserCommoncodeAsc(i.getTeamId()));
                 if (teamMembers.size() > 0) {
-                    TeamHomeDto responseTeamHomeDto = TeamHomeDto.builder()
+                    TeamDetailDto responseTeamDetailDto = TeamDetailDto.builder()
                             .teamId(i.getTeamId())
                             .teamName(i.getTeamName())
                             .teamMembers(teamMembers)
                             .build();
-                    teamAndMembers.add(responseTeamHomeDto);
+                    teamAndMembers.add(responseTeamDetailDto);
                 }
             }
         }
         return teamAndMembers;
     }
 
-    /*
-     * @Transactional
-     * public List<ResponseTeamHomeDto> getMyTeamMembers(Long userId) {
-     * List<TeamUserDto> teamUserDtos = new ArrayList<>();
-     * List<List<TeamUserDto>> teamUserDtosList = new ArrayList<>();
-     * 
-     * List<ResponseTeamHomeDto> responseTeamHomeDtos = new ArrayList<>();
-     * 
-     * List<Team> myTeams = teamRepository.getMyTeams(userId);
-     * if (myTeams.size() > 0) {
-     * int index = 0;
-     * for (Team i : myTeams) {
-     * List<Teaminuser> teamMembers =
-     * teaminuserRepository.findTop3ByTeamId(i.getTeamId());
-     * if (teamMembers.size() > 0) {
-     * for (Teaminuser j : teamMembers) {
-     * TeamUserDto teamUserDto = TeamUserDto.builder()
-     * .userId(j.getUserId())
-     * .userNickname(j.getUser().getUserNickname())
-     * .teaminuserCommoncode(j.getTeaminuserCommoncode())
-     * .teaminuserMaker(j.getTeaminuserMaker())
-     * .build();
-     * teamUserDtos.add(teamUserDto); //내가 만든 팀의 회원목록 저장
-     * }
-     * teamUserDtosList.add(index, teamUserDtos); //팀별 회원목록 저장
-     * 
-     * ResponseTeamHomeDto responseTeamHomeDto = ResponseTeamHomeDto.builder()
-     * .teamId(i.getTeamId())
-     * .teamName(i.getTeamName())
-     * .teamUserDtos(teamUserDtosList.get(index))
-     * .build();
-     * responseTeamHomeDtos.add(responseTeamHomeDto);
-     * 
-     * }
-     * index ++;
-     * }
-     * }
-     * return responseTeamHomeDtos;
-     * }
-     */
-
     /**
      * 팀 생성
      */
-    /*
-     * @Transactional
-     * public void insertTeam(String teamName, Long userId, ArrayList<Long> userIds)
-     * {
-     * TeamDto teamDTO = new TeamDto(teamName);
-     * Team newTeam = teamRepository.save(teamDTO.teamDtoToEntity(teamDTO));
-     * 
-     * List<Teaminuser> teaminuserList = new ArrayList<>();
-     * TeaminuserDto teaminuserDTO = new TeaminuserDto(userId ,newTeam.getTeamId(),
-     * "s_leader", 1);
-     * teaminuserList.add(teaminuserDTO.teamDtoToEntity(teaminuserDTO));
-     * 
-     * if(userIds != null && userIds.size() > 0) {
-     * for(Long i : userIds) {
-     * teaminuserDTO = new TeaminuserDto(i, newTeam.getTeamId(), "s_member", 0);
-     * teaminuserList.add(teaminuserDTO.teamDtoToEntity(teaminuserDTO));
-     * }
-     * }
-     * List<Teaminuser> newTeaminusers =
-     * teaminuserRepository.saveAll(teaminuserList);
-     * }
+    @Override
+    @Transactional
+    public ResultDto<Long> insertTeam(TeamDetailDto teamDetailDto) {
+        if (StringUtils.isEmpty(teamDetailDto.getTeamName()) || StringUtils.isEmpty(teamDetailDto.getTeamMembers())) {
+            throw new IllegalStateException("생성할 팀 정보를 가져오지 못했습니다.");
+        }
+
+        Team team = Team.builder()
+                .teamName(teamDetailDto.getTeamName())
+                .build();
+        Team newTeam = teamRepository.save(team);
+
+        List<Teaminuser> teaminuserList = new ArrayList<>();
+        List<TeamMembersDto> teamMembersDtoList = teamDetailDto.getTeamMembers();
+        for (TeamMembersDto i : teamMembersDtoList) {
+            Teaminuser teaminuser = Teaminuser.builder()
+                    .teamId(newTeam.getTeamId())
+                    .userId(i.getUserId())
+                    .teaminuserCommoncode(i.getTeaminuserCommoncode())
+                    .teaminuserMaker(i.getTeaminuserMaker())
+                    .build();
+            teaminuserList.add(teaminuser);
+        }
+        teaminuserRepository.saveAll(teaminuserList);
+
+        ResultDto<Long> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null, null);
+        return rDto;
+    }
+
+    @Override
+    @Transactional
+    public void modifyTeam(TeamDetailDto teamDetailDto) {
+        if (StringUtils.isEmpty(teamDetailDto.getTeamId()) || StringUtils.isEmpty(teamDetailDto.getTeamName())
+                || StringUtils.isEmpty(teamDetailDto.getTeamMembers())) {
+            throw new IllegalStateException("수정할 팀 정보를 가져오지 못했습니다.");
+        }
+
+        Team team = Team.builder()
+                .teamId(teamDetailDto.getTeamId())
+                .teamName(teamDetailDto.getTeamName())
+                .build();
+        teamRepository.save(team);
+
+        teaminuserRepository.deleteByTeamId(teamDetailDto.getTeamId());
+
+        List<Teaminuser> teaminuserList = new ArrayList<>();
+        List<TeamMembersDto> teamMembersDtoList = teamDetailDto.getTeamMembers();
+        for (TeamMembersDto i : teamMembersDtoList) {
+            Teaminuser teaminuser = Teaminuser.builder()
+                    .teamId(teamDetailDto.getTeamId())
+                    .userId(i.getUserId())
+                    .teaminuserCommoncode(i.getTeaminuserCommoncode())
+                    .teaminuserMaker(i.getTeaminuserMaker())
+                    .build();
+
+            teaminuserList.add(teaminuser);
+        }
+        teaminuserRepository.saveAll(teaminuserList);
+    }
+
+    @Override
+    public void remove(Long teamId) {
+        teaminuserRepository.deleteByTeamId(teamId);
+        teamRepository.deleteById(teamId);
+    }
+
+    /**
+     * 해당 팀 정보 정리해서 반환
      */
+    @Override
+    @Transactional
+    public ResultDto<TeamDetailDto> getTeamInfo(Long teamId) {
+        Team team = teamRepository.findByTeamId(teamId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        List<TeamMembersDto> teamMembers = toTeamMembersDtoList(
+                teaminuserRepository.findByTeamIdOrderByTeaminuserCommoncodeAsc(teamId));
+        if (teamMembers.isEmpty()) {
+            throw new IllegalStateException("해당 팀의 맴버 정보가 없습니다.");
+        }
+        TeamDetailDto teamDetailDto = TeamDetailDto.builder()
+                .teamId(teamId)
+                .teamName(team.getTeamName())
+                .teamMembers(teamMembers)
+                .build();
+
+        ResultDto<TeamDetailDto> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamDetailDto, "TeamDetail");
+        return rDto;
+    }
 }

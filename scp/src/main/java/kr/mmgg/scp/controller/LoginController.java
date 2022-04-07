@@ -11,6 +11,8 @@ import kr.mmgg.scp.config.auth.PrincipalDetails;
 import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.repository.UserRepository;
 
+import java.util.Optional;
+
 @Controller
 public class LoginController {
     @Autowired
@@ -24,7 +26,7 @@ public class LoginController {
         String sub = principalDetails.getAttribute("sub");
         System.out.println(sub); // sub값
         System.out.println(principalDetails.getAttribute("email").toString());
-        User user = userRepository.findByUserEmail(oauth2User.getAttribute("email"));
+        Optional<User> user = userRepository.findByUserEmail(oauth2User.getAttribute("email"));
         return user.toString();
     }
 

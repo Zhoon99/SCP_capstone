@@ -1,10 +1,7 @@
 package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.service.ProjectDetailImpl;
-import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.CustomStatusCode;
-import kr.mmgg.scp.util.ErrorCode;
-import kr.mmgg.scp.util.ErrorResponse;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +13,10 @@ import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
+import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
-import kr.mmgg.scp.entity.Task;
-import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.service.HomeServicelmpl;
-import kr.mmgg.scp.service.ProjectDetailImpl;
 import lombok.AllArgsConstructor;
 
 import java.util.HashMap;
@@ -45,7 +40,7 @@ public class ProjectController {
     private HomeServicelmpl homeServiceImpl;
     private ProjectDetailImpl projectDetailImpl;
 
-    // SCP-300 프로젝트 추가 
+    // SCP-300 프로젝트 추가
     // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
     public ResponseEntity<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto dto) {
@@ -54,16 +49,43 @@ public class ProjectController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @GetMapping(value = "/updateproject/{projectId}")
+    public ResultDto<ProjectUpdateGetInfoDto> updateProjectGetInfo(@PathVariable Long projectId) {
+        ResultDto<ProjectUpdateGetInfoDto> rDto = projectDetailImpl.updateProjectGetInfo(projectId);
+        return rDto;
+    }
+
+    @PatchMapping(value = "updateproject/deletemember/{projectinuserId}")
+    public ResultDto<?> updateProjectDeletemember(@PathVariable Long projectinuserId) {
+        ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
+        return rDto;
+    }
+
+    @PatchMapping(value = "")
+    public ResultDto<?> updateProjectMember() {
+
+        return null;
+    }
+
+    // @PatchMapping(value = "/updateproject/deleteuser/{projectinuserId}")
+    // public ResultDto<?> updateProject(@PathVariable Long projectinuserId){
+    // projectDetailImpl.updateProject(projectinuserId);
+    // return null;
+    // }
+
+    // @PatchMapping(value = "/updateproject/adduser")
+    // public ResultDto<?> updateProject(@RequestBody UpdateProjectAddMemberDto
+    // uAddMember){
+
+    // return null;
+    // }
+
     // SCP-301 프로젝트 모든 할일
     // ResultDto 완성
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
-    public ResultDto<?> allTask(@PathVariable Long projectId) {
-        HashMap<String,List<ProjectDetailAllTaskDto>> map = new HashMap<>();
-        List<ProjectDetailAllTaskDto> pdatList = projectDetailImpl.allTask(projectId);
-        map.put("tasklist", pdatList);
-        ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
+    public ResultDto<List<ProjectDetailAllTaskDto>> allTask(@PathVariable Long projectId) {
+        ResultDto<List<ProjectDetailAllTaskDto>> rDto = projectDetailImpl.allTask(projectId);
         return rDto;
     }
 
@@ -72,12 +94,8 @@ public class ProjectController {
     @Transactional // 영속성 컨텐츠로인해 안해주면 no session 에러남 (서비스뿐만아니라 컨트롤러단에서도 관리해줘야됨)
     @GetMapping(value = "/mytask/{userId}/{projectId}")
     public ResultDto<?> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
-    	HashMap<String,List<ProjectDetailMyTaskDto>> map = new HashMap<>();
-        List<ProjectDetailMyTaskDto> pdmtList = projectDetailImpl.myTask(userId, projectId);
-        map.put("tasklist", pdmtList);
-        ResultDto<List<ProjectDetailMyTaskDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
-        return rDto;
+        HashMap<String, List<ProjectDetailMyTaskDto>> map = new HashMap<>();
+        return null;
     }
 
     @PatchMapping(value = "/whethertask/{userId}/{taskId}")
@@ -91,7 +109,7 @@ public class ProjectController {
     @Transactional
     @RequestMapping(value = "/receivetask/{projectId}/{projectinuserID}", method = RequestMethod.GET)
     public ResultDto<?> receivetask(@PathVariable Long projectId, @PathVariable Long projectinuserID) {
-    	HashMap<String,List<ProjectDetailReceiveTaskDto>> map = new HashMap<>();
+        HashMap<String, List<ProjectDetailReceiveTaskDto>> map = new HashMap<>();
         List<ProjectDetailReceiveTaskDto> pdrtList = projectDetailImpl.receiveTask(projectId, projectinuserID);
         map.put("tasklist", pdrtList);
         ResultDto<List<ProjectDetailReceiveTaskDto>> rDto = new ResultDto<>();
@@ -99,22 +117,22 @@ public class ProjectController {
         return rDto;
     }
 
-    //TODO: 서비스 부분에서 resultDto 만들것 **
+    // TODO: 서비스 부분에서 resultDto 만들것 **
     // ResultDto 완성
     @RequestMapping(value = "/receivetask/{taskId}/{selected}", method = RequestMethod.PATCH)
     public ResultDto<?> receivetask(@PathVariable Long taskId, @PathVariable Integer selected) {
-    	ResultDto<?> rDto = new ResultDto<>();
-    	projectDetailImpl.recevieTask(taskId, selected);
-    	rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null);
-		return rDto;
+        ResultDto<?> rDto = new ResultDto<>();
+        projectDetailImpl.recevieTask(taskId, selected);
+        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null);
+        return rDto;
     }
 
     // SCP-304 보낸 요청 확인
-    // TODO: 프로젝트와 유저가 없으면 오류 
+    // TODO: 프로젝트와 유저가 없으면 오류
     // ResultDto 완성
     @GetMapping(value = "/requestask/{projectId}/{userid}")
     public ResultDto<?> requesttask(@PathVariable Long projectId, @PathVariable Long userid) {
-    	HashMap<String,List<RequestTaskDto>> map = new HashMap<>();
+        HashMap<String, List<RequestTaskDto>> map = new HashMap<>();
         List<RequestTaskDto> list = projectDetailImpl.requestTask(projectId, userid);
         map.put("tasklist", list);
         ResultDto<List<RequestTaskDto>> rDto = new ResultDto<>();
@@ -127,8 +145,8 @@ public class ProjectController {
     @Transactional
     @GetMapping(value = "/sendtask/{projectId}")
     public ResultDto<List<UserDto>> sendTask(@PathVariable Long projectId) {
-    	HashMap<String, List<UserDto>> map = new HashMap<>();
-    	List<UserDto> users = projectDetailImpl.gUsers(projectId);
+        HashMap<String, List<UserDto>> map = new HashMap<>();
+        List<UserDto> users = projectDetailImpl.gUsers(projectId);
         map.put("userlist", users);
         ResultDto<List<UserDto>> rDto = new ResultDto<>();
         rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
@@ -144,6 +162,6 @@ public class ProjectController {
         ResultDto<?> rDto = new ResultDto<>();
         rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null);
         return rDto;
-         
+
     }
 }
