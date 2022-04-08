@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
@@ -22,9 +23,11 @@ import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoMemberDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
+import kr.mmgg.scp.entity.Comment;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
+import kr.mmgg.scp.repository.CommentRepository;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.repository.TaskRepository;
 import kr.mmgg.scp.repository.UserRepository;
@@ -43,6 +46,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	private ProjectinUserRepository projectinUserRepository;
 	private TaskRepository taskRepository;
 	private UserRepository userRepository;
+	private CommentRepository commentRepository;
 	
 	// SCP-301 프로젝트 모든 할일
 	// 프로젝트안의 전체 할일 가져오기
@@ -309,5 +313,23 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND));
 		projectinUserRepository.delete(pInUser);
 		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
+	}
+
+	@Override
+	public ResultDto<?> commentWrite(CommentWriteDto dto) {
+		Comment comment = new Comment();
+		dateTime datetime = new dateTime();
+		comment.setTaskId(dto.getTaskId());
+		comment.setUserId(dto.getUserId());
+		comment.setCommentContent(dto.getCommentContent());
+		comment.setCommentTime(datetime.dateTime());
+		commentRepository.save(comment);
+		// TODO Auto-generated method stub
+		return new ResultDto<>().makeResult(CustomStatusCode.CREATE_SUCCESS);
+	}
+	@Override
+	public ResultDto<?> deleteComment(Long commentId) {
+		commentRepository.deleteById(commentId);
+		return new ResultDto<>().makeResult(CustomStatusCode.DELETE_SUCCESS);
 	}
 }

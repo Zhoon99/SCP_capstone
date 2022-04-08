@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
@@ -141,5 +142,17 @@ public class ProjectController {
     @RequestMapping(value = "/sendtask", method = RequestMethod.POST)
     public ResultDto<?> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
         return projectDetailImpl.sendTask(dto);
+    }
+    
+    // TODO: 할일 댓글 작성
+    @RequestMapping(value = "/commentwrite", method = RequestMethod.POST)
+    public ResultDto<?> commentWrite(@RequestBody CommentWriteDto dto) {
+    	System.out.println(dto);
+    	return projectDetailImpl.commentWrite(dto);
+    }
+    // TODO : 할일 댓글 삭제 // 에러 만들어야되고 댓글보이는것도 만들어야 
+    @RequestMapping(value = "/deletecomment/{commentId}", method = RequestMethod.GET)
+    public ResultDto<?> deleteComment(@PathVariable Long commentId){
+    	return projectDetailImpl.deleteComment(commentId);
     }
 }
