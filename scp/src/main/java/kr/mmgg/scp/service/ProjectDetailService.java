@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
-import kr.mmgg.scp.dto.request.UpdateProjectAddMemberDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;

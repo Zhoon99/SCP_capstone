@@ -2,10 +2,10 @@ package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
-import kr.mmgg.scp.dto.response.TeamDetailDto;
-import kr.mmgg.scp.dto.response.TeamHomeDto;
+import kr.mmgg.scp.dto.response.*;
 import kr.mmgg.scp.service.TeamServiceImpl;
 import kr.mmgg.scp.service.UserServiceImpl;
+import kr.mmgg.scp.util.CustomStatusCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,27 +32,44 @@ public class TeamController {
         return teamService.TeamHome(userId);
     }
 
+    @Transactional
+    @GetMapping(value = "/getUserTeamList/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultDto<List<TeamToAddDto>> getUserTeamList(@PathVariable Long userId) {
+        return teamService.getUserTeamList(userId);
+    }
+
+    @Transactional
+    @GetMapping(value = "/getTeamMembers/{teamId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultDto<List<TeamMembersDto>> getTeamMembers(@PathVariable Long teamId) {
+        return teamService.teamToAddMembers(teamId);
+    }
+
+    @Transactional
+    @PostMapping(value = "/getUsersByEmail/{search}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultDto<List<UserToAddDto>> getUsersByEmail(@PathVariable String search) {
+        return teamService.getUsersByEmail(search);
+    }
+
     //SCP-201 팀 등록
     @Transactional
     @PostMapping(value ="/home", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<Long> register(@RequestBody TeamDetailDto teamDetailDto){
-        return teamService.insertTeam(teamDetailDto);
-    }
+    public ResultDto<?> register(@RequestBody TeamDetailDto teamDetailDto){
+        teamService.insertTeam(teamDetailDto);
 
-    //SCP-201 이메일로 팀원 추가
-    @Transactional
-    @GetMapping(value = "/getUserByEmail/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<UserDto> getUserByEmail(@PathVariable String email) {
-        return userService.getUserIdByEmail(email);
+        ResultDto<?> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null, null);
+        return rDto;
     }
 
     //SCP-201 팀 수정
     @Transactional
     @PutMapping(value ="/home", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> modify(@RequestBody TeamDetailDto teamDetailDto){
-        log.info(teamDetailDto.toString());
+    public ResultDto<?> modify(@RequestBody TeamDetailDto teamDetailDto){
         teamService.modifyTeam(teamDetailDto);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+
+        ResultDto<?> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
+        return rDto;
     }
 
     //SCP-201 팀 수정(팀 정보 불러오기)

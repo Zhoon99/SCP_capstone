@@ -2,9 +2,7 @@ package kr.mmgg.scp.service;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.TeamDto;
-import kr.mmgg.scp.dto.response.TeamDetailDto;
-import kr.mmgg.scp.dto.response.TeamHomeDto;
-import kr.mmgg.scp.dto.response.TeamMembersDto;
+import kr.mmgg.scp.dto.response.*;
 import kr.mmgg.scp.entity.Team;
 import kr.mmgg.scp.entity.Teaminuser;
 
@@ -17,13 +15,19 @@ public interface TeamService {
 
     public List<TeamDetailDto> getTeamMembers(Long userId, List<TeamDto> teams);
 
-    public ResultDto<Long> insertTeam(TeamDetailDto teamDetailDto);
+    public void insertTeam(TeamDetailDto teamDetailDto);
 
     public void remove(Long teamId);
 
     public ResultDto<TeamDetailDto> getTeamInfo(Long teamId);
 
     public void modifyTeam(TeamDetailDto teamDetailDto);
+
+    public ResultDto<List<TeamToAddDto>> getUserTeamList(Long userId);
+
+    public ResultDto<List<TeamMembersDto>> teamToAddMembers(Long teamId);
+
+    public ResultDto<List<UserToAddDto>> getUsersByEmail(String search);
 
     default List<TeamDto> toTeamList(List<Team> team) {
         List<TeamDto> teamDtoList = new ArrayList<>();

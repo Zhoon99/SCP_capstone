@@ -28,12 +28,4 @@ public class ProjectDetailImplTest {
     // System.out.println(pdatList.get(i).getTasklist());
     // }
     // }
-
-    @Test
-    @Transactional
-    void 내할일가져오기() {
-        ProjectDetailMyTaskDto test = (ProjectDetailMyTaskDto) projectDetailImpl.myTask(1L, 1L);
-        log.info(test.toString());
-        System.out.println(projectDetailImpl.myTask(1L, 1L));
-    }
 }

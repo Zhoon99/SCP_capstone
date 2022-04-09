@@ -2,13 +2,13 @@ package kr.mmgg.scp.service;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.TeamDto;
-import kr.mmgg.scp.dto.response.TeamDetailDto;
-import kr.mmgg.scp.dto.response.TeamHomeDto;
-import kr.mmgg.scp.dto.response.TeamMembersDto;
+import kr.mmgg.scp.dto.response.*;
 import kr.mmgg.scp.entity.Team;
 import kr.mmgg.scp.entity.Teaminuser;
+import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.repository.TeamRepository;
 import kr.mmgg.scp.repository.TeaminuserRepository;
+import kr.mmgg.scp.repository.UserRepository;
 import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
@@ -27,6 +27,7 @@ public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
     private final TeaminuserRepository teaminuserRepository;
+    private final UserRepository userRepository;
 
     /**
      * 팀 홈 정보 정리해서 반환
@@ -70,11 +71,89 @@ public class TeamServiceImpl implements TeamService {
     }
 
     /**
+     * 맴버를 추가할 팀 목록 전달
+     */
+    @Override
+    @Transactional
+    public ResultDto<List<TeamToAddDto>> getUserTeamList(Long userId) {
+        List<Teaminuser> teaminusers = teaminuserRepository.findByUserId(userId);
+
+        if (teaminusers.isEmpty()) {
+            throw new IllegalStateException(userId + "해당 유저의 팀 정보가 없습니다.");
+        }
+
+        List<TeamToAddDto> teamToAddDtoList = new ArrayList<>();
+        for (Teaminuser i : teaminusers) {
+            TeamToAddDto teamToAddDto = TeamToAddDto.builder()
+                    .teamId(i.getTeamId())
+                    .teamName(i.getTeam().getTeamName())
+                    .build();
+            teamToAddDtoList.add(teamToAddDto);
+        }
+        ResultDto<List<TeamToAddDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamToAddDtoList, "Teams");
+        return rDto;
+    }
+
+    /**
+     * 팀의 맴버 정보 반환
+     */
+    @Override
+    @Transactional
+    public ResultDto<List<TeamMembersDto>> teamToAddMembers(Long teamId) {
+        List<Teaminuser> teaminusers = teaminuserRepository.findByTeamId(teamId);
+
+        if (teaminusers.isEmpty()) {
+            throw new CustomException(ErrorCode.TEAM_NOT_FOUND);
+        }
+
+        List<TeamMembersDto> teamMembersDtos = new ArrayList<>();
+        for (Teaminuser i : teaminusers) {
+            TeamMembersDto teamMembersDto = TeamMembersDto.builder()
+                    .userId(i.getUserId())
+                    .userNickname(i.getUser().getUserNickname())
+                    .teaminuserCommoncode("s_member")
+                    .teaminuserMaker(0)
+                    .build();
+            teamMembersDtos.add(teamMembersDto);
+        }
+        ResultDto<List<TeamMembersDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamMembersDtos, "Members");
+        return rDto;
+    }
+
+    /**
+     * 검색어로 시작하는 유저정보 반환
+     */
+    @Override
+    @Transactional
+    public ResultDto<List<UserToAddDto>> getUsersByEmail(String search) {
+        List<User> usersIncludingSearch = userRepository.findByUserEmailStartingWith(search);
+
+        if (usersIncludingSearch.isEmpty()) {
+            throw new IllegalStateException(search + "검색어에 해당하는 유저가 없습니다.");
+        }
+
+        List<UserToAddDto> userToAddDtoList = new ArrayList<>();
+        for(User i : usersIncludingSearch) {
+            UserToAddDto userToAddDto = UserToAddDto.builder()
+                    .userId(i.getUserId())
+                    .userNickname(i.getUserNickname())
+                    .userEmail(i.getUserEmail())
+                    .build();
+            userToAddDtoList.add(userToAddDto);
+        }
+        ResultDto<List<UserToAddDto>> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, userToAddDtoList, "EmailUser");
+        return rDto;
+    }
+
+    /**
      * 팀 생성
      */
     @Override
     @Transactional
-    public ResultDto<Long> insertTeam(TeamDetailDto teamDetailDto) {
+    public void insertTeam(TeamDetailDto teamDetailDto) {
         if (StringUtils.isEmpty(teamDetailDto.getTeamName()) || StringUtils.isEmpty(teamDetailDto.getTeamMembers())) {
             throw new IllegalStateException("생성할 팀 정보를 가져오지 못했습니다.");
         }
@@ -96,12 +175,11 @@ public class TeamServiceImpl implements TeamService {
             teaminuserList.add(teaminuser);
         }
         teaminuserRepository.saveAll(teaminuserList);
-
-        ResultDto<Long> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null, null);
-        return rDto;
     }
 
+    /**
+     * 팀 수정
+     */
     @Override
     @Transactional
     public void modifyTeam(TeamDetailDto teamDetailDto) {
@@ -116,21 +194,39 @@ public class TeamServiceImpl implements TeamService {
                 .build();
         teamRepository.save(team);
 
-        teaminuserRepository.deleteByTeamId(teamDetailDto.getTeamId());
+        List<TeamMembersDto> newTeams = teamDetailDto.getTeamMembers();
+        List<Teaminuser> existTeams = teaminuserRepository.findByTeamId(teamDetailDto.getTeamId());
 
-        List<Teaminuser> teaminuserList = new ArrayList<>();
-        List<TeamMembersDto> teamMembersDtoList = teamDetailDto.getTeamMembers();
-        for (TeamMembersDto i : teamMembersDtoList) {
-            Teaminuser teaminuser = Teaminuser.builder()
-                    .teamId(teamDetailDto.getTeamId())
-                    .userId(i.getUserId())
-                    .teaminuserCommoncode(i.getTeaminuserCommoncode())
-                    .teaminuserMaker(i.getTeaminuserMaker())
-                    .build();
-
-            teaminuserList.add(teaminuser);
+        if (existTeams.isEmpty()) {
+            throw new CustomException(ErrorCode.TEAM_NOT_FOUND);
         }
-        teaminuserRepository.saveAll(teaminuserList);
+
+        List<TeamMembersDto> newMembers = new ArrayList<>();
+
+        for(TeamMembersDto i : newTeams) {
+            for(Teaminuser j : existTeams) {
+                if(i.getUserId() == j.getUserId()) { //업데이트
+                    Teaminuser teaminuser = Teaminuser.builder()
+                            .teaminuserId(j.getTeaminuserId())
+                            .userId(i.getUserId())
+                            .teamId(teamDetailDto.getTeamId())
+                            .teaminuserCommoncode(i.getTeaminuserCommoncode())
+                            .teaminuserMaker(i.getTeaminuserMaker())
+                            .build();
+                    teaminuserRepository.save(teaminuser);
+                    newMembers.add(i);
+                }
+            }
+            if(!newMembers.contains(i)) { //추가
+                Teaminuser teaminuser = Teaminuser.builder()
+                        .userId(i.getUserId())
+                        .teamId(teamDetailDto.getTeamId())
+                        .teaminuserCommoncode(i.getTeaminuserCommoncode())
+                        .teaminuserMaker(i.getTeaminuserMaker())
+                        .build();
+                teaminuserRepository.save(teaminuser);
+            }
+        }
     }
 
     @Override
@@ -150,7 +246,7 @@ public class TeamServiceImpl implements TeamService {
         List<TeamMembersDto> teamMembers = toTeamMembersDtoList(
                 teaminuserRepository.findByTeamIdOrderByTeaminuserCommoncodeAsc(teamId));
         if (teamMembers.isEmpty()) {
-            throw new IllegalStateException("해당 팀의 맴버 정보가 없습니다.");
+            throw new IllegalStateException(teamId + "해당 팀의 맴버 정보가 없습니다.");
         }
         TeamDetailDto teamDetailDto = TeamDetailDto.builder()
                 .teamId(teamId)

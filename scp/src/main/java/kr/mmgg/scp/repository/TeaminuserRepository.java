@@ -15,5 +15,9 @@ public interface TeaminuserRepository extends JpaRepository<Teaminuser, Long> {
 
     List<Teaminuser> findByTeamIdOrderByTeaminuserCommoncodeAsc(Long teamId);
 
+    List<Teaminuser> findByUserId(Long userId);
+
+    List<Teaminuser> findByTeamId(Long teamId);
+
     void deleteByTeamId(Long teamId);
 }
