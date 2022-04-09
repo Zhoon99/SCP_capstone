@@ -145,24 +145,29 @@ public class ProjectController {
         return projectDetailImpl.sendTask(dto);
     }
     
-    // TODO: 할일 댓글 작성
+    // 댓글 작성
     @RequestMapping(value = "/commentwrite", method = RequestMethod.POST)
     public ResultDto<?> commentWrite(@RequestBody CommentWriteDto dto) {
     	System.out.println(dto);
     	return projectDetailImpl.commentWrite(dto);
     }
-    // TODO : 할일 댓글 삭제 // 에러 만들어야되고 댓글보이는것도 만들어야 
-    @RequestMapping(value = "/deletecomment/{commentId}", method = RequestMethod.GET)
+    
+    // 댓글 수정
+    @RequestMapping(value = "/commentmodify/{commentId}", method = RequestMethod.PATCH)
+    public ResultDto<?> commentModify(@PathVariable Long commentId, @RequestBody CommentModifyDto cmDto) {
+    	return projectDetailImpl.commentModify(commentId, cmDto);
+    }
+    
+    // 댓글 삭제
+    @RequestMapping(value = "/commentdelete/{commentId}", method = RequestMethod.DELETE)
     public ResultDto<?> deleteComment(@PathVariable Long commentId){
     	return projectDetailImpl.deleteComment(commentId);
     }
     
+    // HomeView -> Detail
     @RequestMapping(value = "/taskDetail/{taskId}", method = RequestMethod.GET)
     public ResultDto<?> taskDetail(@PathVariable Long taskId){
     	return projectDetailImpl.taskDetail(taskId);
     }
-    @RequestMapping(value = "/commentModify/{commentId}", method = RequestMethod.PATCH)
-    public ResultDto<?> commentModify(@PathVariable Long commentId, @RequestBody CommentModifyDto cmDto) {
-    	return projectDetailImpl.commentModify(commentId, cmDto);
-    }
+   
 }

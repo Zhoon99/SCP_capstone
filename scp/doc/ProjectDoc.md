@@ -240,3 +240,76 @@
 	"message": "message"
 }
 ```
+# POST /commentwrite
+### input 
+``` JSON
+	{
+		"taskId" : Long
+		"userId" : Long
+		"commentContent" : String
+	}
+```
+### ouput
+``` JSON 
+{
+	"status": 201,
+	"message": "message"
+}
+```
+# PATCH /commentmodify/{commentId}
+### input
+``` JSON
+{
+  "commentId" : Long,
+  "commentModifyTime" : DateTime(String)
+  "commentContent" : String
+}
+```
+###output
+``` JSON 
+{
+	"status": 202,
+	"message": "message"
+}
+```
+# DELETE /commentdelete/{commentId}
+### ouput
+``` JSON 
+{
+	"status": 203,
+	"message": "message"
+}
+```
+# GET /taskDetail/{taskId}
+### output
+``` JSON
+{
+	"status": 200,
+	"message": "message",
+	"result":{
+			"taskDetail" : {
+				"taskId" : Long,
+				"owner_userName" : String,
+				"requester_userName" : String,
+				"taskContent" : String,
+				"taskDeadline" : String,
+				"commentList" : [
+						{
+							"commentId" : Long,
+							"taskId" : Long,
+							"userName" : String,
+							"commentTime" : DateTime(String),
+							"commentContent" : String
+						},
+						{
+							"commentId" : Long,
+							"taskId" : Long,
+							"userName" : String,
+							"commentTime" : DateTime(String),
+							"commentContent" : String
+						}
+					]
+				}
+			}
+		}
+```

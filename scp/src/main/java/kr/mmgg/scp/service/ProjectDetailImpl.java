@@ -364,6 +364,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		hvpdDto.setTaskContent(task.getTaskContent());
 		hvpdDto.setOwner_userName(null);
 		hvpdDto.setRequester_userName(null);
+		hvpdDto.setTaskDeadline(task.getTaskDeadline());
 		hvpdDto.setCommentList(hvpdclList);
 		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto, "taskDetail"); // 새로작성한 HomeViewProjectDetailDto 반환 
 	}
