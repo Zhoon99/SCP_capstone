@@ -18,9 +18,12 @@ public class ResultDto<T> {
 	public ResultDto<T> makeResult(CustomStatusCode csc, T resultDto, String MapName) {
 		this.status = csc.getStatus();
 		this.message = csc.getMessage();
-		HashMap<String, T> result = new HashMap<>();
-		result.put(MapName, resultDto);
-		this.result = result;
+
+		if(resultDto != null) {
+			HashMap<String, T> result = new HashMap<>();
+			result.put(MapName, resultDto);
+			this.result = result;
+		}
 		return this;
 	}
 	

@@ -91,7 +91,7 @@ public class TeamServiceImpl implements TeamService {
             teamToAddDtoList.add(teamToAddDto);
         }
         ResultDto<List<TeamToAddDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamToAddDtoList, "Teams");
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamToAddDtoList, "teams");
         return rDto;
     }
 
@@ -118,7 +118,7 @@ public class TeamServiceImpl implements TeamService {
             teamMembersDtos.add(teamMembersDto);
         }
         ResultDto<List<TeamMembersDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamMembersDtos, "Members");
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamMembersDtos, "members");
         return rDto;
     }
 
@@ -144,7 +144,19 @@ public class TeamServiceImpl implements TeamService {
             userToAddDtoList.add(userToAddDto);
         }
         ResultDto<List<UserToAddDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, userToAddDtoList, "EmailUser");
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, userToAddDtoList, "emailUser");
+        return rDto;
+    }
+
+    @Override
+    @Transactional
+    public ResultDto<?> deleteTeamMember(Long teamId, Long userId) {
+        Teaminuser teaminuser = teaminuserRepository.findByTeamIdAndAndUserId(teamId, userId)
+                .orElseThrow(() -> new IllegalStateException(teamId + "팀이나 " + userId + "유저에 해당하는 정보가 없습니다."));
+        teaminuserRepository.delete(teaminuser);
+
+        ResultDto<?> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS, null, null);
         return rDto;
     }
 
@@ -153,7 +165,7 @@ public class TeamServiceImpl implements TeamService {
      */
     @Override
     @Transactional
-    public void insertTeam(TeamDetailDto teamDetailDto) {
+    public ResultDto<?> insertTeam(TeamDetailDto teamDetailDto) {
         if (StringUtils.isEmpty(teamDetailDto.getTeamName()) || StringUtils.isEmpty(teamDetailDto.getTeamMembers())) {
             throw new IllegalStateException("생성할 팀 정보를 가져오지 못했습니다.");
         }
@@ -175,6 +187,10 @@ public class TeamServiceImpl implements TeamService {
             teaminuserList.add(teaminuser);
         }
         teaminuserRepository.saveAll(teaminuserList);
+
+        ResultDto<?> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null, null);
+        return rDto;
     }
 
     /**
@@ -182,7 +198,7 @@ public class TeamServiceImpl implements TeamService {
      */
     @Override
     @Transactional
-    public void modifyTeam(TeamDetailDto teamDetailDto) {
+    public ResultDto<?> modifyTeam(TeamDetailDto teamDetailDto) {
         if (StringUtils.isEmpty(teamDetailDto.getTeamId()) || StringUtils.isEmpty(teamDetailDto.getTeamName())
                 || StringUtils.isEmpty(teamDetailDto.getTeamMembers())) {
             throw new IllegalStateException("수정할 팀 정보를 가져오지 못했습니다.");
@@ -227,12 +243,19 @@ public class TeamServiceImpl implements TeamService {
                 teaminuserRepository.save(teaminuser);
             }
         }
+        ResultDto<?> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
+        return rDto;
     }
 
     @Override
-    public void remove(Long teamId) {
+    public ResultDto<?> remove(Long teamId) {
         teaminuserRepository.deleteByTeamId(teamId);
         teamRepository.deleteById(teamId);
+
+        ResultDto<?> rDto = new ResultDto<>();
+        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS, null, null);
+        return rDto;
     }
 
     /**
@@ -255,7 +278,7 @@ public class TeamServiceImpl implements TeamService {
                 .build();
 
         ResultDto<TeamDetailDto> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamDetailDto, "TeamDetail");
+        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, teamDetailDto, "modifyTeamInfo");
         return rDto;
     }
 }

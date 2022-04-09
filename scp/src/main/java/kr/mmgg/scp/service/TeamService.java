@@ -15,19 +15,21 @@ public interface TeamService {
 
     public List<TeamDetailDto> getTeamMembers(Long userId, List<TeamDto> teams);
 
-    public void insertTeam(TeamDetailDto teamDetailDto);
+    public ResultDto<?> insertTeam(TeamDetailDto teamDetailDto);
 
-    public void remove(Long teamId);
+    public ResultDto<?> remove(Long teamId);
 
     public ResultDto<TeamDetailDto> getTeamInfo(Long teamId);
 
-    public void modifyTeam(TeamDetailDto teamDetailDto);
+    public ResultDto<?> modifyTeam(TeamDetailDto teamDetailDto);
 
     public ResultDto<List<TeamToAddDto>> getUserTeamList(Long userId);
 
     public ResultDto<List<TeamMembersDto>> teamToAddMembers(Long teamId);
 
     public ResultDto<List<UserToAddDto>> getUsersByEmail(String search);
+
+    public ResultDto<?> deleteTeamMember(Long teamId, Long userId);
 
     default List<TeamDto> toTeamList(List<Team> team) {
         List<TeamDto> teamDtoList = new ArrayList<>();
