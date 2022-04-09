@@ -1,0 +1,16 @@
+package kr.mmgg.scp.dto.response;
+
+import java.util.List;
+
+import kr.mmgg.scp.entity.Comment;
+import lombok.Data;
+
+@Data
+public class HomeViewProjectDetailDto {
+	private Long taskId; // 할일 P 번호
+	private String owner_userName; // 할일 담당자
+	private String requester_userName; // 할일 요청자
+	private String taskContent; // 할일 내용
+	
+	private List<HomeViewProjectDetailCommentListDto> commentList; // 댓글이 여러개 달릴것을 가정하여 리스트로 작성
+}

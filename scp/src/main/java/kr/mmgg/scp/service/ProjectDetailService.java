@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.UpdateProjectAddMemberDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
@@ -43,4 +44,8 @@ public interface ProjectDetailService {
 	public ResultDto<?> commentWrite(CommentWriteDto dto);
 
 	public ResultDto<?> deleteComment(Long commentId);
+
+	public ResultDto<?> taskDetail(Long taskId);
+
+	public ResultDto<?> commentModify(Long commentId, CommentModifyDto cmDto);
 }

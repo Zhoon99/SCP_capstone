@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
@@ -154,5 +155,14 @@ public class ProjectController {
     @RequestMapping(value = "/deletecomment/{commentId}", method = RequestMethod.GET)
     public ResultDto<?> deleteComment(@PathVariable Long commentId){
     	return projectDetailImpl.deleteComment(commentId);
+    }
+    
+    @RequestMapping(value = "/taskDetail/{taskId}", method = RequestMethod.GET)
+    public ResultDto<?> taskDetail(@PathVariable Long taskId){
+    	return projectDetailImpl.taskDetail(taskId);
+    }
+    @RequestMapping(value = "/commentModify/{commentId}", method = RequestMethod.PATCH)
+    public ResultDto<?> commentModify(@PathVariable Long commentId, @RequestBody CommentModifyDto cmDto) {
+    	return projectDetailImpl.commentModify(commentId, cmDto);
     }
 }

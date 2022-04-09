@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
+import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
+import kr.mmgg.scp.dto.response.HomeViewProjectDetailCommentListDto;
+import kr.mmgg.scp.dto.response.HomeViewProjectDetailDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
@@ -314,7 +317,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		projectinUserRepository.delete(pInUser);
 		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
 	}
-
+	
+	// 홈뷰 -> 자세히 -> 할일 확인 및 코멘트 확인 -> 코멘트 작성 
 	@Override
 	public ResultDto<?> commentWrite(CommentWriteDto dto) {
 		Comment comment = new Comment();
@@ -327,9 +331,49 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		// TODO Auto-generated method stub
 		return new ResultDto<>().makeResult(CustomStatusCode.CREATE_SUCCESS);
 	}
+	// 홈뷰 -> 자세히 -> 할일 확인 및 코멘트 확인 -> 코멘트 삭제
 	@Override
 	public ResultDto<?> deleteComment(Long commentId) {
 		commentRepository.deleteById(commentId);
 		return new ResultDto<>().makeResult(CustomStatusCode.DELETE_SUCCESS);
+	}
+	
+	// 홈뷰 -> 자세히 -> 할일 확인 및 코멘트 확인
+	@Override
+	public ResultDto<?> taskDetail(Long taskId) {
+		Task task = taskRepository.findByTaskId(taskId).orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+		List<Comment> comment = null;
+		List<HomeViewProjectDetailCommentListDto> hvpdclList = new ArrayList<HomeViewProjectDetailCommentListDto>(); // 코멘트dto 리스트를 받을곳
+		HomeViewProjectDetailCommentListDto hvpdclDto;
+		if(!commentRepository.findByTaskId(taskId).isEmpty()) {  // 에러 잡는곳
+			comment = commentRepository.findByTaskId(taskId);
+			for (int i = 0; i < comment.size(); i++) {
+				hvpdclDto = new HomeViewProjectDetailCommentListDto();
+				hvpdclDto.setCommentId(comment.get(i).getTaskId());
+				hvpdclDto.setTaskId(comment.get(i).getTaskId());
+				hvpdclDto.setUserName(comment.get(i).getUser().getUserNickname());
+				hvpdclDto.setCommentTime(comment.get(i).getCommentTime());
+				hvpdclDto.setCommentContent(comment.get(i).getCommentContent());
+				hvpdclList.add(hvpdclDto);
+			}
+		} else {
+			new CustomException(ErrorCode.COMMENT_NOT_FOUND); // 에러발생시 
+		}
+		HomeViewProjectDetailDto hvpdDto = new HomeViewProjectDetailDto();
+		hvpdDto.setTaskId(task.getTaskId());
+		hvpdDto.setTaskContent(task.getTaskContent());
+		hvpdDto.setOwner_userName(null);
+		hvpdDto.setRequester_userName(null);
+		hvpdDto.setCommentList(hvpdclList);
+		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto, "taskDetail"); // 새로작성한 HomeViewProjectDetailDto 반환 
+	}
+	// 홈뷰 -> 자세히 -> 할일 확인 및 코멘트 확인 -> 코멘트 수정
+	@Override
+	public ResultDto<?> commentModify(Long commentId, CommentModifyDto cmDto) {
+		Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+		comment.setCommentContent(cmDto.getCommentContent());
+		comment.setCommentTime(cmDto.getCommentModifyTime());
+		commentRepository.save(comment);
+		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS);
 	}
 }
