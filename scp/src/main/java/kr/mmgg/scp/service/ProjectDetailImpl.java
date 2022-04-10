@@ -52,12 +52,12 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		}
 
 		List<ProjectDetailAllTaskDto> list = new ArrayList<ProjectDetailAllTaskDto>();
-		ProjectDetailAllTaskDto dto;
+		ProjectDetailAllTaskDto dto = null;
 		for (int i = 0; i < plist.size(); i++) {
-			dto = new ProjectDetailAllTaskDto();
 			if (!plist.get(i).getTasks().isEmpty()) {
-				dto.setProjectinuserId(plist.get(i).getProjectinuserId());
 				for (int j = 0; j < plist.get(i).getTasks().size(); j++) {
+					dto = new ProjectDetailAllTaskDto();
+					dto.setProjectinuserId(plist.get(i).getProjectinuserId());
 					dto.setTaskId(plist.get(i).getTasks().get(j).getTaskId());
 					dto.setTaskContent(plist.get(i).getTasks().get(j).getTaskContent());
 					dto.setTaskOwner(plist.get(i).getTasks().get(j).getTaskOwner());
@@ -67,8 +67,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 					dto.setTaskRequesttime(plist.get(i).getTasks().get(j).getTaskRequesttime());
 					dto.setTaskDeadline(plist.get(i).getTasks().get(j).getTaskDeadline());
 					dto.setTaskCreatetime(plist.get(i).getTasks().get(j).getTaskCreatetime());
+					list.add(dto);
 				}
-				list.add(dto);
 			}
 		}
 		ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
