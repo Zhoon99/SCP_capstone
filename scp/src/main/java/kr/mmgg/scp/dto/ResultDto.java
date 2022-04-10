@@ -1,8 +1,6 @@
 package kr.mmgg.scp.dto;
 
 import java.util.HashMap;
-import java.util.List;
-
 import kr.mmgg.scp.util.CustomStatusCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,12 +22,9 @@ public class ResultDto<T> {
 	public ResultDto<T> makeResult(CustomStatusCode csc, T resultDto, String MapName) {
 		this.status = csc.getStatus();
 		this.message = csc.getMessage();
-
-		if(resultDto != null) {
-			HashMap<String, T> result = new HashMap<>();
-			result.put(MapName, resultDto);
-			this.result = result;
-		}
+		HashMap<String, T> result = new HashMap<>();
+		result.put(MapName, resultDto);
+		this.result = result;
 		return this;
 	}
 

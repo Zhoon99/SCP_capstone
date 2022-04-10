@@ -39,12 +39,12 @@ public class homeServiceTest {
     @Transactional
     @Test
     void testCreateProject() {
-        CreateProjectMemberDto memberDto = new CreateProjectMemberDto(1L, 0,
-                "p_member");
-        List<CreateProjectMemberDto> memberDtoList = new ArrayList<>();
-        memberDtoList.add(memberDto);
-        CreateProjectDto projectDto = new CreateProjectDto("테스트 타이틀", memberDtoList);
-        List<ProjectInUser> dto = homeServiceImpl.projectCreate(projectDto);
-        log.info(dto.toString());
+        // CreateProjectMemberDto memberDto = new CreateProjectMemberDto(1L, 0,
+        // "p_member");
+        // List<CreateProjectMemberDto> memberDtoList = new ArrayList<>();
+        // memberDtoList.add(memberDto);
+        // CreateProjectDto projectDto = new CreateProjectDto("테스트 타이틀", memberDtoList);
+        // List<ProjectInUser> dto = homeServiceImpl.projectCreate(projectDto);
+        // log.info(dto.toString());
     }
 }

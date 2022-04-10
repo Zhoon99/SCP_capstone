@@ -13,7 +13,6 @@ import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -22,7 +21,6 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
@@ -156,7 +154,7 @@ public class TeamServiceImpl implements TeamService {
         teaminuserRepository.delete(teaminuser);
 
         ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS, null, null);
+        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS);
         return rDto;
     }
 
@@ -189,7 +187,7 @@ public class TeamServiceImpl implements TeamService {
         teaminuserRepository.saveAll(teaminuserList);
 
         ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null, null);
+        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
         return rDto;
     }
 
@@ -244,7 +242,7 @@ public class TeamServiceImpl implements TeamService {
             }
         }
         ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
+        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
         return rDto;
     }
 
@@ -254,7 +252,7 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.deleteById(teamId);
 
         ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS, null, null);
+        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS);
         return rDto;
     }
 
