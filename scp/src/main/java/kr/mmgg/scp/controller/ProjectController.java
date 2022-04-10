@@ -1,13 +1,15 @@
 package kr.mmgg.scp.controller;
 
+import kr.mmgg.scp.dto.request.UpdateProjectModify;
 import kr.mmgg.scp.service.ProjectDetailImpl;
+
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
-import kr.mmgg.scp.dto.request.UpdateProjectModify;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
@@ -16,9 +18,6 @@ import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -173,5 +172,4 @@ public class ProjectController {
     public ResultDto<?> remove(@PathVariable Long teamId) {
         return homeServiceImpl.removeProject(teamId);
     }
-
 }
