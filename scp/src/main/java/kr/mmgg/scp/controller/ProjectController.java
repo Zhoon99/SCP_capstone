@@ -7,6 +7,7 @@ import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
+import kr.mmgg.scp.dto.request.UpdateProjectModify;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +37,8 @@ public class ProjectController {
     // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
     public ResultDto<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto list) {
-//        List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);
-    	System.out.println(list);
+        // List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);
+        System.out.println(list);
         return homeServiceImpl.projectCreate(list);
     }
 
@@ -132,30 +134,44 @@ public class ProjectController {
     public ResultDto<?> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
         return projectDetailImpl.sendTask(dto);
     }
-    
+
     // 댓글 작성
     @RequestMapping(value = "/commentwrite", method = RequestMethod.POST)
     public ResultDto<?> commentWrite(@RequestBody CommentWriteDto dto) {
-    	System.out.println(dto);
-    	return projectDetailImpl.commentWrite(dto);
+        System.out.println(dto);
+        return projectDetailImpl.commentWrite(dto);
     }
-    
+
     // 댓글 수정
     @RequestMapping(value = "/commentmodify/{commentId}", method = RequestMethod.PATCH)
     public ResultDto<?> commentModify(@PathVariable Long commentId, @RequestBody CommentModifyDto cmDto) {
-    	return projectDetailImpl.commentModify(commentId, cmDto);
+        return projectDetailImpl.commentModify(commentId, cmDto);
     }
-    
+
     // 댓글 삭제
     @RequestMapping(value = "/commentdelete/{commentId}", method = RequestMethod.DELETE)
-    public ResultDto<?> deleteComment(@PathVariable Long commentId){
-    	return projectDetailImpl.deleteComment(commentId);
+    public ResultDto<?> deleteComment(@PathVariable Long commentId) {
+        return projectDetailImpl.deleteComment(commentId);
     }
-    
+
     // HomeView -> Detail
     @RequestMapping(value = "/taskDetail/{taskId}", method = RequestMethod.GET)
-    public ResultDto<?> taskDetail(@PathVariable Long taskId){
-    	return projectDetailImpl.taskDetail(taskId);
+    public ResultDto<?> taskDetail(@PathVariable Long taskId) {
+        return projectDetailImpl.taskDetail(taskId);
     }
-   
+
+    // 프로젝트 수정
+    @Transactional
+    @PutMapping(value = "/project/modify", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultDto<?> modify(@RequestBody UpdateProjectModify updateProjectModify) {
+        return homeServiceImpl.modifyProject(updateProjectModify);
+    }
+
+    // 프로젝트 삭제
+    @Transactional
+    @DeleteMapping("/project/delete/{teamId}")
+    public ResultDto<?> remove(@PathVariable Long teamId) {
+        return homeServiceImpl.removeProject(teamId);
+    }
+
 }
