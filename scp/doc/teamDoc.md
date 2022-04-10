@@ -204,9 +204,30 @@
 }
 ```
 
+## Post "/team/deleteTeamMember"
+
+### • input
+
+``` json
+{
+    "teamId" : Long,
+    "userId" : Long
+}
+```
+
+### • output
+
+``` json
+{
+    "status": 203,
+    "message": "message",
+    "result": null
+}
+```
+
 # Modify
 
-## Get "/team/getUserTeamList/{userId}"
+## Post "/team/modify"
 
 ### • input
 
