@@ -6,22 +6,16 @@ import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.response.*;
 import kr.mmgg.scp.service.TeamServiceImpl;
 import kr.mmgg.scp.service.UserServiceImpl;
-import kr.mmgg.scp.util.CustomStatusCode;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/team")
-@Slf4j
 public class TeamController {
 
     private final TeamServiceImpl teamService;

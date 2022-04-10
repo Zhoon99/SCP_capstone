@@ -1,8 +1,6 @@
 package kr.mmgg.scp.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import kr.mmgg.scp.dto.ResultDto;
@@ -63,23 +61,26 @@ public class HomeServicelmpl implements HomeService {
 	// 프로젝트 생성
 	@Override
 	@Transactional
-	public List<ProjectInUser> projectCreate(CreateProjectDto dto) {
+	public ResultDto<List<ProjectInUser>> projectCreate(List<CreateProjectDto> dto) {
 		List<ProjectInUser> piuList = new ArrayList<>();
 		Project project = new Project();
 		// 프로젝트 생성
-		project.setProjectName(dto.getTitle());
-		Project newProject = projectRepository.save(project);
-		// 프로젝트사람 생성
-		for (int i = 0; i < dto.getMember().size(); i++) {
-			ProjectInUser projectInUser = new ProjectInUser();
-			projectInUser.setProjectId(newProject.getProjectId());
-			projectInUser.setUserId(dto.getMember().get(i).getUserId());
-			projectInUser.setProjectinuserMaker(dto.getMember().get(i).getProjectinuserMaker());
-			projectInUser.setProjectinuserCommoncode(dto.getMember().get(i).getProjectinuserCommoncode());
-			piuList.add(projectInUser);
+		for (int i = 0; i < dto.size(); i++) {
+			project.setProjectName(dto.get(i).getTitle());
+			Project newProject = projectRepository.save(project);
+			// 프로젝트사람 생성
+			for (int j = 0; j < dto.get(i).getMember().size(); j++) {
+				ProjectInUser projectInUser = new ProjectInUser();
+				projectInUser.setProjectId(newProject.getProjectId());
+				projectInUser.setUserId(dto.get(i).getMember().get(j).getUserId());
+				projectInUser.setProjectinuserMaker(dto.get(i).getMember().get(j).getProjectinuserMaker());
+				projectInUser.setProjectinuserCommoncode(dto.get(i).getMember().get(j).getProjectinuserCommoncode());
+				piuList.add(projectInUser);
+			}
 		}
-
-		return projectinUserRepository.saveAll(piuList);
+		projectinUserRepository.saveAll(piuList);
+		ResultDto<List<ProjectInUser>> rDto = new ResultDto<List<ProjectInUser>>();
+		return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
 	}
 
 }
