@@ -52,22 +52,23 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		}
 
 		List<ProjectDetailAllTaskDto> list = new ArrayList<ProjectDetailAllTaskDto>();
-		ProjectDetailAllTaskDto dto;
+		ProjectDetailAllTaskDto dto = null;
 		for (int i = 0; i < plist.size(); i++) {
-			dto = new ProjectDetailAllTaskDto();
 			if (!plist.get(i).getTasks().isEmpty()) {
-				dto.setProjectinuserId(plist.get(i).getProjectinuserId());
 				for (int j = 0; j < plist.get(i).getTasks().size(); j++) {
+					dto = new ProjectDetailAllTaskDto();
+					dto.setProjectinuserId(plist.get(i).getProjectinuserId());
 					dto.setTaskId(plist.get(i).getTasks().get(j).getTaskId());
 					dto.setTaskContent(plist.get(i).getTasks().get(j).getTaskContent());
 					dto.setTaskOwner(plist.get(i).getTasks().get(j).getTaskOwner());
+					dto.setTaskRequester(plist.get(i).getTasks().get(j).getTaskRequester());
 					dto.setTaskComplete(plist.get(i).getTasks().get(j).getTaskComplete());
 					dto.setTaskAccept(plist.get(i).getTasks().get(j).getTaskAccept());
 					dto.setTaskRequesttime(plist.get(i).getTasks().get(j).getTaskRequesttime());
 					dto.setTaskDeadline(plist.get(i).getTasks().get(j).getTaskDeadline());
-					dto.setCreatetime(plist.get(i).getTasks().get(j).getTaskCreatetime());
+					dto.setTaskCreatetime(plist.get(i).getTasks().get(j).getTaskCreatetime());
+					list.add(dto);
 				}
-				list.add(dto);
 			}
 		}
 		ResultDto<List<ProjectDetailAllTaskDto>> rDto = new ResultDto<>();
@@ -91,11 +92,12 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			dto.setTaskId(piuUserIdAndProjectId.getTasks().get(i).getTaskId());
 			dto.setTaskContent(piuUserIdAndProjectId.getTasks().get(i).getTaskContent());
 			dto.setTaskOwner(piuUserIdAndProjectId.getTasks().get(i).getTaskOwner());
+			dto.setTaskRequester(piuUserIdAndProjectId.getTasks().get(i).getTaskRequester());
 			dto.setTaskComplete(piuUserIdAndProjectId.getTasks().get(i).getTaskComplete());
 			dto.setTaskAccept(piuUserIdAndProjectId.getTasks().get(i).getTaskAccept());
 			dto.setTaskRequesttime(piuUserIdAndProjectId.getTasks().get(i).getTaskRequesttime());
 			dto.setTaskDeadline(piuUserIdAndProjectId.getTasks().get(i).getTaskDeadline());
-			dto.setCreatetime(piuUserIdAndProjectId.getTasks().get(i).getTaskCreatetime());
+			dto.setTaskCreatetime(piuUserIdAndProjectId.getTasks().get(i).getTaskCreatetime());
 			list.add(dto);
 		}
 		ResultDto<List<ProjectDetailMyTaskDto>> rDto = new ResultDto<>();
@@ -121,11 +123,12 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				pdrtTask.setTaskId(tlist.get(i).getTaskId());
 				pdrtTask.setTaskContent(tlist.get(i).getTaskContent());
 				pdrtTask.setTaskOwner(tlist.get(i).getTaskOwner());
+				pdrtTask.setTaskRequester(tlist.get(i).getTaskRequester());
 				pdrtTask.setTaskComplete(tlist.get(i).getTaskComplete());
 				pdrtTask.setTaskAccept(tlist.get(i).getTaskAccept());
 				pdrtTask.setTaskRequesttime(tlist.get(i).getTaskRequesttime());
 				pdrtTask.setTaskDeadline(tlist.get(i).getTaskDeadline());
-				pdrtTask.setCreatetime(tlist.get(i).getTaskCreatetime());
+				pdrtTask.setTaskCreatetime(tlist.get(i).getTaskCreatetime());
 				pdrtList.add(pdrtTask);
 			}
 		}
@@ -362,8 +365,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		HomeViewProjectDetailDto hvpdDto = new HomeViewProjectDetailDto();
 		hvpdDto.setTaskId(task.getTaskId());
 		hvpdDto.setTaskContent(task.getTaskContent());
-		hvpdDto.setOwner_userName(null); // 조인해서 데이터 가져올것
-		hvpdDto.setRequester_userName(null); // ##
+		hvpdDto.setOwner_userName(task.getTaskOwner()); // 조인해서 데이터 가져올것
+		hvpdDto.setRequester_userName(task.getTaskRequester()); // ##
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
 		hvpdDto.setCommentList(hvpdclList);
 		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto, "taskDetail"); // 새로작성한
