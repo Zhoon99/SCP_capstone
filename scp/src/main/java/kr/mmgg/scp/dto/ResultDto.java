@@ -1,8 +1,6 @@
 package kr.mmgg.scp.dto;
 
 import java.util.HashMap;
-import java.util.List;
-
 import kr.mmgg.scp.util.CustomStatusCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;

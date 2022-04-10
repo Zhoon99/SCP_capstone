@@ -1,22 +1,15 @@
 package kr.mmgg.scp.service;
 
 import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
-import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
-import kr.mmgg.scp.dto.response.ProjectDetailRequestTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
-import kr.mmgg.scp.entity.Task;
-import kr.mmgg.scp.entity.User;
 
 public interface ProjectDetailService {
 

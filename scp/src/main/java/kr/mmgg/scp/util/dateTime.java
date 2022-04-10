@@ -2,7 +2,6 @@ package kr.mmgg.scp.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class dateTime {
 	private Calendar time = Calendar.getInstance();

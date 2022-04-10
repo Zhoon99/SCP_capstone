@@ -1,8 +1,6 @@
 package kr.mmgg.scp.dto.response;
 
 import java.util.List;
-
-import kr.mmgg.scp.entity.Comment;
 import lombok.Data;
 
 @Data

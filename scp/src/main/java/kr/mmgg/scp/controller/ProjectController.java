@@ -1,31 +1,20 @@
 package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.service.ProjectDetailImpl;
-import kr.mmgg.scp.util.CustomStatusCode;
-
 import org.springframework.web.bind.annotation.*;
-
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
-import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
-import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
-import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
-import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
-
-import java.util.HashMap;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,10 +34,10 @@ public class ProjectController {
     // SCP-300 프로젝트 추가
     // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
-    public ResponseEntity<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto dto) {
-        List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);
-        return (!piuList.isEmpty() || piuList != null) ? ResponseEntity.status(HttpStatus.OK).body(piuList)
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResultDto<List<ProjectInUser>> CreateProject(@RequestBody List<CreateProjectDto> list) {
+//        List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);
+    	System.out.println(list);
+        return homeServiceImpl.projectCreate(list);
     }
 
     @GetMapping(value = "/updateproject/{projectId}")
