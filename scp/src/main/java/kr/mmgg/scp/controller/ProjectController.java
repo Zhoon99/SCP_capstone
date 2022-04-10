@@ -1,8 +1,11 @@
 package kr.mmgg.scp.controller;
 
+import kr.mmgg.scp.dto.request.UpdateProjectModify;
+import kr.mmgg.scp.dto.response.*;
 import kr.mmgg.scp.service.ProjectDetailImpl;
 import kr.mmgg.scp.util.CustomStatusCode;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
@@ -10,13 +13,6 @@ import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
-import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
-import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
-import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskDto;
-import kr.mmgg.scp.dto.response.ProjectDetailReceiveTaskSelectDto;
-import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
-import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
-import kr.mmgg.scp.dto.response.RequestTaskDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
@@ -167,6 +163,20 @@ public class ProjectController {
     @RequestMapping(value = "/taskDetail/{taskId}", method = RequestMethod.GET)
     public ResultDto<?> taskDetail(@PathVariable Long taskId){
     	return projectDetailImpl.taskDetail(taskId);
+    }
+
+    //프로젝트 수정
+    @Transactional
+    @PutMapping(value ="/project/modify", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultDto<?> modify(@RequestBody UpdateProjectModify updateProjectModify){
+        return homeServiceImpl.modifyProject(updateProjectModify);
+    }
+
+    //프로젝트 삭제
+    @Transactional
+    @DeleteMapping("/project/delete/{teamId}")
+    public ResultDto<?> remove(@PathVariable Long teamId) {
+        return homeServiceImpl.removeProject(teamId);
     }
    
 }
