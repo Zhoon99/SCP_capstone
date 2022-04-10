@@ -292,14 +292,16 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		}
 		ProjectUpdateGetInfoDto pUpdateGetDto = new ProjectUpdateGetInfoDto();
 		List<ProjectUpdateGetInfoMemberDto> users = new ArrayList<>();
-		for (ProjectInUser pInUser : pInUsers) {
+
+		pInUsers.stream().forEach(p -> {
 			ProjectUpdateGetInfoMemberDto user = new ProjectUpdateGetInfoMemberDto();
-			user.setProjectinuserId(pInUser.getProjectinuserId());
-			user.setNickName(pInUser.getUser().getUserNickname());
-			user.setUserId(pInUser.getUser().getUserId());
-			user.setProjectinuserCommoncode(pInUser.getProjectinuserCommoncode());
+			user.setUserId(p.getUserId());
+			user.setProjectinuserId(p.getProjectinuserId());
+			user.setNickName(p.getUser().getUserNickname());
+			user.setProjectinuserCommoncode(p.getProjectinuserCommoncode());
 			users.add(user);
-		}
+		});
+
 		pUpdateGetDto.setProjectName(pInUsers.get(0).getProject().getProjectName());
 		pUpdateGetDto.setUsers(users);
 		ResultDto<ProjectUpdateGetInfoDto> rDto = new ResultDto<ProjectUpdateGetInfoDto>();
