@@ -117,6 +117,7 @@ public class HomeServicelmpl implements HomeService {
 					projectInUser.setUserId(i.getUserId());
 					projectInUser.setProjectId(updateProjectModify.getProjectId());
 					projectInUser.setProjectinuserCommoncode(i.getCommonCode());
+					projectInUser.setProjectinuserMaker(i.getMaker());
 					projectinUserRepository.save(projectInUser);
 					newMembers.add(i);
 				}
@@ -126,6 +127,7 @@ public class HomeServicelmpl implements HomeService {
 				projectInUser.setUserId(i.getUserId());
 				projectInUser.setProjectId(updateProjectModify.getProjectId());
 				projectInUser.setProjectinuserCommoncode(i.getCommonCode());
+				projectInUser.setProjectinuserMaker(i.getMaker());
 				projectinUserRepository.save(projectInUser);
 			}
 		}

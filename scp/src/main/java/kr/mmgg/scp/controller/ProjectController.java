@@ -1,35 +1,23 @@
 package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.dto.request.UpdateProjectModify;
-import kr.mmgg.scp.dto.response.*;
 import kr.mmgg.scp.service.ProjectDetailImpl;
-<<<<<<< HEAD
-import kr.mmgg.scp.util.CustomStatusCode;
 
 import org.springframework.http.MediaType;
-=======
->>>>>>> 66794d1d968cd1e9952e519856313de0ca72a74c
 import org.springframework.web.bind.annotation.*;
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
-<<<<<<< HEAD
-=======
-import kr.mmgg.scp.dto.request.UpdateProjectModify;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
->>>>>>> 66794d1d968cd1e9952e519856313de0ca72a74c
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -178,26 +166,10 @@ public class ProjectController {
         return homeServiceImpl.modifyProject(updateProjectModify);
     }
 
-<<<<<<< HEAD
-    //프로젝트 수정
-    @Transactional
-    @PutMapping(value ="/project/modify", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<?> modify(@RequestBody UpdateProjectModify updateProjectModify){
-        return homeServiceImpl.modifyProject(updateProjectModify);
-    }
-
-    //프로젝트 삭제
-=======
     // 프로젝트 삭제
->>>>>>> 66794d1d968cd1e9952e519856313de0ca72a74c
     @Transactional
     @DeleteMapping("/project/delete/{teamId}")
     public ResultDto<?> remove(@PathVariable Long teamId) {
         return homeServiceImpl.removeProject(teamId);
     }
-<<<<<<< HEAD
-   
-=======
-
->>>>>>> 66794d1d968cd1e9952e519856313de0ca72a74c
 }
