@@ -41,13 +41,12 @@ public class HomeServicelmpl implements HomeService {
 		List<HomeViewDto> homeViewDtoList = new ArrayList<HomeViewDto>();
 		for (int i = 0; i < piuUserIdList.size(); i++) {
 			homeViewDto = new HomeViewDto();
-			List<List<Task>> tList = new ArrayList<>();
+			List<Task> tList = new ArrayList<>();
 			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
-
 			// 할일 담는곳
 			for (ProjectInUser pTask : piuProjectIdList) {
 				if (!pTask.getTasks().isEmpty()) {
-					tList.add(pTask.getTasks());
+					tList.addAll(pTask.getTasks());
 				}
 			}
 			// 플젝 아이디 이름 해당 사람의 코드 담기
