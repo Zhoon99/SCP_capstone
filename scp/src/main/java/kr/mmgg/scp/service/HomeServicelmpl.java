@@ -83,5 +83,4 @@ public class HomeServicelmpl implements HomeService {
 		ResultDto<List<ProjectInUser>> rDto = new ResultDto<List<ProjectInUser>>();
 		return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
 	}
-
 }
