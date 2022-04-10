@@ -1,6 +1,8 @@
 package kr.mmgg.scp.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import kr.mmgg.scp.dto.ResultDto;
@@ -41,6 +43,7 @@ public class HomeServicelmpl implements HomeService {
 			homeViewDto = new HomeViewDto();
 			List<Task> tList = new ArrayList<>();
 			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
+
 			// 할일 담는곳
 			for (ProjectInUser pTask : piuProjectIdList) {
 				if (!pTask.getTasks().isEmpty()) {
@@ -61,22 +64,20 @@ public class HomeServicelmpl implements HomeService {
 	// 프로젝트 생성
 	@Override
 	@Transactional
-	public ResultDto<List<ProjectInUser>> projectCreate(List<CreateProjectDto> dto) {
+	public ResultDto<List<ProjectInUser>> projectCreate(CreateProjectDto dto) {
 		List<ProjectInUser> piuList = new ArrayList<>();
 		Project project = new Project();
 		// 프로젝트 생성
-		for (int i = 0; i < dto.size(); i++) {
-			project.setProjectName(dto.get(i).getTitle());
-			Project newProject = projectRepository.save(project);
-			// 프로젝트사람 생성
-			for (int j = 0; j < dto.get(i).getMember().size(); j++) {
-				ProjectInUser projectInUser = new ProjectInUser();
-				projectInUser.setProjectId(newProject.getProjectId());
-				projectInUser.setUserId(dto.get(i).getMember().get(j).getUserId());
-				projectInUser.setProjectinuserMaker(dto.get(i).getMember().get(j).getProjectinuserMaker());
-				projectInUser.setProjectinuserCommoncode(dto.get(i).getMember().get(j).getProjectinuserCommoncode());
-				piuList.add(projectInUser);
-			}
+		project.setProjectName(dto.getTitle());
+		Project newProject = projectRepository.save(project);
+		// 프로젝트사람 생성
+		for (int i = 0; i < dto.getMember().size(); i++) {
+			ProjectInUser projectInUser = new ProjectInUser();
+			projectInUser.setProjectId(newProject.getProjectId());
+			projectInUser.setUserId(dto.getMember().get(i).getUserId());
+			projectInUser.setProjectinuserMaker(dto.getMember().get(i).getProjectinuserMaker());
+			projectInUser.setProjectinuserCommoncode(dto.getMember().get(i).getProjectinuserCommoncode());
+			piuList.add(projectInUser);
 		}
 		projectinUserRepository.saveAll(piuList);
 		ResultDto<List<ProjectInUser>> rDto = new ResultDto<List<ProjectInUser>>();
