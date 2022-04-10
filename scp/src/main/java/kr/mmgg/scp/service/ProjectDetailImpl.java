@@ -345,8 +345,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 		List<Comment> comment = null;
 		List<HomeViewProjectDetailCommentListDto> hvpdclList = new ArrayList<HomeViewProjectDetailCommentListDto>(); // 코멘트dto
-																														// 리스트를
-																														// 받을곳
+																														// 리스트																										// 받을곳
 		HomeViewProjectDetailCommentListDto hvpdclDto;
 		if (!commentRepository.findByTaskId(taskId).isEmpty()) { // 에러 잡는곳
 			comment = commentRepository.findByTaskId(taskId);
