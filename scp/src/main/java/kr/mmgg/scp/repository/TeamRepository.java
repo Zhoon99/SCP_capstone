@@ -17,7 +17,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             "ON t.teamId = tu.teamId\n" +
             "WHERE tu.userId = :userId\n" +
             "AND tu.teaminuserMaker = 1")
-    List<Team> getMyTeams(Long userId);
+    public List<Team> getMyTeams(Long userId);
 
     @Query(value = "SELECT t\n" +
             "FROM Team t\n" +
@@ -25,7 +25,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             "ON t.teamId = tu.teamId\n" +
             "WHERE tu.userId = :userId\n" +
             "AND tu.teaminuserMaker <> 1")
-    List<Team> getSharedTeams(Long userId);
+    public List<Team> getSharedTeams(Long userId);
 
-    Optional<Team> findByTeamId(Long teamId);
+    public Optional<Team> findByTeamId(Long teamId);
 }

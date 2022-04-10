@@ -7,4 +7,5 @@ public class ProjectUpdateGetInfoMemberDto {
     private Long userId;
     private Long projectinuserId;
     private String nickName;
+    private String projectinuserCommoncode;
 }
