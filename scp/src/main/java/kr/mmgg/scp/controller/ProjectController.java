@@ -15,8 +15,6 @@ import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +33,6 @@ public class ProjectController {
     // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
     public ResultDto<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto list) {
-//        List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);
-    	System.out.println(list);
         return homeServiceImpl.projectCreate(list);
     }
 
@@ -136,7 +132,6 @@ public class ProjectController {
     // 댓글 작성
     @RequestMapping(value = "/commentwrite", method = RequestMethod.POST)
     public ResultDto<?> commentWrite(@RequestBody CommentWriteDto dto) {
-    	System.out.println(dto);
     	return projectDetailImpl.commentWrite(dto);
     }
     
