@@ -1,4 +1,4 @@
-# Post "/project/crateproject"
+# Post "/project/createproject"
 ## SCP 300 프로젝트 추가 / 수정
 ### input
 ``` json
@@ -154,8 +154,8 @@
 	}
 }
 ```
-# PATCH /receivetask/{taskId}/{selected}
-## SCP-303 프로젝트 상세 - 받은 요청 // 수락 - 거절
+# PATCH /receivetask/{taskId}/{selected} 
+## SCP-303 프로젝트 상세 - 받은 요청 // 수락 - 거절 (1, -1) 1은 수락 -1 거절 0은 요청을 받은상태
 ### output
 ``` json
 	"status": 200,

@@ -362,8 +362,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		HomeViewProjectDetailDto hvpdDto = new HomeViewProjectDetailDto();
 		hvpdDto.setTaskId(task.getTaskId());
 		hvpdDto.setTaskContent(task.getTaskContent());
-		hvpdDto.setOwner_userName(null);
-		hvpdDto.setRequester_userName(null);
+		hvpdDto.setOwner_userName(null); // 조인해서 데이터 가져올것 
+		hvpdDto.setRequester_userName(null); // ##
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
 		hvpdDto.setCommentList(hvpdclList);
 		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto, "taskDetail"); // 새로작성한 HomeViewProjectDetailDto 반환 
