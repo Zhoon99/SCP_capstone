@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>로그인 페이지</title>
+</head>
+<body>
+    <form action="/testfile" method="post" enctype="Multipart/form-data">
+        <div class="filebox mt-5">
+            <span class="fs-5 fw-bold">이미지</span>
+            <label for="file">파일찾기</label>
+            <input type="file" id="file" name = "filetest" multiple="multiple">
+        </div>
+        <button class="btn btn-warning btn-lg text-white float-end fw-bold px-4" type="submit">등록하기</button>
+    </form>
+</body>
+</html>

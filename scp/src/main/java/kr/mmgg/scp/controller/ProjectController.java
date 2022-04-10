@@ -97,7 +97,7 @@ public class ProjectController {
     public ResultDto<?> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
         return projectDetailImpl.myTask(userId, projectId);
     }
-    
+
     // SCP-302 할일 수락 / 거절
     // ResultDto 완성
     @PatchMapping(value = "/whethertask/{userId}/{taskId}")
@@ -114,7 +114,6 @@ public class ProjectController {
     }
 
     // SCP-303 받은요청 수락 / 거절
-    // TODO: 서비스 부분에서 resultDto 만들것 **
     // ResultDto 완성
     @RequestMapping(value = "/receivetask/{taskId}/{selected}", method = RequestMethod.PATCH)
     public ResultDto<?> receivetask(@PathVariable Long taskId, @PathVariable Integer selected) {
