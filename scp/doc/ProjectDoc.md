@@ -1,4 +1,5 @@
 # Post "/project/crateproject"
+## SCP 300 프로젝트 추가 / 수정
 ### input
 ``` json
 {
@@ -28,6 +29,7 @@
 ```
 
 # GET /alltask/{projectId}
+## SCP-301 프로젝트 상세 - 전체 할일
 ### output
 ``` json
 {
@@ -66,6 +68,7 @@
 }
 ```
 # GET /mytask/{userId}/{projectId}
+## SCP-302 프로젝트 상세 - 내 할일
 ### output
 ``` json
 {
@@ -113,6 +116,7 @@
 }
 ```
 # GET /receivetask/{projectId}/{projectinuserId}
+## SCP-303 프로젝트 상세 - 받은 요청
 ### output
 ``` json
 {
@@ -151,6 +155,7 @@
 }
 ```
 # PATCH /receivetask/{taskId}/{selected}
+## SCP-303 프로젝트 상세 - 받은 요청 // 수락 - 거절
 ### output
 ``` json
 	"status": 200,
@@ -158,6 +163,7 @@
 ```
 
 # GET /requestask/{projectId}/{userId}
+## SCP-304 프로젝트 상세 - 보낸 요청 //
 ### output
 ``` json
 {
@@ -196,6 +202,7 @@
 }
 ```
 # GET /sendtask/{projectId}
+## SCP-305 프로젝트 상세 요청 멤버 추가 
 ### output
 ``` json
 {
@@ -224,6 +231,7 @@
 }
 ```
 # POST /sendtask
+## SCP-305 프로젝트 상세 할일 작성
 ### input
 ``` json
 		{
@@ -241,6 +249,7 @@
 }
 ```
 # POST /commentwrite
+## 댓글 작성
 ### input 
 ``` JSON
 	{
@@ -257,6 +266,7 @@
 }
 ```
 # PATCH /commentmodify/{commentId}
+## 댓글 수정
 ### input
 ``` JSON
 {
@@ -273,6 +283,7 @@
 }
 ```
 # DELETE /commentdelete/{commentId}
+## 댓글 삭제
 ### ouput
 ``` JSON 
 {
@@ -281,6 +292,7 @@
 }
 ```
 # GET /taskDetail/{taskId}
+## SCP-306 할 일 상세
 ### output
 ``` JSON
 {

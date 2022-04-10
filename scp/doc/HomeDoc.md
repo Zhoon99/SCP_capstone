@@ -1,4 +1,5 @@
-## GET /homeview/{userId}
+# GET /homeview/{userId}
+## SCP-100 사이드바 - 홈
 ### output
 ``` json
 {
