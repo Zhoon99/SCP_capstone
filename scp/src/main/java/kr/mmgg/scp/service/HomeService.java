@@ -9,9 +9,9 @@ import kr.mmgg.scp.dto.response.HomeViewDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 
 public interface HomeService {
-	public ResultDto<List<HomeViewDto>> homeView(Long userId);
+    public ResultDto<List<HomeViewDto>> homeView(Long userId);
 
-    public List<ProjectInUser> projectCreate(CreateProjectDto dto);
+    public ResultDto<List<ProjectInUser>> projectCreate(CreateProjectDto dto);
 
     public ResultDto<?> modifyProject(UpdateProjectModify updateProjectModify);
 

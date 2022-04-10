@@ -44,13 +44,13 @@ public class HomeServicelmpl implements HomeService {
 		List<HomeViewDto> homeViewDtoList = new ArrayList<HomeViewDto>();
 		for (int i = 0; i < piuUserIdList.size(); i++) {
 			homeViewDto = new HomeViewDto();
-			List<List<Task>> tList = new ArrayList<>();
+			List<Task> tList = new ArrayList<>();
 			piuProjectIdList = projectinUserRepository.findByProjectId(piuUserIdList.get(i).getProjectId());
 
 			// 할일 담는곳
 			for (ProjectInUser pTask : piuProjectIdList) {
 				if (!pTask.getTasks().isEmpty()) {
-					tList.add(pTask.getTasks());
+					tList.addAll(pTask.getTasks());
 				}
 			}
 			// 플젝 아이디 이름 해당 사람의 코드 담기
@@ -61,13 +61,13 @@ public class HomeServicelmpl implements HomeService {
 			homeViewDtoList.add(homeViewDto);
 		}
 		ResultDto<List<HomeViewDto>> rDto = new ResultDto<List<HomeViewDto>>();
-		return rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS,homeViewDtoList,"projects");
+		return rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, homeViewDtoList, "projects");
 	}
 
 	// 프로젝트 생성
 	@Override
 	@Transactional
-	public List<ProjectInUser> projectCreate(CreateProjectDto dto) {
+	public ResultDto<List<ProjectInUser>> projectCreate(CreateProjectDto dto) {
 		List<ProjectInUser> piuList = new ArrayList<>();
 		Project project = new Project();
 		// 프로젝트 생성
@@ -82,16 +82,16 @@ public class HomeServicelmpl implements HomeService {
 			projectInUser.setProjectinuserCommoncode(dto.getMember().get(i).getProjectinuserCommoncode());
 			piuList.add(projectInUser);
 		}
-
-		return projectinUserRepository.saveAll(piuList);
+		projectinUserRepository.saveAll(piuList);
+		ResultDto<List<ProjectInUser>> rDto = new ResultDto<List<ProjectInUser>>();
+		return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
 	}
 
-	//프로젝트 수정
+	// 프로젝트 수정
 	@Override
 	@Transactional
 	public ResultDto<?> modifyProject(UpdateProjectModify updateProjectModify) {
-		if (StringUtils.isEmpty(updateProjectModify.getProjectId()) || StringUtils.isEmpty(updateProjectModify.getProjectName())
-				|| StringUtils.isEmpty(updateProjectModify.getUsers())) {
+		if (updateProjectModify.equals(null)) {
 			throw new IllegalStateException("수정할 팀 정보를 가져오지 못했습니다.");
 		}
 
@@ -109,9 +109,9 @@ public class HomeServicelmpl implements HomeService {
 
 		List<UpdateProjectModifyMember> newMembers = new ArrayList<>();
 
-		for(UpdateProjectModifyMember i : newProjects) {
-			for(ProjectInUser j : existProjects) {
-				if(i.getUserId() == j.getUserId()) { //업데이트
+		for (UpdateProjectModifyMember i : newProjects) {
+			for (ProjectInUser j : existProjects) {
+				if (i.getUserId() == j.getUserId()) { // 업데이트
 					ProjectInUser projectInUser = new ProjectInUser();
 					projectInUser.setProjectinuserId(j.getProjectinuserId());
 					projectInUser.setUserId(i.getUserId());
@@ -121,7 +121,7 @@ public class HomeServicelmpl implements HomeService {
 					newMembers.add(i);
 				}
 			}
-			if(!newMembers.contains(i)) { //추가
+			if (!newMembers.contains(i)) { // 추가
 				ProjectInUser projectInUser = new ProjectInUser();
 				projectInUser.setUserId(i.getUserId());
 				projectInUser.setProjectId(updateProjectModify.getProjectId());
@@ -130,8 +130,7 @@ public class HomeServicelmpl implements HomeService {
 			}
 		}
 		ResultDto<?> rDto = new ResultDto<>();
-		rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
-		return rDto;
+		return rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
 	}
 
 	@Override

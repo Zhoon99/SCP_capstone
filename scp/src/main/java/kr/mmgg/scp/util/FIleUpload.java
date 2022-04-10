@@ -12,7 +12,7 @@ public class FIleUpload {
     public String fileUpload(MultipartHttpServletRequest request, String fileName)
             throws IllegalStateException, IOException {
         // 저장 공간
-        String path = "C:/Users/rudal/Desktop";
+        String path = "C:\\Users\\Admin\\Desktop\\test";
         File file = new File(path);
         // 디렉토리 없으면 새로 만듬
         if (file.exists() == false) {
