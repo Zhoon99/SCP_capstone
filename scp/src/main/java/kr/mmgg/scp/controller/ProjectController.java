@@ -34,7 +34,7 @@ public class ProjectController {
     // SCP-300 프로젝트 추가
     // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
-    public ResultDto<List<ProjectInUser>> CreateProject(@RequestBody List<CreateProjectDto> list) {
+    public ResultDto<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto list) {
 //        List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);
     	System.out.println(list);
         return homeServiceImpl.projectCreate(list);
