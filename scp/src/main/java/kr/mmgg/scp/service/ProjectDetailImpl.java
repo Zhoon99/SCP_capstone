@@ -330,7 +330,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 
 	// 홈뷰 -> 자세히 -> 할일 확인 및 코멘트 확인 -> 코멘트 삭제
 	@Override
-	public ResultDto<?> deleteComment(Long commentId) {
+	public ResultDto<?> commentDelete(Long commentId) {
 		commentRepository.deleteById(commentId);
 		return new ResultDto<>().makeResult(CustomStatusCode.DELETE_SUCCESS);
 	}

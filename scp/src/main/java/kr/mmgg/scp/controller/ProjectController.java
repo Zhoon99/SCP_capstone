@@ -150,8 +150,8 @@ public class ProjectController {
 
     // 댓글 삭제
     @RequestMapping(value = "/commentdelete/{commentId}", method = RequestMethod.DELETE)
-    public ResultDto<?> deleteComment(@PathVariable Long commentId) {
-        return projectDetailImpl.deleteComment(commentId);
+    public ResultDto<?> commentDelete(@PathVariable Long commentId) {
+        return projectDetailImpl.commentDelete(commentId);
     }
 
     // HomeView -> Detail
