@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.request.CommentModifyDto;
+import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
@@ -55,7 +57,7 @@ public class ProjectController {
         return rDto;
     }
 
-    @PatchMapping(value = "updateproject/deletemember/{projectinuserId}")
+    @PatchMapping(value = "/updateproject/deletemember/{projectinuserId}")
     public ResultDto<?> updateProjectDeletemember(@PathVariable Long projectinuserId) {
         ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
         return rDto;
@@ -85,8 +87,7 @@ public class ProjectController {
     @Transactional
     @RequestMapping(value = "/alltask/{projectId}", method = RequestMethod.GET)
     public ResultDto<List<ProjectDetailAllTaskDto>> allTask(@PathVariable Long projectId) {
-        ResultDto<List<ProjectDetailAllTaskDto>> rDto = projectDetailImpl.allTask(projectId);
-        return rDto;
+        return projectDetailImpl.allTask(projectId);
     }
 
     // SCP-302 프로젝트 자신 할일
@@ -94,14 +95,14 @@ public class ProjectController {
     @Transactional // 영속성 컨텐츠로인해 안해주면 no session 에러남 (서비스뿐만아니라 컨트롤러단에서도 관리해줘야됨)
     @GetMapping(value = "/mytask/{userId}/{projectId}")
     public ResultDto<?> myTask(@PathVariable Long userId, @PathVariable Long projectId) {
-        HashMap<String, List<ProjectDetailMyTaskDto>> map = new HashMap<>();
-        return null;
+        return projectDetailImpl.myTask(userId, projectId);
     }
 
+    // SCP-302 할일 수락 / 거절
+    // ResultDto 완성
     @PatchMapping(value = "/whethertask/{userId}/{taskId}")
-    public ResponseEntity<?> whetherTask(@PathVariable Long userId, @PathVariable Long taskId) {
-        projectDetailImpl.whetherTask(userId, taskId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResultDto<?> whetherTask(@PathVariable Long userId, @PathVariable Long taskId) {
+        return projectDetailImpl.whetherTask(userId, taskId);
     }
 
     // SCP-303 받은 요청 확인
@@ -109,35 +110,22 @@ public class ProjectController {
     @Transactional
     @RequestMapping(value = "/receivetask/{projectId}/{projectinuserID}", method = RequestMethod.GET)
     public ResultDto<?> receivetask(@PathVariable Long projectId, @PathVariable Long projectinuserID) {
-        HashMap<String, List<ProjectDetailReceiveTaskDto>> map = new HashMap<>();
-        List<ProjectDetailReceiveTaskDto> pdrtList = projectDetailImpl.receiveTask(projectId, projectinuserID);
-        map.put("tasklist", pdrtList);
-        ResultDto<List<ProjectDetailReceiveTaskDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
-        return rDto;
+        return projectDetailImpl.receiveTask(projectId, projectinuserID);
     }
 
-    // TODO: 서비스 부분에서 resultDto 만들것 **
+    // SCP-303 받은요청 수락 / 거절
     // ResultDto 완성
     @RequestMapping(value = "/receivetask/{taskId}/{selected}", method = RequestMethod.PATCH)
     public ResultDto<?> receivetask(@PathVariable Long taskId, @PathVariable Integer selected) {
-        ResultDto<?> rDto = new ResultDto<>();
-        projectDetailImpl.recevieTask(taskId, selected);
-        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null);
-        return rDto;
+        return projectDetailImpl.receiveTask(taskId, selected);
     }
 
     // SCP-304 보낸 요청 확인
     // TODO: 프로젝트와 유저가 없으면 오류
     // ResultDto 완성
     @GetMapping(value = "/requestask/{projectId}/{userid}")
-    public ResultDto<?> requesttask(@PathVariable Long projectId, @PathVariable Long userid) {
-        HashMap<String, List<RequestTaskDto>> map = new HashMap<>();
-        List<RequestTaskDto> list = projectDetailImpl.requestTask(projectId, userid);
-        map.put("tasklist", list);
-        ResultDto<List<RequestTaskDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
-        return rDto;
+    public ResultDto<?> requestask(@PathVariable Long projectId, @PathVariable Long userid) {
+        return projectDetailImpl.requestTask(projectId, userid);
     }
 
     // SCP-305 프로젝트 할일 요청시 프로젝트 안 사람들 불러오기
@@ -145,12 +133,7 @@ public class ProjectController {
     @Transactional
     @GetMapping(value = "/sendtask/{projectId}")
     public ResultDto<List<UserDto>> sendTask(@PathVariable Long projectId) {
-        HashMap<String, List<UserDto>> map = new HashMap<>();
-        List<UserDto> users = projectDetailImpl.gUsers(projectId);
-        map.put("userlist", users);
-        ResultDto<List<UserDto>> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, map);
-        return rDto;
+        return projectDetailImpl.gUsers(projectId);
     }
 
     // SCP-305 프로젝트 할일 보내는 작업
@@ -158,10 +141,32 @@ public class ProjectController {
     @Transactional
     @RequestMapping(value = "/sendtask", method = RequestMethod.POST)
     public ResultDto<?> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
-        projectDetailImpl.sendTask(dto);
-        ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null);
-        return rDto;
-
+        return projectDetailImpl.sendTask(dto);
     }
+    
+    // 댓글 작성
+    @RequestMapping(value = "/commentwrite", method = RequestMethod.POST)
+    public ResultDto<?> commentWrite(@RequestBody CommentWriteDto dto) {
+    	System.out.println(dto);
+    	return projectDetailImpl.commentWrite(dto);
+    }
+    
+    // 댓글 수정
+    @RequestMapping(value = "/commentmodify/{commentId}", method = RequestMethod.PATCH)
+    public ResultDto<?> commentModify(@PathVariable Long commentId, @RequestBody CommentModifyDto cmDto) {
+    	return projectDetailImpl.commentModify(commentId, cmDto);
+    }
+    
+    // 댓글 삭제
+    @RequestMapping(value = "/commentdelete/{commentId}", method = RequestMethod.DELETE)
+    public ResultDto<?> deleteComment(@PathVariable Long commentId){
+    	return projectDetailImpl.deleteComment(commentId);
+    }
+    
+    // HomeView -> Detail
+    @RequestMapping(value = "/taskDetail/{taskId}", method = RequestMethod.GET)
+    public ResultDto<?> taskDetail(@PathVariable Long taskId){
+    	return projectDetailImpl.taskDetail(taskId);
+    }
+   
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.HomeViewDto;
 
@@ -17,6 +18,7 @@ import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.repository.ProjectRepository;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
 import lombok.AllArgsConstructor;
 
@@ -29,7 +31,7 @@ public class HomeServicelmpl implements HomeService {
 	// 홈화면 DTO
 	@Transactional
 	@Override
-	public List<HomeViewDto> homeView(Long userId) {
+	public ResultDto<List<HomeViewDto>> homeView(Long userId) {
 		List<ProjectInUser> piuUserIdList = projectinUserRepository.findByUserId(userId);
 		if (piuUserIdList.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND);
@@ -55,7 +57,8 @@ public class HomeServicelmpl implements HomeService {
 			homeViewDto.setTasklist(tList);
 			homeViewDtoList.add(homeViewDto);
 		}
-		return homeViewDtoList;
+		ResultDto<List<HomeViewDto>> rDto = new ResultDto<List<HomeViewDto>>();
+		return rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS,homeViewDtoList,"projects");
 	}
 
 	// 프로젝트 생성
