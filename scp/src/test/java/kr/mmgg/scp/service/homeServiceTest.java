@@ -23,19 +23,19 @@ public class homeServiceTest {
     @Autowired
     private HomeServicelmpl homeServiceImpl;
 
-
     @Autowired
     private ProjectDetailImpl impl;
 
     private MockMvc mvc;
+
     @Test
     @Transactional
     void testHomeView() {
-        List<HomeViewDto> dto = homeServiceImpl.homeView(1L);
-        log.info(dto.toString());
+        // List<HomeViewDto> dto = homeServiceImpl.homeView(1L);
+        // log.info(dto.toString());
 
     }
-    
+
     @Transactional
     @Test
     void testCreateProject() {

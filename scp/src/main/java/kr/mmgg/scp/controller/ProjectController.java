@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.request.CommentModifyDto;
+import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
@@ -141,4 +143,30 @@ public class ProjectController {
     public ResultDto<?> sendTask(@RequestBody ProjectDetailSendTaskDto dto) {
         return projectDetailImpl.sendTask(dto);
     }
+    
+    // 댓글 작성
+    @RequestMapping(value = "/commentwrite", method = RequestMethod.POST)
+    public ResultDto<?> commentWrite(@RequestBody CommentWriteDto dto) {
+    	System.out.println(dto);
+    	return projectDetailImpl.commentWrite(dto);
+    }
+    
+    // 댓글 수정
+    @RequestMapping(value = "/commentmodify/{commentId}", method = RequestMethod.PATCH)
+    public ResultDto<?> commentModify(@PathVariable Long commentId, @RequestBody CommentModifyDto cmDto) {
+    	return projectDetailImpl.commentModify(commentId, cmDto);
+    }
+    
+    // 댓글 삭제
+    @RequestMapping(value = "/commentdelete/{commentId}", method = RequestMethod.DELETE)
+    public ResultDto<?> deleteComment(@PathVariable Long commentId){
+    	return projectDetailImpl.deleteComment(commentId);
+    }
+    
+    // HomeView -> Detail
+    @RequestMapping(value = "/taskDetail/{taskId}", method = RequestMethod.GET)
+    public ResultDto<?> taskDetail(@PathVariable Long taskId){
+    	return projectDetailImpl.taskDetail(taskId);
+    }
+   
 }
