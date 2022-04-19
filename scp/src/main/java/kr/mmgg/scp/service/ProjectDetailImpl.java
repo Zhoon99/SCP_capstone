@@ -43,9 +43,11 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// SCP-301 프로젝트 모든 할일
 	// 프로젝트안의 전체 할일 가져오기
 	// ResultDto 완성
+	// @param projectId
 	@Transactional
 	@Override
 	public ResultDto<List<ProjectDetailAllTaskDto>> allTask(Long projectId) {
+		System.out.println("hihi");
 		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
 		if (plist.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
@@ -190,9 +192,11 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		Task task = new Task();
 		dateTime datetime = new dateTime();
 		task.setTaskId(null);
-		task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname()); // 받는 사람
+		task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname());
+		// 받는 사람
 		task.setTaskRequester(
-				projectinUserRepository.findById(dto.getProjectinuserId()).get().getUser().getUserNickname()); // 보낸 사람
+				projectinUserRepository.findById(dto.getProjectinuserId()).get().getUser().getUserNickname());
+		// 보낸 사람
 		task.setProjectinuserId(dto.getProjectinuserId());
 		task.setTaskContent(dto.getTaskContent());
 		task.setTaskCreatetime(datetime.dateTime());
@@ -304,7 +308,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		pUpdateGetDto.setProjectName(pInUsers.get(0).getProject().getProjectName());
 		pUpdateGetDto.setUsers(users);
 		ResultDto<ProjectUpdateGetInfoDto> rDto = new ResultDto<ProjectUpdateGetInfoDto>();
-		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, pUpdateGetDto, "projectInfo");
+		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, pUpdateGetDto,
+				"projectInfo");
 		return rDto;
 	}
 
@@ -314,7 +319,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		ProjectInUser pInUser = projectinUserRepository.findById(ProjectinuserId)
 				.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND));
 		projectinUserRepository.delete(pInUser);
-		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
+		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS, null,
+				null);
 	}
 
 	// 홈뷰 -> 자세히 -> 할일 확인 및 코멘트 확인 -> 코멘트 작성
@@ -345,8 +351,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 		List<Comment> comment = null;
 		List<HomeViewProjectDetailCommentListDto> hvpdclList = new ArrayList<HomeViewProjectDetailCommentListDto>(); // 코멘트dto
-																														// 리스트를
-																														// 받을곳
+		// 리스트를
+		// 받을곳
 		HomeViewProjectDetailCommentListDto hvpdclDto;
 		if (!commentRepository.findByTaskId(taskId).isEmpty()) { // 에러 잡는곳
 			comment = commentRepository.findByTaskId(taskId);
@@ -369,9 +375,10 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		hvpdDto.setRequester_userName(task.getTaskRequester()); // ##
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
 		hvpdDto.setCommentList(hvpdclList);
-		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto, "taskDetail"); // 새로작성한
-																										// HomeViewProjectDetailDto
-																										// 반환
+		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto,
+				"taskDetail"); // 새로작성한
+		// HomeViewProjectDetailDto
+		// 반환
 	}
 
 	// 홈뷰 -> 자세히 -> 할일 확인 및 코멘트 확인 -> 코멘트 수정

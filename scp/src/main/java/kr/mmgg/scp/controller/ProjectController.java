@@ -1,7 +1,7 @@
 package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.dto.request.UpdateProjectModify;
-import kr.mmgg.scp.service.ProjectDetailImpl;
+import kr.mmgg.scp.service.ProjectDetailService;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +14,7 @@ import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.entity.ProjectInUser;
+import kr.mmgg.scp.service.HomeService;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
 import java.util.List;
@@ -29,8 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @AllArgsConstructor
 public class ProjectController {
 
-    private HomeServicelmpl homeServiceImpl;
-    private ProjectDetailImpl projectDetailImpl;
+    private HomeService homeServiceImpl;
+    private ProjectDetailService projectDetailImpl;
 
     // SCP-300 프로젝트 추가
     // TODO: request DTO 작성
