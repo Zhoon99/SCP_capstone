@@ -16,11 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TestAop {
     @Around("execution(* *..controller.*.*(..))")
     public Object printLog(ProceedingJoinPoint pjp) throws Throwable {
-        for (Object i : pjp.getArgs()) {
-            log.info("getArgs : " + i.toString());
-        }
         Object result = pjp.proceed();
-        log.info("================================After=============================");
         return result;
     }
 }

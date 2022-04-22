@@ -47,7 +47,6 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Transactional
 	@Override
 	public ResultDto<List<ProjectDetailAllTaskDto>> allTask(Long projectId) {
-		System.out.println("hihi");
 		List<ProjectInUser> plist = projectinUserRepository.findByProjectId(projectId);
 		if (plist.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
