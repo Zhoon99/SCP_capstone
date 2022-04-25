@@ -24,7 +24,6 @@ public class HomeController {
     @Transactional
     @RequestMapping(value = "/homeview/{userId}", method = RequestMethod.GET)
     public ResultDto<List<HomeViewDto>> homeview(@PathVariable Long userId) {
-//        List<HomeViewDto> hvList = ;
         return homeServiceImpl.homeView(userId);
     }
 

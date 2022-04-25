@@ -8,8 +8,8 @@ public class ProjectDetailAllTaskDto {
 		private Long projectinuserId;
 		
 		private String taskContent;
-		private String taskOwner;
-		private String taskRequester;
+//		private String taskOwner;
+		private	Long taskRequester;
 		
 		private Integer taskComplete;
 		private Integer taskAccept;

@@ -8,7 +8,6 @@ public class RequestTaskDto {
 	private Long projectinuserId;
 	
 	private String taskContent;
-	private String taskOwner;
 	
 	private Integer taskComplete;
 	private Integer taskAccept;

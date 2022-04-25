@@ -50,7 +50,6 @@ public class ProjectController {
 
     @PatchMapping(value = "")
     public ResultDto<?> updateProjectMember() {
-
         return null;
     }
 

@@ -7,8 +7,7 @@ public class ProjectDetailReceiveTaskDto {
 	private Long projectinuserId;
 	
 	private String taskContent;
-	private String taskOwner;
-	private String taskRequester;
+	private Long taskRequester;
 	
 	private Integer taskComplete;
 	private Integer taskAccept;
