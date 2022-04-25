@@ -161,15 +161,15 @@ public class ProjectDetailImpl implements ProjectDetailService {
 					// requester의 projectinuserId와 받아온 유저ID를 확인
 					if(task.getTaskRequester() == projectinUserRepository.findByUserIdAndProjectId(user.getUserId(), projectId).get().getProjectinuserId()) {
 						dto = new RequestTaskDto();
-						dto.setProjectinuserId(task.getProjectinuserId());
 						dto.setTaskId(task.getTaskId());
+						dto.setProjectinuserId(task.getProjectinuserId());
+						dto.setTaskRequester(task.getTaskRequester());
 						dto.setTaskContent(task.getTaskContent());
 						dto.setTaskComplete(task.getTaskComplete());
 						dto.setTaskAccept(task.getTaskAccept());
 						dto.setTaskRequesttime(task.getTaskRequesttime());
 						dto.setTaskDeadline(task.getTaskDeadline());
 						dto.setCreatetime(task.getTaskCreatetime());
-						System.out.println(dto.toString());
 						list.add(dto);
 					}
 				}
