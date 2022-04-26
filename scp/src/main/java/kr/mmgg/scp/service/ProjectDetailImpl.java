@@ -60,6 +60,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 					dto.setProjectinuserId(plist.get(i).getProjectinuserId());
 					dto.setTaskId(plist.get(i).getTasks().get(j).getTaskId());
 					dto.setTaskContent(plist.get(i).getTasks().get(j).getTaskContent());
+					dto.setTaskOwner_String(projectinUserRepository.findById(plist.get(i).getProjectinuserId()).get().getUser().getUserNickname());
+					dto.setTaskRequester_string(projectinUserRepository.findById(plist.get(i).getTasks().get(j).getTaskRequester()).get().getUser().getUserNickname());;
 //					dto.setTaskOwner(plist.get(i).getTasks().get(j).getTaskOwner());
 					dto.setTaskRequester(plist.get(i).getTasks().get(j).getTaskRequester());
 					dto.setTaskComplete(plist.get(i).getTasks().get(j).getTaskComplete());
@@ -89,10 +91,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		for (int i = 0; i < piuUserIdAndProjectId.getTasks().size(); i++) {
 			dto = new ProjectDetailMyTaskDto();
 			dto.setProjectinuserId(piuUserIdAndProjectId.getTasks().get(i).getProjectinuserId());
+			dto.setTaskOwner_string(projectinUserRepository.findById
+					(piuUserIdAndProjectId.getTasks().get(i).getProjectinuserId()).get().getUser().getUserNickname());
 			dto.setTaskId(piuUserIdAndProjectId.getTasks().get(i).getTaskId());
 			dto.setTaskContent(piuUserIdAndProjectId.getTasks().get(i).getTaskContent());
-//			dto.setTaskOwner(piuUserIdAndProjectId.getTasks().get(i).getTaskOwner());
 			dto.setTaskRequester(piuUserIdAndProjectId.getTasks().get(i).getTaskRequester());
+			dto.setTaskRequester_string(projectinUserRepository.findById
+					(piuUserIdAndProjectId.getTasks().get(i).getTaskRequester()).get().getUser().getUserNickname());
 			dto.setTaskComplete(piuUserIdAndProjectId.getTasks().get(i).getTaskComplete());
 			dto.setTaskAccept(piuUserIdAndProjectId.getTasks().get(i).getTaskAccept());
 			dto.setTaskRequesttime(piuUserIdAndProjectId.getTasks().get(i).getTaskRequesttime());
@@ -120,10 +125,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			pdrtTask = new ProjectDetailReceiveTaskDto();
 			if (tlist.get(i).getProjectinuser().getProjectId() == projectId) {
 				pdrtTask.setProjectinuserId(tlist.get(i).getProjectinuserId());
+				pdrtTask.setTaskOwner_string(projectinUserRepository.findById
+						(tlist.get(i).getProjectinuserId()).get().getUser().getUserNickname());
 				pdrtTask.setTaskId(tlist.get(i).getTaskId());
 				pdrtTask.setTaskContent(tlist.get(i).getTaskContent());
-//				pdrtTask.setTaskOwner(tlist.get(i).getTaskOwner());
 				pdrtTask.setTaskRequester(tlist.get(i).getTaskRequester());
+				pdrtTask.setTaskRequester_string(projectinUserRepository.findById
+						(tlist.get(i).getTaskRequester()).get().getUser().getUserNickname());
 				pdrtTask.setTaskComplete(tlist.get(i).getTaskComplete());
 				pdrtTask.setTaskAccept(tlist.get(i).getTaskAccept());
 				pdrtTask.setTaskRequesttime(tlist.get(i).getTaskRequesttime());
@@ -157,13 +165,15 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		for (int i = 0; i < plist.size(); i++) {
 			if (!plist.get(i).getTasks().isEmpty()) {
 				for (Task task : plist.get(i).getTasks()) {
-//					if (task.getTaskRequester().equals(user.getUserNickname())) {
-					// requester의 projectinuserId와 받아온 유저ID를 확인
 					if(task.getTaskRequester() == projectinUserRepository.findByUserIdAndProjectId(user.getUserId(), projectId).get().getProjectinuserId()) {
 						dto = new RequestTaskDto();
 						dto.setTaskId(task.getTaskId());
 						dto.setProjectinuserId(task.getProjectinuserId());
+						dto.setTaskOwner_string(projectinUserRepository.findById
+								(task.getProjectinuserId()).get().getUser().getUserNickname());
 						dto.setTaskRequester(task.getTaskRequester());
+						dto.setTaskRequester_string(projectinUserRepository.findById
+								(task.getTaskRequester()).get().getUser().getUserNickname());
 						dto.setTaskContent(task.getTaskContent());
 						dto.setTaskComplete(task.getTaskComplete());
 						dto.setTaskAccept(task.getTaskAccept());
@@ -365,8 +375,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		projectinuser =  projectinUserRepository.findById(task.getTaskRequester()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 		hvpdDto.setTaskId(task.getTaskId());
 		hvpdDto.setTaskContent(task.getTaskContent());
-		hvpdDto.setOwner_userName(task.getProjectinuser().getUser().getUserNickname()); // 조인해서 데이터 가져올것
-		hvpdDto.setRequester_userName(projectinuser.getUser().getUserNickname()); // ##
+		hvpdDto.setTaskOwner_string(task.getProjectinuser().getUser().getUserNickname()); // 조인해서 데이터 가져올것
+		hvpdDto.setTaskRequester_string(projectinuser.getUser().getUserNickname()); // ##
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
 		hvpdDto.setCommentList(hvpdclList);
 		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto, "taskDetail"); // 새로작성한

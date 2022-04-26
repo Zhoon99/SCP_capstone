@@ -146,8 +146,8 @@ public class TestProjectController {
 //		testMyTask(2L, 1L); // 통과
 //		testWhetherTask(2L, 1L); // 통과
 //		testReceivetask(1L, -1); // 통과
-//		testReceivetask(1L, 2L); // 통과
-//		testRequestask(1L, 2L); // 통과
+		testReceivetask(1L, 2L); // 통과
+		testRequestask(1L, 2L); // 통과
 //		testSendTask(1L);
 
 //		ProjectDetailSendTaskDto pdstdto = new ProjectDetailSendTaskDto();
