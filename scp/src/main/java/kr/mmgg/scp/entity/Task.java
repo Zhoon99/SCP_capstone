@@ -38,10 +38,10 @@ public class Task {
 
 	@Column(length = 255)
 	private String taskContent;
+//	@Column(length = 20)
+//	private String taskOwner;
 	@Column(length = 20)
-	private String taskOwner;
-	@Column(length = 20)
-	private String taskRequester;
+	private Long taskRequester;
 
 	private Integer taskComplete;
 	private Integer taskAccept;

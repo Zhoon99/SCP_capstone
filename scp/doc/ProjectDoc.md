@@ -30,7 +30,7 @@
 
 # GET /alltask/{projectId}
 ## SCP-301 프로젝트 상세 - 전체 할일
-### output
+### output 2022-04-26 수정
 ``` json
 {
 	"status": 200,
@@ -41,10 +41,11 @@
 		[
 			{
 				"taskId": Long,
-				"projectinuserId": Long,
+				"projectinuserId" : Long,
+				"taskOwner_string" : String,
 				"taskContent": String,
-				"taskOwner": String,
-				"taskRequester": String,
+				"taskRequester": Long,
+				"taskRequester_string" : String,
 				"taskComplete": boolean(Integer),
 				"taskAccept": boolean(Integer),
 				"taskRequesttime": datetime,
@@ -54,9 +55,10 @@
 			{
 				"taskId": Long,
 				"projectinuserId": Long,
+				"taskOwner_string" : String,
 				"taskContent": String,
-				"taskOwner": String,
-				"taskRequester": String,
+				"taskRequester": Long,
+				"taskRequester_string" : String,
 				"taskComplete": boolean(Integer),
 				"taskAccept": boolean(Integer),
 				"taskRequesttime": datetime,
@@ -69,7 +71,7 @@
 ```
 # GET /mytask/{userId}/{projectId}
 ## SCP-302 프로젝트 상세 - 내 할일
-### output
+### output 2022-04-26 수정완료
 ``` json
 {
 	"status": 200,
@@ -80,10 +82,11 @@
 		[
 			{
 				"taskId": Long,
-				"projectinuserId": Long,
+				"projectinuserId" : Long,
+				"taskOwner_string" : String,
 				"taskContent": String,
-				"taskOwner": String,
-				"taskRequester": String,
+				"taskRequester": Long,
+				"taskRequester_string" : String,
 				"taskComplete": boolean(Integer),
 				"taskAccept": boolean(Integer),
 				"taskRequesttime": datetime,
@@ -92,10 +95,11 @@
 			},
 			{
 				"taskId": Long,
-				"projectinuserId": Long,
+				"projectinuserId" : Long,
+				"taskOwner_string" : String,
 				"taskContent": String,
-				"taskOwner": String,
-				"taskRequester": String,
+				"taskRequester": Long,
+				"taskRequester_string" : String,
 				"taskComplete": boolean(Integer),
 				"taskAccept": boolean(Integer),
 				"taskRequesttime": datetime,
@@ -117,7 +121,7 @@
 ```
 # GET /receivetask/{projectId}/{projectinuserId}
 ## SCP-303 프로젝트 상세 - 받은 요청
-### output
+### output 2022-04-26 수정
 ``` json
 {
 	"status": 200,
@@ -128,10 +132,11 @@
 		[
 			{
 				"taskId": Long
-				"projectinuserId": Long,
-				"taskContent": String
-				"taskOwner": String,
-				"taskRequester": String,
+				"projectinuserId" : Long,
+				"taskOwner_string" : String,
+				"taskContent": String,
+				"taskRequester": Long,
+				"taskRequester_string" : String,
 				"taskComplete": boolean(Integer),
 				"taskAccept": boolean(Integer),
 				"taskRequesttime": datetime,
@@ -140,10 +145,11 @@
 			},
 			{
 				"taskId": Long
-				"projectinuserId": Long,
-				"taskContent": String
-				"taskOwner": String,
-				"taskRequester": String,
+				"projectinuserId" : Long,
+				"taskOwner_string" : String,
+				"taskContent": String,
+				"taskRequester": Long,
+				"taskRequester_string" : String,
 				"taskComplete": boolean(Integer),
 				"taskAccept": boolean(Integer),
 				"taskRequesttime": datetime,
@@ -158,13 +164,15 @@
 ## SCP-303 프로젝트 상세 - 받은 요청 // 수락 - 거절 (1, -1) 1은 수락 -1 거절 0은 요청을 받은상태
 ### output
 ``` json
+{
 	"status": 200,
 	"message": "message"
+}
 ```
 
 # GET /requestask/{projectId}/{userId}
 ## SCP-304 프로젝트 상세 - 보낸 요청 //
-### output
+### output 2022-04-26 수정
 ``` json
 {
 	"status": 200,
@@ -175,10 +183,11 @@
 		[
 			{
 				"taskId": Long
-				"projectinuserId": Long,
-				"taskContent": String
-				"taskOwner": String,
-				"taskRequester": String,
+				"projectinuserId" : Long,
+				"taskOwner_string" : String,
+				"taskContent": String,
+				"taskRequester": Long,
+				"taskRequester_string" : String,
 				"taskComplete": boolean(Integer),
 				"taskAccept": boolean(Integer),
 				"taskRequesttime": datetime,
@@ -187,10 +196,11 @@
 			},
 			{
 				"taskId": Long
-				"projectinuserId": Long,
-				"taskContent": String
-				"taskOwner": String,
-				"taskRequester": String,
+				"projectinuserId" : Long,
+				"taskOwner_string" : String,
+				"taskContent": String,
+				"taskRequester": Long,
+				"taskRequester_string" : String,
 				"taskComplete": boolean(Integer),
 				"taskAccept": boolean(Integer),
 				"taskRequesttime": datetime,
@@ -232,13 +242,14 @@
 ```
 # POST /sendtask
 ## SCP-305 프로젝트 상세 할일 작성
-### input
+### input 2022-04-25 수정
 ``` json
 		{
+			"projectId" : Long,
 	    	"userId" : Long,
 			"projectinuserId": Long,
 			"taskContent" : String,
-			"taskDeadline" : datetime,
+			"taskDeadline" : datetime
 		}
 ```
 ### ouput
@@ -253,8 +264,8 @@
 ### input 
 ``` JSON
 	{
-		"taskId" : Long
-		"userId" : Long
+		"taskId" : Long,
+		"userId" : Long,
 		"commentContent" : String
 	}
 ```
@@ -267,11 +278,10 @@
 ```
 # PATCH /commentmodify/{commentId}
 ## 댓글 수정
-### input
+### input 2022-04-25 수정완료
 ``` JSON
 {
   "commentId" : Long,
-  "commentModifyTime" : DateTime(String)
   "commentContent" : String
 }
 ```
@@ -293,7 +303,7 @@
 ```
 # GET /taskDetail/{taskId}
 ## SCP-306 할 일 상세
-### output
+### output 2022-04-26 수정
 ``` JSON
 {
 	"status": 200,
@@ -301,8 +311,8 @@
 	"result":{
 			"taskDetail" : {
 				"taskId" : Long,
-				"owner_userName" : String,
-				"requester_userName" : String,
+				"taskOwner_string" : String,
+				"taskRequester_string" : String,
 				"taskContent" : String,
 				"taskDeadline" : String,
 				"commentList" : [

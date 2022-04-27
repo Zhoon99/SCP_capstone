@@ -35,7 +35,7 @@ public interface ProjectDetailService {
 
 	public ResultDto<?> commentWrite(CommentWriteDto dto);
 
-	public ResultDto<?> deleteComment(Long commentId);
+	public ResultDto<?> commentDelete(Long commentId);
 
 	public ResultDto<?> taskDetail(Long taskId);
 

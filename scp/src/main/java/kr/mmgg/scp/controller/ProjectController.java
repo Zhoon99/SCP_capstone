@@ -1,24 +1,24 @@
 package kr.mmgg.scp.controller;
 
-import kr.mmgg.scp.service.ProjectDetailImpl;
+import kr.mmgg.scp.dto.request.UpdateProjectModify;
+import kr.mmgg.scp.service.ProjectDetailService;
+
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
-import kr.mmgg.scp.dto.request.UpdateProjectModify;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.entity.ProjectInUser;
+import kr.mmgg.scp.service.HomeService;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,15 +30,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @AllArgsConstructor
 public class ProjectController {
 
-    private HomeServicelmpl homeServiceImpl;
-    private ProjectDetailImpl projectDetailImpl;
+    private HomeService homeServiceImpl;
+    private ProjectDetailService projectDetailImpl;
 
     // SCP-300 프로젝트 추가
     // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
     public ResultDto<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto list) {
-        // List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);
-        System.out.println(list);
         return homeServiceImpl.projectCreate(list);
     }
 
@@ -56,7 +54,6 @@ public class ProjectController {
 
     @PatchMapping(value = "")
     public ResultDto<?> updateProjectMember() {
-
         return null;
     }
 
@@ -138,7 +135,6 @@ public class ProjectController {
     // 댓글 작성
     @RequestMapping(value = "/commentwrite", method = RequestMethod.POST)
     public ResultDto<?> commentWrite(@RequestBody CommentWriteDto dto) {
-        System.out.println(dto);
         return projectDetailImpl.commentWrite(dto);
     }
 
@@ -150,8 +146,8 @@ public class ProjectController {
 
     // 댓글 삭제
     @RequestMapping(value = "/commentdelete/{commentId}", method = RequestMethod.DELETE)
-    public ResultDto<?> deleteComment(@PathVariable Long commentId) {
-        return projectDetailImpl.deleteComment(commentId);
+    public ResultDto<?> commentDelete(@PathVariable Long commentId) {
+        return projectDetailImpl.commentDelete(commentId);
     }
 
     // HomeView -> Detail
@@ -173,5 +169,4 @@ public class ProjectController {
     public ResultDto<?> remove(@PathVariable Long teamId) {
         return homeServiceImpl.removeProject(teamId);
     }
-
 }

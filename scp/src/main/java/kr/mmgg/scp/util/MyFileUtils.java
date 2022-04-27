@@ -2,13 +2,17 @@ package kr.mmgg.scp.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-public class FIleUpload {
+public class MyFileUtils {
     public String fileUpload(MultipartHttpServletRequest request, String fileName)
             throws IllegalStateException, IOException {
         // 저장 공간
@@ -39,5 +43,18 @@ public class FIleUpload {
 
         }
         return newFileName;
+    }
+
+    public void fileDownload(HttpServletResponse response, String Filepath) throws IOException {
+        byte[] fileByte = FileUtils.readFileToByteArray(new File(Filepath));
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition",
+                "attachment; fileName=\"" + URLEncoder.encode("tistory.png", "UTF-8") + "\";");
+        response.setHeader("Content-Transfer-Encoding", "binary");
+
+        response.getOutputStream().write(fileByte);
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
     }
 }
