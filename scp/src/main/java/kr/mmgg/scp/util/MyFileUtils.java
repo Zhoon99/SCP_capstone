@@ -13,10 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public class MyFileUtils {
-    public String fileUpload(MultipartHttpServletRequest request, String fileName)
+    public void fileUpload(MultipartHttpServletRequest request, String filePath)
             throws IllegalStateException, IOException {
         // 저장 공간
-        String path = "C:\\Users\\Admin\\Desktop\\test";
+        String path = filePath;
         File file = new File(path);
         // 디렉토리 없으면 새로 만듬
         if (file.exists() == false) {
@@ -35,14 +35,12 @@ public class MyFileUtils {
                 // // 파일 dto 생성
                 // FileDto fileDto = new FileDto();
 
-                newFileName = fileName + multipartFile.getOriginalFilename()
-                        .substring(multipartFile.getOriginalFilename().lastIndexOf('.'));
+                newFileName = multipartFile.getOriginalFilename();
                 file = new File(path + "/" + newFileName);
+                file.length();
                 multipartFile.transferTo(file);
             }
-
         }
-        return newFileName;
     }
 
     public void fileDownload(HttpServletResponse response, String Filepath) throws IOException {

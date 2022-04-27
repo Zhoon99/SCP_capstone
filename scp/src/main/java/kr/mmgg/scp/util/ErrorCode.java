@@ -20,10 +20,10 @@ public enum ErrorCode {
     TASK_NOT_MATCH(HttpStatus.NOT_FOUND, "해당 할일과 유저가 매칭되지 않습니다."),
     TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 팀을 찾을 수 없습니다."),
     PAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 페이지가 없습니다."),
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
+    FILE_ERROR(HttpStatus.NOT_FOUND, "파일 처리 에러."),
     /* 500 Internal Server Error 서버가 처리 방법을 모르는 상황이 발생했습니다. */
-    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에러")
-    ;
+    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에러");
 
     private final HttpStatus httpStatus;
     private final String detail;
