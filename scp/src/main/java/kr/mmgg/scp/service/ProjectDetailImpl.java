@@ -61,7 +61,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 					dto.setProjectinuserId(plist.get(i).getProjectinuserId());
 					dto.setTaskId(plist.get(i).getTasks().get(j).getTaskId());
 					dto.setTaskContent(plist.get(i).getTasks().get(j).getTaskContent());
-					dto.setTaskOwner(plist.get(i).getTasks().get(j).getTaskOwner());
+					dto.setTaskOwner_String(projectinUserRepository.findById(plist.get(i).getProjectinuserId()).get()
+							.getUser().getUserNickname());
+					dto.setTaskRequester_string(
+							projectinUserRepository.findById(plist.get(i).getTasks().get(j).getTaskRequester()).get()
+									.getUser().getUserNickname());
+					;
+					// dto.setTaskOwner(plist.get(i).getTasks().get(j).getTaskOwner());
 					dto.setTaskRequester(plist.get(i).getTasks().get(j).getTaskRequester());
 					dto.setTaskComplete(plist.get(i).getTasks().get(j).getTaskComplete());
 					dto.setTaskAccept(plist.get(i).getTasks().get(j).getTaskAccept());
@@ -90,10 +96,15 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		for (int i = 0; i < piuUserIdAndProjectId.getTasks().size(); i++) {
 			dto = new ProjectDetailMyTaskDto();
 			dto.setProjectinuserId(piuUserIdAndProjectId.getTasks().get(i).getProjectinuserId());
+			dto.setTaskOwner_string(
+					projectinUserRepository.findById(piuUserIdAndProjectId.getTasks().get(i).getProjectinuserId()).get()
+							.getUser().getUserNickname());
 			dto.setTaskId(piuUserIdAndProjectId.getTasks().get(i).getTaskId());
 			dto.setTaskContent(piuUserIdAndProjectId.getTasks().get(i).getTaskContent());
-			dto.setTaskOwner(piuUserIdAndProjectId.getTasks().get(i).getTaskOwner());
 			dto.setTaskRequester(piuUserIdAndProjectId.getTasks().get(i).getTaskRequester());
+			dto.setTaskRequester_string(
+					projectinUserRepository.findById(piuUserIdAndProjectId.getTasks().get(i).getTaskRequester()).get()
+							.getUser().getUserNickname());
 			dto.setTaskComplete(piuUserIdAndProjectId.getTasks().get(i).getTaskComplete());
 			dto.setTaskAccept(piuUserIdAndProjectId.getTasks().get(i).getTaskAccept());
 			dto.setTaskRequesttime(piuUserIdAndProjectId.getTasks().get(i).getTaskRequesttime());
@@ -121,10 +132,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			pdrtTask = new ProjectDetailReceiveTaskDto();
 			if (tlist.get(i).getProjectinuser().getProjectId() == projectId) {
 				pdrtTask.setProjectinuserId(tlist.get(i).getProjectinuserId());
+				pdrtTask.setTaskOwner_string(projectinUserRepository.findById(tlist.get(i).getProjectinuserId()).get()
+						.getUser().getUserNickname());
 				pdrtTask.setTaskId(tlist.get(i).getTaskId());
 				pdrtTask.setTaskContent(tlist.get(i).getTaskContent());
-				pdrtTask.setTaskOwner(tlist.get(i).getTaskOwner());
 				pdrtTask.setTaskRequester(tlist.get(i).getTaskRequester());
+				pdrtTask.setTaskRequester_string(projectinUserRepository.findById(tlist.get(i).getTaskRequester()).get()
+						.getUser().getUserNickname());
 				pdrtTask.setTaskComplete(tlist.get(i).getTaskComplete());
 				pdrtTask.setTaskAccept(tlist.get(i).getTaskAccept());
 				pdrtTask.setTaskRequesttime(tlist.get(i).getTaskRequesttime());
@@ -158,21 +172,23 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		// 해당 프로젝트의 모든 할일 가져오기
 		for (int i = 0; i < plist.size(); i++) {
 			if (!plist.get(i).getTasks().isEmpty()) {
-				// requester와 proejctinuserid가 같으면 저장
-				// TODO: 닉네임이 겹칠 경우 큰일남......
 				for (Task task : plist.get(i).getTasks()) {
-					if (task.getTaskRequester().equals(user.getUserNickname())) {
+					if (task.getTaskRequester() == projectinUserRepository
+							.findByUserIdAndProjectId(user.getUserId(), projectId).get().getProjectinuserId()) {
 						dto = new RequestTaskDto();
-						dto.setProjectinuserId(task.getProjectinuserId());
 						dto.setTaskId(task.getTaskId());
+						dto.setProjectinuserId(task.getProjectinuserId());
+						dto.setTaskOwner_string(projectinUserRepository.findById(task.getProjectinuserId()).get()
+								.getUser().getUserNickname());
+						dto.setTaskRequester(task.getTaskRequester());
+						dto.setTaskRequester_string(projectinUserRepository.findById(task.getTaskRequester()).get()
+								.getUser().getUserNickname());
 						dto.setTaskContent(task.getTaskContent());
-						dto.setTaskOwner(task.getTaskOwner());
 						dto.setTaskComplete(task.getTaskComplete());
 						dto.setTaskAccept(task.getTaskAccept());
 						dto.setTaskRequesttime(task.getTaskRequesttime());
 						dto.setTaskDeadline(task.getTaskDeadline());
 						dto.setCreatetime(task.getTaskCreatetime());
-						System.out.println(dto.toString());
 						list.add(dto);
 					}
 				}
@@ -189,13 +205,14 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Transactional
 	public ResultDto<?> sendTask(ProjectDetailSendTaskDto dto) {
 		Task task = new Task();
+		ProjectInUser projectinuser = new ProjectInUser();
+		projectinuser = projectinUserRepository.findByUserIdAndProjectId(dto.getUserId(), dto.getProjectId())
+				.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 		dateTime datetime = new dateTime();
 		task.setTaskId(null);
-		task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname());
-		// 받는 사람
-		task.setTaskRequester(
-				projectinUserRepository.findById(dto.getProjectinuserId()).get().getUser().getUserNickname());
-		// 보낸 사람
+		// task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname());
+		// // 받는 사람
+		task.setTaskRequester(projectinuser.getProjectinuserId()); // 보낸 사람
 		task.setProjectinuserId(dto.getProjectinuserId());
 		task.setTaskContent(dto.getTaskContent());
 		task.setTaskCreatetime(datetime.dateTime());
@@ -348,10 +365,12 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	public ResultDto<?> taskDetail(Long taskId) {
 		Task task = taskRepository.findByTaskId(taskId)
 				.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+		ProjectInUser projectinuser = new ProjectInUser();
 		List<Comment> comment = null;
 		List<HomeViewProjectDetailCommentListDto> hvpdclList = new ArrayList<HomeViewProjectDetailCommentListDto>(); // 코멘트dto
-		// 리스트를
-		// 받을곳
+																														// 리스트
+																														// //
+																														// 받을곳
 		HomeViewProjectDetailCommentListDto hvpdclDto;
 		if (!commentRepository.findByTaskId(taskId).isEmpty()) { // 에러 잡는곳
 			comment = commentRepository.findByTaskId(taskId);
@@ -368,10 +387,12 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			new CustomException(ErrorCode.COMMENT_NOT_FOUND); // 에러발생시
 		}
 		HomeViewProjectDetailDto hvpdDto = new HomeViewProjectDetailDto();
+		projectinuser = projectinUserRepository.findById(task.getTaskRequester())
+				.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 		hvpdDto.setTaskId(task.getTaskId());
 		hvpdDto.setTaskContent(task.getTaskContent());
-		hvpdDto.setOwner_userName(task.getTaskOwner()); // 조인해서 데이터 가져올것
-		hvpdDto.setRequester_userName(task.getTaskRequester()); // ##
+		hvpdDto.setTaskOwner_string(task.getProjectinuser().getUser().getUserNickname()); // 조인해서 데이터 가져올것
+		hvpdDto.setTaskRequester_string(projectinuser.getUser().getUserNickname()); // ##
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
 		hvpdDto.setCommentList(hvpdclList);
 		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto,
@@ -385,8 +406,9 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	public ResultDto<?> commentModify(Long commentId, CommentModifyDto cmDto) {
 		Comment comment = commentRepository.findByCommentId(commentId)
 				.orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+		dateTime datetime = new dateTime();
 		comment.setCommentContent(cmDto.getCommentContent());
-		comment.setCommentTime(cmDto.getCommentModifyTime());
+		comment.setCommentTime(datetime.dateTime());
 		commentRepository.save(comment);
 		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS);
 	}

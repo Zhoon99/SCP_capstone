@@ -6,11 +6,10 @@ import lombok.Data;
 public class ProjectDetailReceiveTaskDto {
 	private Long taskId;
 	private Long projectinuserId;
-
+	private String taskOwner_string;
 	private String taskContent;
-	private String taskOwner;
-	private String taskRequester;
-
+	private Long taskRequester;
+	private String taskRequester_string;
 	private Integer taskComplete;
 	private Integer taskAccept;
 
