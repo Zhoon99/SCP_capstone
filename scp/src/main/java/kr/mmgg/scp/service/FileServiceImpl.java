@@ -7,25 +7,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import kr.mmgg.scp.dto.ScpFileDto;
 import kr.mmgg.scp.dto.ResultDto;
-import kr.mmgg.scp.dto.response.FileUploadDto;
-import kr.mmgg.scp.repository.FileRepository;
+import kr.mmgg.scp.dto.response.ScpFileUploadDto;
+import kr.mmgg.scp.entity.ScpFile;
+import kr.mmgg.scp.repository.ScpFileRepository;
 import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
-import kr.mmgg.scp.util.MyFileUtils;
+import kr.mmgg.scp.util.ScpFileUtils;
 
 @Service
 public class FileServiceImpl implements FileService {
     @Autowired
-    private FileRepository fileRepository;
+    private ScpFileRepository fileRepository;
 
-    private MyFileUtils myFileUtils = new MyFileUtils();
+    private ScpFileUtils myFileUtils = new ScpFileUtils();
 
-    public ResultDto<?> fileUpload(FileUploadDto fileinfoDto) {
+    // 파일 업로드
+    @Override
+    public ResultDto<?> fileUpload(ScpFileUploadDto fileinfoDto) {
         try {
-            myFileUtils.fileUpload(fileinfoDto.getFile(), fileinfoDto.getFilePath());
-
+            ScpFile scpFile = new ScpFile();
+            List<ScpFileDto> fileDtos = myFileUtils.fileUpload(fileinfoDto.getFile(), fileinfoDto.getFilePath());
+            for (ScpFileDto fileDto : fileDtos) {
+                scpFile.setFileName(fileDto.getFileName());
+                scpFile.setFileExtension(fileDto.getFileExtension());
+                scpFile.setFilePath(fileinfoDto.getFilePath());
+                scpFile.setFileSize(fileDto.getFilesize());
+                scpFile.setTaskId(fileinfoDto.getTaskId());
+                fileRepository.save(scpFile);
+            }
         } catch (IllegalStateException | IOException e) {
             throw new CustomException(ErrorCode.FILE_ERROR);
         }

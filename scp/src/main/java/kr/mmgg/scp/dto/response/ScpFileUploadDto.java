@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import lombok.Data;
 
 @Data
-public class FileUploadDto {
+public class ScpFileUploadDto {
     MultipartHttpServletRequest file;
     String filePath;
     Long taskId;

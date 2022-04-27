@@ -3,8 +3,10 @@ package kr.mmgg.scp.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,9 +14,12 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-public class MyFileUtils {
-    public void fileUpload(MultipartHttpServletRequest request, String filePath)
+import kr.mmgg.scp.dto.ScpFileDto;
+
+public class ScpFileUtils {
+    public List<ScpFileDto> fileUpload(MultipartHttpServletRequest request, String filePath)
             throws IllegalStateException, IOException {
+        List<ScpFileDto> fileDtos = new ArrayList<>();
         // 저장 공간
         String path = filePath;
         File file = new File(path);
@@ -32,15 +37,21 @@ public class MyFileUtils {
             // input타입이 file인 친구들중 하나를 꺼내 List에 넣는다.
             List<MultipartFile> list = request.getFiles(name);
             for (MultipartFile multipartFile : list) {
+                ScpFileDto fileDto = new ScpFileDto();
                 // // 파일 dto 생성
                 // FileDto fileDto = new FileDto();
-
+                String fileName = multipartFile.getOriginalFilename();
+                fileDto.setFileExtension(fileName
+                        .substring(fileName.lastIndexOf(".") + 1));
+                fileDto.setFileName(fileName.substring(0, fileName.lastIndexOf(".")));
+                fileDto.setFilesize(multipartFile.getSize());
+                fileDtos.add(fileDto);
                 newFileName = multipartFile.getOriginalFilename();
                 file = new File(path + "/" + newFileName);
-                file.length();
                 multipartFile.transferTo(file);
             }
         }
+        return fileDtos;
     }
 
     public void fileDownload(HttpServletResponse response, String Filepath) throws IOException {
