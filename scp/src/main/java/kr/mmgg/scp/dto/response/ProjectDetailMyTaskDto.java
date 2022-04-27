@@ -7,12 +7,14 @@ public class ProjectDetailMyTaskDto {
 	private Long projectinuserId;
 	
 	private String taskContent;
-	private String taskOwner;
+	private String taskOwner_string;
+	private Long taskRequester;
+	private String taskRequester_string;
 	
 	private Integer taskComplete;
 	private Integer taskAccept;
 	
 	private String taskRequesttime;
 	private String taskDeadline;
-	private String Createtime;
+	private String taskCreatetime;
 }

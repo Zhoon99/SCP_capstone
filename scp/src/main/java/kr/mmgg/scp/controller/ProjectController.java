@@ -36,8 +36,6 @@ public class ProjectController {
     // TODO: request DTO 작성
     @PostMapping(value = "/createproject")
     public ResultDto<List<ProjectInUser>> CreateProject(@RequestBody CreateProjectDto list) {
-        // List<ProjectInUser> piuList = homeServiceImpl.projectCreate(dto);
-        System.out.println(list);
         return homeServiceImpl.projectCreate(list);
     }
 
@@ -55,7 +53,6 @@ public class ProjectController {
 
     @PatchMapping(value = "")
     public ResultDto<?> updateProjectMember() {
-
         return null;
     }
 
@@ -137,7 +134,6 @@ public class ProjectController {
     // 댓글 작성
     @RequestMapping(value = "/commentwrite", method = RequestMethod.POST)
     public ResultDto<?> commentWrite(@RequestBody CommentWriteDto dto) {
-        System.out.println(dto);
         return projectDetailImpl.commentWrite(dto);
     }
 

@@ -3,9 +3,10 @@ package kr.mmgg.scp.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import kr.mmgg.scp.entity.File;
+import kr.mmgg.scp.entity.Message;
+
 
 @Repository
-public interface FileRepository extends JpaRepository<File, Long>{
-	
+public interface MessageRepository extends JpaRepository<Message, Long>{
+
 }
