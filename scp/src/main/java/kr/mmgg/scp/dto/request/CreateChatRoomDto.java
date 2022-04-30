@@ -7,5 +7,6 @@ import lombok.Data;
 @Data
 public class CreateChatRoomDto {
 	private String chatroomName;
+	private Long userId;
 	private List<CreateChatRoomMemberDto> chatroomMember;
 }

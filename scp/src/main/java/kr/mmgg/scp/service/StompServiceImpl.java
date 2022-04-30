@@ -75,7 +75,7 @@ public class StompServiceImpl implements StompService {
 
 	@Override
 	public ResultDto<List<lookupRoomDto>> lookupRoom(Long userId) {
-		List<ChatinUser> chatinuserList = chatinuserRepository.findByUserId(userId);
+		List<ChatinUser> chatinuserList = chatinuserRepository.findByUserIdAndChatinuserExit(userId, 0);
 		lookupRoomDto lDto;
 		ArrayList<lookupRoomDto> lrdList = new ArrayList<lookupRoomDto>();
 		for (int i = 0; i < chatinuserList.size(); i++) {
@@ -93,20 +93,23 @@ public class StompServiceImpl implements StompService {
 
 	@Override
 	public ResultDto<?> deleteRoom(Long chatroomId) {
+		List<ChatinUser> clist = chatinuserRepository.findByChatroomId(chatroomId);
 		chatroomRepository.deleteById(chatroomId);
+		chatinuserRepository.deleteAll(clist);
 		return new ResultDto<>().makeResult(CustomStatusCode.DELETE_SUCCESS);
 	}
 
 	public ResultDto<?> modifyRoom(Long chatroomId, ModifyChatRoomDto mcrDto) {
 		Chatroom chatroom = chatroomRepository.findByChatroomId(chatroomId);
 		chatroom.setChatroomName(mcrDto.getChatroomName());
-
 		List<ChatinUser> chatinuserList = new ArrayList<ChatinUser>();
 		ChatinUser chatinuser;
 		for (int i = 0; i < mcrDto.getChatroomMember().size(); i++) {
 			chatinuser = new ChatinUser();
 			chatinuser.setUserId(mcrDto.getChatroomMember().get(i).getUserId());
 			chatinuser.setChatroomId(chatroomId);
+			chatinuser.setChatinuserExit(0);
+			chatinuser.setChatinuserCommoncode("c-member");
 			chatinuserList.add(chatinuser);
 		}
 		chatinuserRepository.saveAll(chatinuserList); // 인원을 변경시키고 commoncode 를 확인한다음에 c-group 또는 c-personal 로 변경시켜야되서
@@ -127,15 +130,22 @@ public class StompServiceImpl implements StompService {
 		chatroom.setChatroomCommoncode("c-personal");
 		Chatroom save = chatroomRepository.save(chatroom);
 		List<ChatinUser> ciuList = new ArrayList<ChatinUser>();
-		ChatinUser chatinuser;
 		Long chatroomId = save.getChatroomId();
+		ChatinUser chatinuser = new ChatinUser();
+		chatinuser.setUserId(ccrDto.getUserId());
+		chatinuser.setChatroomId(chatroomId);
+		chatinuser.setChatinuserCommoncode("c-leader");
+		chatinuser.setChatinuserExit(0);
+		ciuList.add(chatinuser);
 		for (int i = 0; i < ccrDto.getChatroomMember().size(); i++) {
 			chatinuser = new ChatinUser();
 			chatinuser.setUserId(ccrDto.getChatroomMember().get(i).getUserId());
 			chatinuser.setChatroomId(chatroomId);
+			chatinuser.setChatinuserExit(0);
+			chatinuser.setChatinuserCommoncode("c-member");
 			ciuList.add(chatinuser);
 		}
-		if (ccrDto.getChatroomMember().size() > 2) {
+		if (ccrDto.getChatroomMember().size() > 1) {
 			save = chatroomRepository.findByChatroomId(chatroomId);
 			save.setChatroomCommoncode("c-group");
 		}
@@ -145,16 +155,17 @@ public class StompServiceImpl implements StompService {
 
 	@Override
 	public ResultDto<?> exitChatroom(Long chatroomId, Long userId) {
-
 		ChatinUser chatinuser = chatinuserRepository.findByChatroomIdAndUserId(chatroomId, userId)
 				.orElseThrow(() -> new IllegalStateException(chatroomId + "채팅방이나 " + userId + "유저에 해당하는 정보가 없습니다."));
-		chatinuserRepository.delete(chatinuser);
+		chatinuser.setChatinuserExit(1);
+		chatinuserRepository.save(chatinuser);
 
 		if (chatinuserRepository.findByChatroomId(chatroomId).size() < 3) {
-			Chatroom chatroom = chatroomRepository.findByChatroomId(chatroomId);
-			chatroom.setChatroomCommoncode("c-personal");
-			chatroomRepository.save(chatroom);
-		}
+            Chatroom chatroom = chatroomRepository.findByChatroomId(chatroomId);
+            chatroom.setChatroomCommoncode("c-personal");
+            chatroomRepository.save(chatroom);
+        }
+
 
 		ResultDto<?> rDto = new ResultDto<>();
 		rDto.makeResult(CustomStatusCode.DELETE_SUCCESS);

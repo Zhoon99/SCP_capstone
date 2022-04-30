@@ -41,4 +41,6 @@ public class ChatinUser {
 	private String chatinuserCommoncode;
 	private Integer chatinuserExit;
 	
+	private String chatinuserCommoncode;
+	private Integer chatinuserExit;
 }
