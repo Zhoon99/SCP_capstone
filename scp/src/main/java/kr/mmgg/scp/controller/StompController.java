@@ -4,10 +4,9 @@ import kr.mmgg.scp.dto.MessageDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateChatRoomDto;
 import kr.mmgg.scp.dto.request.ModifyChatRoomDto;
+import kr.mmgg.scp.dto.response.ChatroomDto;
 import kr.mmgg.scp.dto.response.UserToAddDto;
 import kr.mmgg.scp.dto.response.lookupRoomDto;
-import kr.mmgg.scp.dto.TeaminuserDto;
-import kr.mmgg.scp.dto.response.TeamToAddDto;
 import kr.mmgg.scp.service.StompService;
 import kr.mmgg.scp.service.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -32,7 +28,7 @@ public class StompController {
     
     @Transactional
     @GetMapping(value = "/chat/{chatroomId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<List<MessageDto>> lookupChatroomMessages(@PathVariable Long chatroomId) {
+    public ResultDto<ChatroomDto> lookupChatroomMessages(@PathVariable Long chatroomId) {
         return stompService.lookupChatroomMessages(chatroomId);
     }
 
