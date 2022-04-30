@@ -4,6 +4,7 @@ import kr.mmgg.scp.dto.MessageDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateChatRoomDto;
 import kr.mmgg.scp.dto.request.ModifyChatRoomDto;
+import kr.mmgg.scp.dto.response.ChatroomDto;
 import kr.mmgg.scp.dto.response.lookupRoomDto;
 import kr.mmgg.scp.entity.ChatinUser;
 import kr.mmgg.scp.entity.Chatroom;
@@ -33,13 +34,16 @@ public class StompServiceImpl implements StompService {
 
 	@Override
 	@Transactional
-	public ResultDto<List<MessageDto>> lookupChatroomMessages(Long chatroomId) {
+	public ResultDto<ChatroomDto> lookupChatroomMessages(Long chatroomId) {
+
 		List<MessageDto> messageDtos = new ArrayList<>();
+		ChatroomDto chatroomDto = new ChatroomDto();
 
 		List<ChatinUser> chatinuserList = chatinuserRepository.findByChatroomId(chatroomId);
 		if (chatinuserList.isEmpty()) {
 			throw new IllegalStateException(chatroomId + "해당 채팅방 정보가 없습니다.");
 		}
+		chatroomDto.setChatroomName(chatinuserList.get(0).getChatroom().getChatroomName());
 
 		for (ChatinUser i : chatinuserList) {
 			List<Message> allMessages = messageRepository.findByChatinuserId(i.getChatinuserId());
@@ -47,8 +51,13 @@ public class StompServiceImpl implements StompService {
 				throw new IllegalStateException(i.getChatinuserId() + "해당 chatinuser 정보가 없습니다.");
 			}
 
+			if(i.getChatinuserCommoncode().equals("c-leader")) {
+				chatroomDto.setChatroomLeaderId(i.getUserId());
+			}
+
 			for (Message j : allMessages) {
 				MessageDto messageDto = MessageDto.builder()
+						.userId(i.getUserId())
 						.userNickname(i.getUser().getUserNickname())
 						.messageContent(j.getMessageContent())
 						.messageTime(j.getMessageTime())
@@ -57,9 +66,10 @@ public class StompServiceImpl implements StompService {
 			}
 		}
 		Collections.sort(messageDtos, new MessageComparator()); // 날짜 순 정렬
+		chatroomDto.setMessages(messageDtos);
 
-		ResultDto<List<MessageDto>> rDto = new ResultDto<>();
-		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, messageDtos, "messages");
+		ResultDto<ChatroomDto> rDto = new ResultDto<>();
+		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, chatroomDto, "messages");
 		return rDto;
 	}
 
@@ -141,9 +151,7 @@ public class StompServiceImpl implements StompService {
 		chatinuserRepository.delete(chatinuser);
 
 		if (chatinuserRepository.findByChatroomId(chatroomId).size() < 3) {
-			Chatroom chatroom = new Chatroom();
-			chatroom.setChatroomId(chatroomId);
-			chatroom.setChatroomName(chatinuser.getChatroom().getChatroomName());
+			Chatroom chatroom = chatroomRepository.findByChatroomId(chatroomId);
 			chatroom.setChatroomCommoncode("c-personal");
 			chatroomRepository.save(chatroom);
 		}

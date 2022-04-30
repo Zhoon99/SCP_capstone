@@ -4,6 +4,7 @@ import kr.mmgg.scp.dto.MessageDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateChatRoomDto;
 import kr.mmgg.scp.dto.request.ModifyChatRoomDto;
+import kr.mmgg.scp.dto.response.ChatroomDto;
 import kr.mmgg.scp.dto.response.UserToAddDto;
 import kr.mmgg.scp.dto.response.lookupRoomDto;
 import kr.mmgg.scp.service.StompService;
@@ -27,7 +28,7 @@ public class StompController {
 
     @Transactional
     @GetMapping(value = "/chat/{chatroomId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<List<MessageDto>> lookupChatroomMessages(@PathVariable Long chatroomId) {
+    public ResultDto<ChatroomDto> lookupChatroomMessages(@PathVariable Long chatroomId) {
         return stompService.lookupChatroomMessages(chatroomId);
     }
 
@@ -62,7 +63,7 @@ public class StompController {
     }
 
     @Transactional
-    @PostMapping(value = "/exitChatroom/{chatroomId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/exitChatroom/{chatroomId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResultDto<?> exitChatroom(@PathVariable Long chatroomId, @PathVariable Long userId) {
         return stompService.exitChatroom(chatroomId, userId);
     }
