@@ -66,7 +66,7 @@ public class StompServiceImpl implements StompService {
 			}
 		}
 		Collections.sort(messageDtos, new MessageComparator()); // 날짜 순 정렬
-		chatroomDto.setMessages(messageDtos);
+		chatroomDto.setMessagelist(messageDtos);
 
 		ResultDto<ChatroomDto> rDto = new ResultDto<>();
 		rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, chatroomDto, "messages");
