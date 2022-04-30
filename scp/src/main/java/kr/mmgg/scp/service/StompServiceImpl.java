@@ -147,7 +147,8 @@ public class StompServiceImpl implements StompService {
 	public ResultDto<?> exitChatroom(Long chatroomId, Long userId) {
 		ChatinUser chatinuser = chatinuserRepository.findByChatroomIdAndUserId(chatroomId, userId)
 				.orElseThrow(() -> new IllegalStateException(chatroomId + "채팅방이나 " + userId + "유저에 해당하는 정보가 없습니다."));
-		chatinuserRepository.delete(chatinuser);
+		chatinuser.setChatinuserExit(1);
+		chatinuserRepository.save(chatinuser);
 
 		if (chatinuserRepository.findByChatroomId(chatroomId).size() < 3) {
             Chatroom chatroom = chatroomRepository.findByChatroomId(chatroomId);

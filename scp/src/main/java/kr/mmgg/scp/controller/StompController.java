@@ -29,7 +29,7 @@ import java.util.List;
 public class StompController {
     private final TeamService teamService;
     private final StompService stompService;
-
+    
     @Transactional
     @GetMapping(value = "/chat/{chatroomId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResultDto<List<MessageDto>> lookupChatroomMessages(@PathVariable Long chatroomId) {
@@ -66,7 +66,7 @@ public class StompController {
     public ResultDto<List<UserToAddDto>> lookupMember(@PathVariable String email) {
         return teamService.getUsersByEmail(email);
     }
-
+    // 채팅방 나가기
     @Transactional
     @GetMapping(value = "/exitChatroom/{chatroomId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResultDto<?> exitChatroom(@PathVariable Long chatroomId, @PathVariable Long userId) {
