@@ -10,7 +10,7 @@
         "messages": {
             "chatroomName": "String",
             "chatroomLeaderId": Long,
-            "messagelist": [
+            "messageList": [
                 {
                     "userId": Long,
                     "userNickname": "String",

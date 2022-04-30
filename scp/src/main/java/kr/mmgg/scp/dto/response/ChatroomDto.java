@@ -15,5 +15,5 @@ import java.util.List;
 public class ChatroomDto {
     private String chatroomName;
     private Long chatroomLeaderId;
-    private List<MessageDto> messagelist;
+    private List<MessageDto> messageList;
 }
