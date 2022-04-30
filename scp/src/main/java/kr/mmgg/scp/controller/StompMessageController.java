@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class StompMessageController {
-	@MessageMapping("/{room}/{name}")
-	public void chat(@DestinationVariable("room") String room, @DestinationVariable("name") String name , String content) throws Exception {
-  	SimpMessagingTemplate.convertAndSend("/topic/" + room , new Chat(name, content));
-  }
+    /*@MessageMapping("/{room}/{name}")
+    public void chat(@DestinationVariable("room") String room, @DestinationVariable("name") String name, String content) throws Exception {
+        SimpMessagingTemplate.convertAndSend("/topic/" + room, new Chat(name, content));
+    }*/
 }

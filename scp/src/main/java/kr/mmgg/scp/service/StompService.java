@@ -9,4 +9,6 @@ import java.util.List;
 public interface StompService {
 
     public ResultDto<List<MessageDto>> lookupChatroomMessages(Long chatroomId);
+
+    public ResultDto<?> exitChatroom(Long chatroomId, Long userId);
 }
