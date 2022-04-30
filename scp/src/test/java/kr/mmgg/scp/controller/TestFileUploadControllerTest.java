@@ -39,7 +39,7 @@ public class TestFileUploadControllerTest {
         MockMultipartFile multipartFile = new MockMultipartFile("file", name, contenType, new FileInputStream(path));
         System.out.println("multipartfile : " + multipartFile);
         MultipartHttpServletRequest request = (MultipartHttpServletRequest) mvc
-                .perform(multipart("/testfile")
+                .perform(multipart("/fileupload/1/1")
                         .file(multipartFile))
                 .andExpect(status().isOk())
                 .andReturn().getRequest();

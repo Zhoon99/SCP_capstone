@@ -11,15 +11,17 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import kr.mmgg.scp.dto.ScpFileDto;
 
+@Component
 public class ScpFileUtils {
-    public List<ScpFileDto> fileUpload(MultipartHttpServletRequest request, String filePath)
+    public List<File> fileUpload(MultipartHttpServletRequest request, String filePath)
             throws IllegalStateException, IOException {
-        List<ScpFileDto> fileDtos = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
         // 저장 공간
         String path = filePath;
         File file = new File(path);
@@ -33,33 +35,27 @@ public class ScpFileUtils {
         String newFileName = null;
         while (FileIt.hasNext()) {
             name = FileIt.next();
-
             // input타입이 file인 친구들중 하나를 꺼내 List에 넣는다.
             List<MultipartFile> list = request.getFiles(name);
             for (MultipartFile multipartFile : list) {
-                ScpFileDto fileDto = new ScpFileDto();
-                // // 파일 dto 생성
-                // FileDto fileDto = new FileDto();
-                String fileName = multipartFile.getOriginalFilename();
-                fileDto.setFileExtension(fileName
-                        .substring(fileName.lastIndexOf(".") + 1));
-                fileDto.setFileName(fileName.substring(0, fileName.lastIndexOf(".")));
-                fileDto.setFilesize(multipartFile.getSize());
-                fileDtos.add(fileDto);
                 newFileName = multipartFile.getOriginalFilename();
                 file = new File(path + "/" + newFileName);
+                fileList.add(file);
                 multipartFile.transferTo(file);
+
             }
         }
-        return fileDtos;
+        return fileList;
     }
 
-    public void fileDownload(HttpServletResponse response, String Filepath) throws IOException {
+    public void fileDownload(HttpServletResponse response, String Filepath, String fileName) throws IOException {
+        // 가져온 파일을 바이트로 변환한다.
         byte[] fileByte = FileUtils.readFileToByteArray(new File(Filepath));
 
+        // front에서 다운 받기위한 ContentType설정
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition",
-                "attachment; fileName=\"" + URLEncoder.encode("tistory.png", "UTF-8") + "\";");
+                "attachment; fileName=\"" + URLEncoder.encode(fileName, "UTF-8") + "\";");
         response.setHeader("Content-Transfer-Encoding", "binary");
 
         response.getOutputStream().write(fileByte);

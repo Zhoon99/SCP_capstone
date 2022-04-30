@@ -1,0 +1,64 @@
+회원
+테이블 명 + "_" +  컬럼내용
+아이디 : varchar(20)
+user_id
+비밀번호 : varchar(64)
+user_password
+이름 : varchar(10)
+user_name
+생년월일 : date
+user_birthday
+핸드폰번호 : varchar(11)
+user_phonenumber
+이메일 : varchar(50)
+user_email
+
+결제정보
+결제id : bigint
+아이디 : varchar(20)
+상품id : int 
+갯수 : int
+결제일자 : datetime
+
+카테고리
+category
+카테고리id : bigint
+category_id
+아이디 : varchar(20)
+user_id
+카테고리명 : varchar(30)
+category_name
+
+상품
+상품id : bigint
+product_id
+카테고리id : bigint
+category_id
+상품명 : varchar(30)
+product_name
+가격 : int
+product_price
+정보 : tinytext(255)
+product_info
+이미지 : varchar(50)
+product_image
+
+구매디테일
+구매번호 : bigint
+paydetail_id
+회원번호
+user_id
+옵션id
+option_id
+상품id
+product_id
+
+옵션
+옵션id : bigint
+option_id
+옵션이름 : varchar(20)
+option_name
+옵션가격 : int
+option_price
+옵션이미지 : varchar(50)
+option_image
