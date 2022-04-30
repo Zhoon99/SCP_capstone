@@ -6,5 +6,6 @@ import lombok.Data;
 public class UpdateProjectModifyMember {
     private Long userId;
     private String userName;
-    private String CommonCode;
+    private String commonCode;
+    private Integer maker;
 }

@@ -154,7 +154,7 @@ public class TeamServiceImpl implements TeamService {
         teaminuserRepository.delete(teaminuser);
 
         ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS, null, null);
+        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS);
         return rDto;
     }
 
@@ -187,7 +187,7 @@ public class TeamServiceImpl implements TeamService {
         teaminuserRepository.saveAll(teaminuserList);
 
         ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, null, null);
+        rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
         return rDto;
     }
 
@@ -242,7 +242,7 @@ public class TeamServiceImpl implements TeamService {
             }
         }
         ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS, null, null);
+        rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
         return rDto;
     }
 
@@ -252,7 +252,7 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.deleteById(teamId);
 
         ResultDto<?> rDto = new ResultDto<>();
-        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS, null, null);
+        rDto.makeResult(CustomStatusCode.DELETE_SUCCESS);
         return rDto;
     }
 
