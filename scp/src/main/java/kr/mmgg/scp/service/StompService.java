@@ -11,14 +11,14 @@ import java.util.List;
 public interface StompService {
 
     public ResultDto<List<MessageDto>> lookupChatroomMessages(Long chatroomId);
-    
+
     public ResultDto<List<lookupRoomDto>> lookupRoom(Long userId);
-    
+
     public ResultDto<?> deleteRoom(Long chatroomId);
-    
+
     public ResultDto<?> modifyRoom(Long chatroomId, ModifyChatRoomDto mcrDto);
 
-	public ResultDto<?> createRoom(CreateChatRoomDto ccrDto);
+    public ResultDto<?> createRoom(CreateChatRoomDto ccrDto);
 
-	public ResultDto<?> lookupMember(String email);
+    public ResultDto<?> exitChatroom(Long chatroomId, Long userId);
 }

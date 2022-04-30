@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import kr.mmgg.scp.entity.Chatroom;
 
+import java.util.Optional;
+
 @Repository
-public interface ChatroomRepository extends JpaRepository<Chatroom, Long>{
-	public Chatroom findByChatroomId(Long chatroomId);
+public interface ChatroomRepository extends JpaRepository<Chatroom, Long> {
+    public Chatroom findByChatroomId(Long chatroomId);
+
 }
