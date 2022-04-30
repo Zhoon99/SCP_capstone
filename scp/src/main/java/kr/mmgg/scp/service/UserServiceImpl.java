@@ -46,4 +46,11 @@ public class UserServiceImpl implements UserService {
         rDto.makeResult(CustomStatusCode.LOOKUP_SUCCESS, userDto, "user");
         return rDto;
     }
+
+    @Override
+    public User findByUserId(Long userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));;
+        return user;
+    }
 }
