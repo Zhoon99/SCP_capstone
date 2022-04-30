@@ -1,14 +1,11 @@
 package kr.mmgg.scp.controller;
 
-import kr.mmgg.scp.dto.ChatinuserDto;
 import kr.mmgg.scp.dto.MessageDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateChatRoomDto;
 import kr.mmgg.scp.dto.request.ModifyChatRoomDto;
 import kr.mmgg.scp.dto.response.UserToAddDto;
 import kr.mmgg.scp.dto.response.lookupRoomDto;
-import kr.mmgg.scp.dto.TeaminuserDto;
-import kr.mmgg.scp.dto.response.TeamToAddDto;
 import kr.mmgg.scp.service.StompService;
 import kr.mmgg.scp.service.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -68,8 +62,8 @@ public class StompController {
     }
 
     @Transactional
-    @PostMapping(value = "/exitChatroom", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<?> exitChatroom(@RequestBody ChatinuserDto chatinuserDto) {
-        return stompService.exitChatroom(chatinuserDto.getChatroomId(), chatinuserDto.getUserId());
+    @PostMapping(value = "/exitChatroom/{chatroomId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultDto<?> exitChatroom(@PathVariable Long chatroomId, @PathVariable Long userId) {
+        return stompService.exitChatroom(chatroomId, userId);
     }
 }
