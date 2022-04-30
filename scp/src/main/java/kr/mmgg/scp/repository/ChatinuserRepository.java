@@ -1,7 +1,5 @@
 package kr.mmgg.scp.repository;
 
-import kr.mmgg.scp.entity.Chatroom;
-import org.hibernate.metamodel.model.convert.spi.JpaAttributeConverter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +11,6 @@ import java.util.List;
 public interface ChatinuserRepository extends JpaRepository<ChatinUser, Long>{
 
     public List<ChatinUser> findByChatroomId(Long chatroomId);
+    
+    public List<ChatinUser> findByUserId(Long userId);
 }

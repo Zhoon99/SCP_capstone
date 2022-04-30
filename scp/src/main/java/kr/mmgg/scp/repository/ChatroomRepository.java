@@ -7,5 +7,5 @@ import kr.mmgg.scp.entity.Chatroom;
 
 @Repository
 public interface ChatroomRepository extends JpaRepository<Chatroom, Long>{
-
+	public Chatroom findByChatroomId(Long chatroomId);
 }
