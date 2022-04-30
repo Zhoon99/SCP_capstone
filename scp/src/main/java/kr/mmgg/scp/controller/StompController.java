@@ -67,7 +67,7 @@ public class StompController {
     }
 
     @Transactional
-    @PostMapping(value = "/exitChatroom/{chatroomId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/exitChatroom/{chatroomId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResultDto<?> exitChatroom(@PathVariable Long chatroomId, @PathVariable Long userId) {
         return stompService.exitChatroom(chatroomId, userId);
     }
