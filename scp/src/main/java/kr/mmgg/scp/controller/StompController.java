@@ -61,6 +61,7 @@ public class StompController {
     }
 
     // 채팅방 생성 및 수정 -> 이메일로 멤버검색
+    // TODO: 내자신 이메일도 보임 수정해야됨 즉 userId를 받아서 email검증과정을 거치고, 비교한뒤 내꺼는 제외시키기
     @GetMapping(value = "/lookupMember/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResultDto<List<UserToAddDto>> lookupMember(@PathVariable String email) {
         return teamService.getUsersByEmail(email);

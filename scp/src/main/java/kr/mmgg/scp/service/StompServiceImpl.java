@@ -99,6 +99,7 @@ public class StompServiceImpl implements StompService {
 			chatinuser.setUserId(mcrDto.getChatroomMember().get(i).getUserId());
 			chatinuser.setChatroomId(chatroomId);
 			chatinuser.setChatinuserExit(0);
+			chatinuser.setChatinuserCommoncode("c-member");
 			chatinuserList.add(chatinuser);
 		}
 		chatinuserRepository.saveAll(chatinuserList); // 인원을 변경시키고 commoncode 를 확인한다음에 c-group 또는 c-personal 로 변경시켜야되서
