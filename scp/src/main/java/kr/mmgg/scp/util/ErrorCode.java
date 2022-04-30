@@ -23,7 +23,9 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
     FILE_ERROR(HttpStatus.NOT_FOUND, "파일 처리 에러."),
     /* 500 Internal Server Error 서버가 처리 방법을 모르는 상황이 발생했습니다. */
-    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에러");
+    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에러"),
+    CHATROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 채팅방을 찾을 수 없습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final String detail;

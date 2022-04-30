@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+import kr.mmgg.scp.dto.request.CreateProjectMemberDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,6 +24,9 @@ import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.util.dateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -141,40 +145,40 @@ public class TestProjectController {
 	
 	@Test
 	void alltest() throws Exception{
-		dateTime datetime = new dateTime();
-//		testAllTask(1L); // 통과
-//		testMyTask(2L, 1L); // 통과
-//		testWhetherTask(2L, 1L); // 통과
-//		testReceivetask(1L, -1); // 통과
+		/*dateTime datetime = new dateTime();
+		testAllTask(1L); // 통과
+		testMyTask(2L, 1L); // 통과
+		testWhetherTask(2L, 1L); // 통과
+		testReceivetask(1L, -1); // 통과
 		testReceivetask(1L, 2L); // 통과
 		testRequestask(1L, 2L); // 통과
-//		testSendTask(1L);
+		testSendTask(1L);
 
-//		ProjectDetailSendTaskDto pdstdto = new ProjectDetailSendTaskDto();
-//		dto.setProjectId(1L);
-//		dto.setProjectinuserId(2L);
-//		dto.setTaskContent("testmockmvc");
-//		dto.setTaskDeadline(datetime.dateTime());
-//		dto.setUserId(2L);
-//		testSendTask(pdstdto); // 통과
-		
-//		CommentWriteDto cwdto = new CommentWriteDto();
-//		dto.setTaskId(1L);
-//		dto.setUserId(2L);
-//		dto.setCommentContent("HI");
-//		testCommentWrite(cwdto); // 통과
-		
-//		CommentModifyDto cmdto = new CommentModifyDto();
-//		cmdto.setCommentId(1L);
-//		cmdto.setCommentContent("HI MOCK수정");
-//		testCommentModify(1L, cmdto); // 통과
-		
-//		testDeleteComment(1L); // 통과
-		
-//		List<CreateProjectMemberDto> mlist = new ArrayList<CreateProjectMemberDto>();
-//		CreateProjectMemberDto mdto = new CreateProjectMemberDto(1L, 1, "p-leader");
-//		mlist.add(mdto);
-//		CreateProjectDto dto = new CreateProjectDto("MockMVC 테스트", mlist);
-//		testCreateProject(dto);
+		ProjectDetailSendTaskDto pdstdto = new ProjectDetailSendTaskDto();
+		pdstdto.setProjectId(1L);
+		pdstdto.setProjectinuserId(2L);
+		pdstdto.setTaskContent("testmockmvc");
+		pdstdto.setTaskDeadline(datetime.dateTime());
+		pdstdto.setUserId(2L);
+		testSendTask(pdstdto); // 통과
+
+	CommentWriteDto cwdto = new CommentWriteDto();
+		cwdto.setTaskId(1L);
+		cwdto.setUserId(2L);
+		cwdto.setCommentContent("HI");
+		testCommentWrite(cwdto); // 통과
+
+		CommentModifyDto cmdto = new CommentModifyDto();
+		cmdto.setCommentId(1L);
+		cmdto.setCommentContent("HI MOCK수정");
+		testCommentModify(1L, cmdto); // 통과
+
+		testDeleteComment(1L); // 통과
+
+		List<CreateProjectMemberDto> mlist = new ArrayList<CreateProjectMemberDto>();
+		CreateProjectMemberDto mdto = new CreateProjectMemberDto(1L, 1, "p-leader");
+		mlist.add(mdto);
+		CreateProjectDto dto = new CreateProjectDto("MockMVC 테스트", mlist);
+		testCreateProject(dto);*/
 	}
 }
