@@ -1,43 +1,50 @@
 package kr.mmgg.scp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import kr.mmgg.scp.config.oauth.PrincipalOauth2UserService;
+import kr.mmgg.scp.config.oauth2.CustomOauth2UserService;
 
+//https://ozofweird.tistory.com/entry/Spring-Boot-Spring-Boot-JWT-OAuth2-2
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 필터체인에 등록
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
 	@Autowired
-	private PrincipalOauth2UserService principalOauth2UserService;
+	private CustomOauth2UserService customOauth2UserService;
+
+	// 비밀번호 암호화 빈으로 등록
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().mvcMatchers("/static/files/**"); // files에 있는 모든 파일들은 시큐리티 적용을 무시한다.
+		web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // 정적 리소스들에 대해서 시큐리티 적용 무시
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable();
-		http.authorizeRequests()
-				.anyRequest() // 어떤 요청도 다 허용
-				.permitAll()
-				// .and()
-				// .formLogin() // 로그인페이지
-				// .loginPage("/login")
-				// .defaultSuccessUrl("/")
-				// .loginProcessingUrl("/login") // PrincipalDetailsService << 설정 되면 자동으로 낚아챔
-				// .and()
-				// .logout()
-				// .logoutSuccessUrl("/login")
+		http.csrf().disable().headers().frameOptions().disable()
 				.and()
-				.oauth2Login() // oauth2 로그인
-				.loginPage("/login")
+				.authorizeRequests()
+				.anyRequest()
+				.authenticated()
+				.and()
+				.logout().logoutSuccessUrl("/")
+				.and()
+				.oauth2Login()
 				.userInfoEndpoint()
-				.userService(principalOauth2UserService);
-		// .anyRequest().permitAll()
-		// .and()
-		// .formLogin()
-		// .loginPage("/login")
-		// .loginProcessingUrl("/login") // 시큐리티가 로그인을 낚아채는곳
-		// .defaultSuccessUrl("/") // 로그인성공시 돌아가는 주소
+				.userService(customOauth2UserService);
+
 	}
 }
