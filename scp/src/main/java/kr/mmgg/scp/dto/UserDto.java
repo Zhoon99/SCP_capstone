@@ -1,6 +1,7 @@
 package kr.mmgg.scp.dto;
 
 import kr.mmgg.scp.entity.User;
+import kr.mmgg.scp.util.Provider;
 import kr.mmgg.scp.util.Role;
 import lombok.*;
 
@@ -10,7 +11,7 @@ public class UserDto {
     private Long id;
     private String userNickname;
     private String userEmail;
-    private String userSnstype;
+    private Provider userSnstype;
     private Role userRole;
 
     public UserDto(User user) {

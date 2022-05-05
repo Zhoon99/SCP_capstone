@@ -10,15 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import kr.mmgg.scp.config.oauth2.CustomOauth2UserService;
-
 //https://ozofweird.tistory.com/entry/Spring-Boot-Spring-Boot-JWT-OAuth2-2
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 필터체인에 등록
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-	@Autowired
-	private CustomOauth2UserService customOauth2UserService;
 
 	// 비밀번호 암호화 빈으로 등록
 	@Bean
@@ -34,17 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().headers().frameOptions().disable()
-				.and()
-				.authorizeRequests()
-				.anyRequest()
-				.authenticated()
-				.and()
-				.logout().logoutSuccessUrl("/")
-				.and()
-				.oauth2Login()
-				.userInfoEndpoint()
-				.userService(customOauth2UserService);
 
 	}
 }

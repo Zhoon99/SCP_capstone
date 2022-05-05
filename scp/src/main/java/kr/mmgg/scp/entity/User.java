@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import kr.mmgg.scp.util.Provider;
 import kr.mmgg.scp.util.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,10 +36,14 @@ public class User {
     private String userNickname;
 
     @Column(length = 255)
-    private String userEmail;
+    private String userPassword;
 
     @Column(length = 255)
-    private String userSnstype;
+    private String userEmail;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 255)
+    private Provider userSnstype;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
@@ -49,11 +54,16 @@ public class User {
     private List<Teaminuser> teaminusers = new ArrayList<>();
 
     @Builder
-    public User(String userNickname, String userEmail, String userSnstype, Role userRole) {
+    public User(String userNickname, String userEmail, Provider userSnstype, Role userRole) {
         this.userNickname = userNickname;
         this.userEmail = userEmail;
         this.userSnstype = userSnstype;
         this.userRole = userRole;
+    }
+
+    public User update(String nickname) {
+        this.userNickname = nickname;
+        return this;
     }
 
     public String getRoleKey() {
