@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class HomeViewProjectDetailDto {
 	private Long taskId; // 할일 P 번호
+	private Long taskOwnerId;
 	private String taskOwner_string; // 할일 담당자
 	private String taskRequester_string; // 할일 요청자
 	private String taskContent; // 할일 내용

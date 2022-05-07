@@ -4,9 +4,11 @@ import lombok.Data;
 
 @Data
 public class HomeViewProjectDetailCommentListDto {
-	private Long commentId;
 	private Long taskId;
-	private String userName;
+//	private Long taskOwnerId;
+//	private String taskOwner_string;
+	private Long commentId;
+	private String commentNickname;
 	private String commentTime;
 	private String commentContent;
 }
