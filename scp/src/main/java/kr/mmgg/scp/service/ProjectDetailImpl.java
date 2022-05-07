@@ -179,7 +179,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 						dto.setTaskAccept(task.getTaskAccept());
 						dto.setTaskRequesttime(task.getTaskRequesttime());
 						dto.setTaskDeadline(task.getTaskDeadline());
-						dto.setCreatetime(task.getTaskCreatetime());
+						dto.setTaskCreatetime(task.getTaskCreatetime());
 						list.add(dto);
 					}
 				}

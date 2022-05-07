@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class StompMessageDto {
-    private Long senderId;
-    private String senderNickname;
-    private String content;
+    private Long chatinuserId;
+    private String chatinuserName;
+    private String messageContent;
+    private String messageTime;
 }
