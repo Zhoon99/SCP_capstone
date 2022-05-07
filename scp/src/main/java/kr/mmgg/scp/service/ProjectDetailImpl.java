@@ -60,7 +60,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 					dto.setProjectinuserId(plist.get(i).getProjectinuserId());
 					dto.setTaskId(plist.get(i).getTasks().get(j).getTaskId());
 					dto.setTaskContent(plist.get(i).getTasks().get(j).getTaskContent());
-					dto.setTaskOwner_String(projectinUserRepository.findById(plist.get(i).getProjectinuserId()).get().getUser().getUserNickname());
+					dto.setTaskOwner_string(projectinUserRepository.findById(plist.get(i).getProjectinuserId()).get().getUser().getUserNickname());
 					dto.setTaskRequester_string(projectinUserRepository.findById(plist.get(i).getTasks().get(j).getTaskRequester()).get().getUser().getUserNickname());;
 //					dto.setTaskOwner(plist.get(i).getTasks().get(j).getTaskOwner());
 					dto.setTaskRequester(plist.get(i).getTasks().get(j).getTaskRequester());
@@ -179,7 +179,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 						dto.setTaskAccept(task.getTaskAccept());
 						dto.setTaskRequesttime(task.getTaskRequesttime());
 						dto.setTaskDeadline(task.getTaskDeadline());
-						dto.setCreatetime(task.getTaskCreatetime());
+						dto.setTaskCreatetime(task.getTaskCreatetime());
 						list.add(dto);
 					}
 				}

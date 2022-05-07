@@ -5,16 +5,19 @@ import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateChatRoomDto;
 import kr.mmgg.scp.dto.request.ModifyChatRoomDto;
 import kr.mmgg.scp.dto.response.ChatroomDto;
+import kr.mmgg.scp.dto.response.StompMessageDto;
 import kr.mmgg.scp.dto.response.lookupRoomDto;
 import kr.mmgg.scp.entity.ChatinUser;
 import kr.mmgg.scp.entity.Chatroom;
 import kr.mmgg.scp.entity.Message;
 import kr.mmgg.scp.entity.Teaminuser;
+import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.repository.ChatinuserRepository;
 import kr.mmgg.scp.repository.ChatroomRepository;
 import kr.mmgg.scp.repository.MessageRepository;
 import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.MessageComparator;
+import kr.mmgg.scp.util.dateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +34,7 @@ public class StompServiceImpl implements StompService {
 	private final ChatinuserRepository chatinuserRepository;
 	private final ChatroomRepository chatroomRepository;
 	private final MessageRepository messageRepository;
+	private final UserService userService;
 
 	@Override
 	@Transactional
@@ -170,5 +174,23 @@ public class StompServiceImpl implements StompService {
 		ResultDto<?> rDto = new ResultDto<>();
 		rDto.makeResult(CustomStatusCode.DELETE_SUCCESS);
 		return rDto;
+	}
+
+	@Override
+	public StompMessageDto chatService(Long chatroomId, Long userId, String content) {
+		User user = userService.findByUserId(userId);
+	    ChatinUser chatinUser = chatinuserRepository.findByUserIdAndChatroomId(userId, chatroomId);
+	    dateTime datetime = new dateTime();
+	    StompMessageDto dto = new StompMessageDto();
+	    dto.setChatinuserId(chatinUser.getChatinuserId());
+	    dto.setChatinuserName(user.getUserNickname());
+	    dto.setMessageContent(content);
+	    dto.setMessageTime(datetime.dateTime());
+	    Message message = new Message();
+	    message.setChatinuserId(dto.getChatinuserId());
+	    message.setMessageContent(content);
+		message.setMessageTime(dto.getMessageTime());
+	    messageRepository.save(message);
+		return dto;
 	}
 }
