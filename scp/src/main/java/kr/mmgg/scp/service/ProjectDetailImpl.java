@@ -360,9 +360,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			comment = commentRepository.findByTaskId(taskId);
 			for (int i = 0; i < comment.size(); i++) {
 				hvpdclDto = new HomeViewProjectDetailCommentListDto();
-				hvpdclDto.setCommentId(comment.get(i).getTaskId());
 				hvpdclDto.setTaskId(comment.get(i).getTaskId());
-				hvpdclDto.setUserName(comment.get(i).getUser().getUserNickname());
+//				hvpdclDto.setCommentId(comment.get(i).getTaskId());
+				hvpdclDto.setCommentNickname(comment.get(i).getUser().getUserNickname());
+				hvpdclDto.setCommentId(comment.get(i).getUserId());
+//				hvpdclDto.setTaskOwnerId(comment.get(i).getTask().getProjectinuserId());
+//				hvpdclDto.setTaskOwner_string(comment.get(i).getTask().getProjectinuser().getUser().getUserNickname());
+//				hvpdclDto.setUserName(comment.get(i).getUser().getUserNickname());
 				hvpdclDto.setCommentTime(comment.get(i).getCommentTime());
 				hvpdclDto.setCommentContent(comment.get(i).getCommentContent());
 				hvpdclList.add(hvpdclDto);
@@ -374,6 +378,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		projectinuser =  projectinUserRepository.findById(task.getTaskRequester()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 		hvpdDto.setTaskId(task.getTaskId());
 		hvpdDto.setTaskContent(task.getTaskContent());
+		hvpdDto.setTaskOwnerId(task.getProjectinuserId());
 		hvpdDto.setTaskOwner_string(task.getProjectinuser().getUser().getUserNickname()); // 조인해서 데이터 가져올것
 		hvpdDto.setTaskRequester_string(projectinuser.getUser().getUserNickname()); // ##
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
