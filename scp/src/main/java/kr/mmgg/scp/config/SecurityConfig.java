@@ -4,21 +4,67 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import kr.mmgg.scp.security.CustomUserDetailsService;
+import kr.mmgg.scp.security.TokenAuthenticationFilter;
+import kr.mmgg.scp.security.oauth2.CustomOAuth2UserService;
+import kr.mmgg.scp.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import kr.mmgg.scp.security.oauth2.OAuth2AuthenticationFailureHandler;
+import kr.mmgg.scp.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import kr.mmgg.scp.util.Role;
+import lombok.RequiredArgsConstructor;
 
 //https://ozofweird.tistory.com/entry/Spring-Boot-Spring-Boot-JWT-OAuth2-2
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 필터체인에 등록
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true) // 인가 처리 옵션 설정
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	private final CustomUserDetailsService customUserDetailsService;
+
+	private final CustomOAuth2UserService customOAuth2UserService;
+
+	private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+	private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
 	// 비밀번호 암호화 빈으로 등록
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public TokenAuthenticationFilter tokenAuthenticationFilter() {
+		return new TokenAuthenticationFilter();
+	}
+
+	@Bean
+	public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+		return new HttpCookieOAuth2AuthorizationRequestRepository();
+	}
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
+	}
+
+	@Bean(BeanIds.AUTHENTICATION_MANAGER)
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
 	}
 
 	@Override
@@ -29,6 +75,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		// csrf 비활성화
+		http.csrf().disable();
+		http
+				// 토큰은 사용하기위해 sesseion 비활성화
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				// 로그인폼 비활성화
+				.formLogin().loginPage("/customlogin").permitAll()
+				.and()
+				.authorizeRequests()
+				.antMatchers("/", "/test").permitAll()
+				.antMatchers("/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+				.antMatchers("/auth/**", "/oauth2/**").permitAll()
+				.anyRequest().authenticated()
+				.and()
+				.oauth2Login()
+				.authorizationEndpoint()
+				// 클라이언트 처음 로그인 시도 URI
+				.baseUri("/oauth2/authorization")
+				.authorizationRequestRepository(cookieAuthorizationRequestRepository())
+				.and()
+				.userInfoEndpoint()
+				.userService(customOAuth2UserService)
+				.and()
+				.successHandler(oAuth2AuthenticationSuccessHandler)
+				.failureHandler(oAuth2AuthenticationFailureHandler)
+				.and()
+				.httpBasic();
+
+		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
 }

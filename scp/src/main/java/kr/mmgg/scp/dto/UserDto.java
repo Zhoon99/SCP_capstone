@@ -8,18 +8,14 @@ import lombok.*;
 @ToString
 @Data
 public class UserDto {
-    private Long id;
     private String userNickname;
     private String userEmail;
-    private Provider userSnstype;
-    private Role userRole;
+    private String userPassword;
 
     public UserDto(User user) {
-        this.id = user.getUserId();
         this.userNickname = user.getUserNickname();
         this.userEmail = user.getUserEmail();
-        this.userSnstype = user.getUserSnstype();
-        this.userRole = user.getUserRole();
+        this.userPassword = user.getUserPassword();
     }
 
 }

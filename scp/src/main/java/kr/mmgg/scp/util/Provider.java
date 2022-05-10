@@ -1,6 +1,12 @@
 package kr.mmgg.scp.util;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+
 public enum Provider {
-    local,
-    google
+    google,
+    github,
+    kakao
 }

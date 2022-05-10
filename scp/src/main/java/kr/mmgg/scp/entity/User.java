@@ -46,7 +46,7 @@ public class User {
     private Provider userSnstype;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private Role userRole;
 
     @JsonIgnore
@@ -54,11 +54,12 @@ public class User {
     private List<Teaminuser> teaminusers = new ArrayList<>();
 
     @Builder
-    public User(String userNickname, String userEmail, Provider userSnstype, Role userRole) {
+    public User(String userNickname, String userEmail, Provider userSnstype, Role userRole, String userPassword) {
         this.userNickname = userNickname;
         this.userEmail = userEmail;
         this.userSnstype = userSnstype;
         this.userRole = userRole;
+        this.userPassword = userPassword;
     }
 
     public User update(String nickname) {
@@ -67,6 +68,6 @@ public class User {
     }
 
     public String getRoleKey() {
-        return this.userRole.getKey();
+        return this.userRole.name();
     }
 }
