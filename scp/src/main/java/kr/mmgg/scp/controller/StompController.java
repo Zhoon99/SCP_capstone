@@ -1,14 +1,12 @@
 package kr.mmgg.scp.controller;
 
-import kr.mmgg.scp.dto.ChatinuserDto;
 import kr.mmgg.scp.dto.MessageDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateChatRoomDto;
 import kr.mmgg.scp.dto.request.ModifyChatRoomDto;
+import kr.mmgg.scp.dto.response.ChatroomDto;
 import kr.mmgg.scp.dto.response.UserToAddDto;
 import kr.mmgg.scp.dto.response.lookupRoomDto;
-import kr.mmgg.scp.dto.TeaminuserDto;
-import kr.mmgg.scp.dto.response.TeamToAddDto;
 import kr.mmgg.scp.service.StompService;
 import kr.mmgg.scp.service.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -30,10 +25,10 @@ import java.util.List;
 public class StompController {
     private final TeamService teamService;
     private final StompService stompService;
-
+    
     @Transactional
     @GetMapping(value = "/chat/{chatroomId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<List<MessageDto>> lookupChatroomMessages(@PathVariable Long chatroomId) {
+    public ResultDto<ChatroomDto> lookupChatroomMessages(@PathVariable Long chatroomId) {
         return stompService.lookupChatroomMessages(chatroomId);
     }
 
@@ -62,14 +57,15 @@ public class StompController {
     }
 
     // 채팅방 생성 및 수정 -> 이메일로 멤버검색
+    // TODO: 내자신 이메일도 보임 수정해야됨 즉 userId를 받아서 email검증과정을 거치고, 비교한뒤 내꺼는 제외시키기
     @GetMapping(value = "/lookupMember/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResultDto<List<UserToAddDto>> lookupMember(@PathVariable String email) {
         return teamService.getUsersByEmail(email);
     }
-
+    // 채팅방 나가기
     @Transactional
-    @PostMapping(value = "/exitChatroom", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<?> exitChatroom(@RequestBody ChatinuserDto chatinuserDto) {
-        return stompService.exitChatroom(chatinuserDto.getChatroomId(), chatinuserDto.getUserId());
+    @GetMapping(value = "/exitChatroom/{chatroomId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultDto<?> exitChatroom(@PathVariable Long chatroomId, @PathVariable Long userId) {
+        return stompService.exitChatroom(chatroomId, userId);
     }
 }

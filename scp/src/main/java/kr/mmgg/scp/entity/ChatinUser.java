@@ -37,5 +37,7 @@ public class ChatinUser {
 	
 	@Column(name = "chatroom_id")
 	private Long chatroomId;
-	
+  
+	private String chatinuserCommoncode;
+	private Integer chatinuserExit;
 }

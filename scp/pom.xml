@@ -11,6 +11,7 @@
 	<groupId>kr.mmgg</groupId>
 	<artifactId>scp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>scp</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -114,7 +115,7 @@
 		<dependency>
             <groupId>org.webjars</groupId>
             <artifactId>stomp-websocket</artifactId>
-            <version>2.3.3</version>
+            <version>2.3.3-1</version>
         </dependency>
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
 		<dependency>

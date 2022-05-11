@@ -1,4 +1,4 @@
-package kr.mmgg.scp.dto;
+package kr.mmgg.scp.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MessageDto {
-    private Long userId;
-    private String userNickname;
+public class StompMessageDto {
+    private Long chatinuserId;
+    private String chatinuserName;
     private String messageContent;
     private String messageTime;
 }

@@ -14,8 +14,9 @@ public interface ChatinuserRepository extends JpaRepository<ChatinUser, Long> {
 
     public List<ChatinUser> findByChatroomId(Long chatroomId);
 
-    public List<ChatinUser> findByUserId(Long userId);
+    public List<ChatinUser> findByUserIdAndChatinuserExit(Long userId, Integer flag);
 
-    public Optional<ChatinUser> findByChatroomIdAndUserId(@Param("chatroomId") Long chatroomId,
-            @Param("userId") Long userId);
+    public Optional<ChatinUser> findByChatroomIdAndUserId(Long chatroomId,Long userId);
+    
+    public ChatinUser findByUserIdAndChatroomId(Long userId, Long chatroomId);
 }
