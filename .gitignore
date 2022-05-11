@@ -28,3 +28,5 @@ bin/
 .idea/
 ### VS Code ###
 .vscode/
+
+**/*.properties

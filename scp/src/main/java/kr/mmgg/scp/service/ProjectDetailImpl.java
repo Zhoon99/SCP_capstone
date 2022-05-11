@@ -2,7 +2,11 @@ package kr.mmgg.scp.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
@@ -28,6 +32,7 @@ import kr.mmgg.scp.repository.UserRepository;
 import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
+import kr.mmgg.scp.util.Mailutils;
 import kr.mmgg.scp.util.dateTime;
 import lombok.AllArgsConstructor;
 
@@ -39,6 +44,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	private TaskRepository taskRepository;
 	private UserRepository userRepository;
 	private CommentRepository commentRepository;
+	private JavaMailSender javaMailSender;
 
 	// SCP-301 프로젝트 모든 할일
 	// 프로젝트안의 전체 할일 가져오기
@@ -204,30 +210,37 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	@Override
 	@Transactional
 	public ResultDto<?> sendTask(ProjectDetailSendTaskDto dto) {
-		Task task = new Task();
-		ProjectInUser projectinuser = new ProjectInUser();
-		projectinuser = projectinUserRepository.findByUserIdAndProjectId(dto.getUserId(), dto.getProjectId())
-				.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-		dateTime datetime = new dateTime();
-		task.setTaskId(null);
-		// task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname());
-		// // 받는 사람
-		task.setTaskRequester(projectinuser.getProjectinuserId()); // 보낸 사람
-		task.setProjectinuserId(dto.getProjectinuserId());
-		task.setTaskContent(dto.getTaskContent());
-		task.setTaskCreatetime(datetime.dateTime());
-		task.setTaskRequesttime(datetime.dateTime());
-		task.setTaskDeadline(dto.getTaskDeadline());
-		task.setTaskAccept(0);
-		task.setTaskComplete(0);
+		try {
+			Mailutils mailutils = new Mailutils(javaMailSender);
+			Task task = new Task();
+			ProjectInUser projectinuser = new ProjectInUser();
+			projectinuser = projectinUserRepository.findByUserIdAndProjectId(dto.getUserId(), dto.getProjectId())
+					.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+			dateTime datetime = new dateTime();
+			task.setTaskId(null);
+			// task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname());
+			// // 받는 사람
+			task.setTaskRequester(projectinuser.getProjectinuserId()); // 보낸 사람
+			task.setProjectinuserId(dto.getProjectinuserId());
+			task.setTaskContent(dto.getTaskContent());
+			task.setTaskCreatetime(datetime.dateTime());
+			task.setTaskRequesttime(datetime.dateTime());
+			task.setTaskDeadline(dto.getTaskDeadline());
+			task.setTaskAccept(0);
+			task.setTaskComplete(0);
 
-		if (taskRepository.save(task) == null) {
-			// TODO: 에러 핸들러 만들기
-			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
-		} else {
-			ResultDto<?> rDto = new ResultDto<>();
-			return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
+			if (taskRepository.save(task) == null) {
+				throw new CustomException(ErrorCode.TASK_NOT_FOUND);
+			} else {
+				ResultDto<?> rDto = new ResultDto<>();
+				return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
+			}
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		// 파일 에러 만들기
+		throw new CustomException(ErrorCode.PAGE_NOT_FOUND);
 	}
 
 	// SCP-305 프로젝트 할일 요청시 프로젝트 안 사람들 불러오기
