@@ -12,7 +12,7 @@ public class RequestTaskDto {
 	private String taskRequester_string;
 	private Integer taskComplete;
 	private Integer taskAccept;
-	
+
 	private String taskRequesttime;
 	private String taskDeadline;
 	private String taskCreatetime;

@@ -1,4 +1,5 @@
 package kr.mmgg.scp.dto.response;
+
 import lombok.Data;
 
 @Data
@@ -11,7 +12,7 @@ public class ProjectDetailReceiveTaskDto {
 	private String taskRequester_string;
 	private Integer taskComplete;
 	private Integer taskAccept;
-	
+
 	private String taskRequesttime;
 	private String taskDeadline;
 	private String taskCreatetime;
