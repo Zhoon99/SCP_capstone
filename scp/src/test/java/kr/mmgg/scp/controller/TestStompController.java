@@ -77,16 +77,16 @@ public class TestStompController {
 	@Test
 	void alltest() throws Exception {
 		//GET
-//		testLookupChatroomMessages(1L);
-//		testLookupRoom(1L);
+		testLookupChatroomMessages(1L);
+		//testLookupRoom(1L);
 //		testLookupMember("test");
-//		testExitchatRoom(7L, 3L);
-//		testDeleteRoom(7L);
+//		testExitchatRoom(6L, 5L);
+//		testDeleteRoom(6L);
 		//POST
 		//createRoom
 //		CreateChatRoomDto ccrDto = new CreateChatRoomDto();
 //		ccrDto.setUserId(1L);
-//		ccrDto.setChatroomName("4번째");
+//		ccrDto.setChatroomName("MockMVC 테스트");
 //		List<CreateChatRoomMemberDto> ccrmDtoList = new ArrayList<CreateChatRoomMemberDto>();
 //		CreateChatRoomMemberDto ccrmDto = new CreateChatRoomMemberDto();
 //		ccrmDto.setUserId(2L);
@@ -98,7 +98,7 @@ public class TestStompController {
 //		testCreateRoom(ccrDto);
 		//modifyRoom
 //		ModifyChatRoomDto mcrDto = new ModifyChatRoomDto();
-//		mcrDto.setChatroomName("4번째인척하는 4번째였습니다.");
+//		mcrDto.setChatroomName("6번째인척하는 6번째였습니다.");
 //		List<ModifyChatRoomMemberDto> mcrmDtoList = new ArrayList<ModifyChatRoomMemberDto>();
 //		ModifyChatRoomMemberDto mcrmDto = new ModifyChatRoomMemberDto();
 //		mcrmDto.setUserId(4L);
@@ -107,6 +107,6 @@ public class TestStompController {
 //		mcrmDto.setUserId(5L);
 //		mcrmDtoList.add(mcrmDto);
 //		mcrDto.setChatroomMember(mcrmDtoList);
-//		testModifyRoom(4L, mcrDto);
+//		testModifyRoom(6L, mcrDto);
 	}
 }

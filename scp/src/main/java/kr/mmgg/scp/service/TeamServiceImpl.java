@@ -125,8 +125,10 @@ public class TeamServiceImpl implements TeamService {
      */
     @Override
     @Transactional
-    public ResultDto<List<UserToAddDto>> getUsersByEmail(String search) {
+    public ResultDto<List<UserToAddDto>> getUsersByEmail(Long userId, String search) {
+        User user = userRepository.findByUserId(userId).get();
         List<User> usersIncludingSearch = userRepository.findByUserEmailStartingWith(search);
+        usersIncludingSearch.remove(user);
 
         if (usersIncludingSearch.isEmpty()) {
             throw new IllegalStateException(search + "검색어에 해당하는 유저가 없습니다.");

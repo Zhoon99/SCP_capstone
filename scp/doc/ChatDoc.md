@@ -121,7 +121,7 @@
 	}
 }
 ```
-# GET /lookupMember/{email}
+# GET /lookupMember/{userId}/{email}
 ## 이메일로 멤버 조회
 ### output
 ``` json

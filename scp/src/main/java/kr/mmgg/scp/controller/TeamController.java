@@ -44,9 +44,9 @@ public class TeamController {
 
     //SCP-201 AddTeamMember 이메일 검색 기능
     @Transactional
-    @GetMapping(value = "/getUsersByEmail/{search}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultDto<List<UserToAddDto>> getUsersByEmail(@PathVariable String search) {
-        return teamService.getUsersByEmail(search);
+    @GetMapping(value = "/getUsersByEmail/{userId}/{search}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultDto<List<UserToAddDto>> getUsersByEmail(@PathVariable Long userId, @PathVariable String search) {
+        return teamService.getUsersByEmail(userId, search);
     }
 
     //SCP-201 팀 맴버 삭제

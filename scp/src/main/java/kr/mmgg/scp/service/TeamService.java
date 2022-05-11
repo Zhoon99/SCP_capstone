@@ -27,7 +27,7 @@ public interface TeamService {
 
     public ResultDto<List<TeamMembersDto>> teamToAddMembers(Long teamId);
 
-    public ResultDto<List<UserToAddDto>> getUsersByEmail(String search);
+    public ResultDto<List<UserToAddDto>> getUsersByEmail(Long userId, String search);
 
     public ResultDto<?> deleteTeamMember(Long teamId, Long userId);
 
