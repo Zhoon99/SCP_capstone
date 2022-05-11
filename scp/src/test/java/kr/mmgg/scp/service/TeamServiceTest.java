@@ -1,3 +1,4 @@
+
 package kr.mmgg.scp.service;
 
 import kr.mmgg.scp.dto.MessageDto;
@@ -94,22 +95,24 @@ public class TeamServiceTest {
 
     @Test
     public void 테스트1() throws Exception {
-        /*List<Teaminuser> userTeams = teaminuserRepository.findByUserId(3L);
-
-        if (userTeams.isEmpty()) {
-            throw new IllegalStateException("해당 유저의 팀 정보가 없습니다.");
-        }
-
-        List<TeamToAddDto> teamToAddDtoList = new ArrayList<>();
-        for(Teaminuser i : userTeams) {
-            log.info(i.toString());
-            TeamToAddDto teamToAddDto = TeamToAddDto.builder()
-                    .teamId(i.getTeamId())
-                    .teamName(i.getTeam().getTeamName())
-                    .build();
-            teamToAddDtoList.add(teamToAddDto);
-        }
-        log.info(teamToAddDtoList.toString());*/
+        /*
+         * List<Teaminuser> userTeams = teaminuserRepository.findByUserId(3L);
+         * 
+         * if (userTeams.isEmpty()) {
+         * throw new IllegalStateException("해당 유저의 팀 정보가 없습니다.");
+         * }
+         * 
+         * List<TeamToAddDto> teamToAddDtoList = new ArrayList<>();
+         * for(Teaminuser i : userTeams) {
+         * log.info(i.toString());
+         * TeamToAddDto teamToAddDto = TeamToAddDto.builder()
+         * .teamId(i.getTeamId())
+         * .teamName(i.getTeam().getTeamName())
+         * .build();
+         * teamToAddDtoList.add(teamToAddDto);
+         * }
+         * log.info(teamToAddDtoList.toString());
+         */
 
         List<Teaminuser> teaminusers = teaminuserRepository.findByTeamId(1L);
 

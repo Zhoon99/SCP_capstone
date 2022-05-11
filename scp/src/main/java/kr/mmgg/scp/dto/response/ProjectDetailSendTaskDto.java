@@ -1,4 +1,5 @@
 package kr.mmgg.scp.dto.response;
+
 import lombok.Data;
 
 @Data

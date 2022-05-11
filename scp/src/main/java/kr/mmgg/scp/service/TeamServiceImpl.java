@@ -1,3 +1,4 @@
+
 package kr.mmgg.scp.service;
 
 import kr.mmgg.scp.dto.ResultDto;
@@ -135,7 +136,7 @@ public class TeamServiceImpl implements TeamService {
         }
 
         List<UserToAddDto> userToAddDtoList = new ArrayList<>();
-        for(User i : usersIncludingSearch) {
+        for (User i : usersIncludingSearch) {
             UserToAddDto userToAddDto = UserToAddDto.builder()
                     .userId(i.getUserId())
                     .userNickname(i.getUserNickname())
@@ -219,9 +220,9 @@ public class TeamServiceImpl implements TeamService {
 
         List<TeamMembersDto> newMembers = new ArrayList<>();
 
-        for(TeamMembersDto i : newTeams) {
-            for(Teaminuser j : existTeams) {
-                if(i.getUserId() == j.getUserId()) { //업데이트
+        for (TeamMembersDto i : newTeams) {
+            for (Teaminuser j : existTeams) {
+                if (i.getUserId() == j.getUserId()) { // 업데이트
                     Teaminuser teaminuser = Teaminuser.builder()
                             .teaminuserId(j.getTeaminuserId())
                             .userId(i.getUserId())
@@ -233,7 +234,7 @@ public class TeamServiceImpl implements TeamService {
                     newMembers.add(i);
                 }
             }
-            if(!newMembers.contains(i)) { //추가
+            if (!newMembers.contains(i)) { // 추가
                 Teaminuser teaminuser = Teaminuser.builder()
                         .userId(i.getUserId())
                         .teamId(teamDetailDto.getTeamId())
