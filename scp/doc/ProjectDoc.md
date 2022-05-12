@@ -131,7 +131,7 @@
 		"taskList":
 		[
 			{
-				"taskId": Long
+				"taskId": Long,
 				"projectinuserId" : Long,
 				"taskOwner_string" : String,
 				"taskContent": String,
@@ -144,7 +144,7 @@
 				"taskCreatetime": datetime
 			},
 			{
-				"taskId": Long
+				"taskId": Long,
 				"projectinuserId" : Long,
 				"taskOwner_string" : String,
 				"taskContent": String,
