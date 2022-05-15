@@ -94,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.oauth2Login()
 				.authorizationEndpoint()
 				// 클라이언트 처음 로그인 시도 URI
-				.baseUri("/oauth2/authorization")
+//				.baseUri("/oauth2/authorization")
 				.authorizationRequestRepository(cookieAuthorizationRequestRepository())
 				.and()
 				.userInfoEndpoint()
