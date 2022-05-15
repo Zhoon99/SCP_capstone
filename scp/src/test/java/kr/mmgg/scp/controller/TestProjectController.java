@@ -39,7 +39,6 @@ public class TestProjectController {
 	@Autowired
 	private ProjectinUserRepository projectinUserRepository;
 	void testCreateProject(CreateProjectDto dto) throws Exception{
-		
 		String param = objectMapper.writeValueAsString(dto);
 		mock.perform(post("/createproject").content(param).contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
