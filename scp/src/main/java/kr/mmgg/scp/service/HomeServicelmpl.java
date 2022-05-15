@@ -77,7 +77,7 @@ public class HomeServicelmpl implements HomeService {
 		Project project = new Project();
 		// 프로젝트 생성
 		project.setProjectName(dto.getTitle());
-		Project newProject = projectRepository.save(project);
+		
 
 		// 채팅방 생성
 		Chatroom chatroom = new Chatroom();
@@ -86,7 +86,9 @@ public class HomeServicelmpl implements HomeService {
 		Chatroom save = chatroomRepository.save(chatroom);
 		List<ChatinUser> ciuList = new ArrayList<>();
 		ChatinUser chatinuser;
-
+		project.setChatroomId(save.getChatroomId());
+		Project newProject = projectRepository.save(project);
+		
 		// 프로젝트사람 생성
 		for (int i = 0; i < dto.getMember().size(); i++) {
 			ProjectInUser projectInUser = new ProjectInUser();
