@@ -179,7 +179,8 @@ public class StompServiceImpl implements StompService {
 	@Override
 	public StompMessageDto chatService(Long chatroomId, Long userId, String content) {
 		User user = userService.findByUserId(userId);
-	    ChatinUser chatinUser = chatinuserRepository.findByUserIdAndChatroomId(userId, chatroomId);
+	    ChatinUser chatinUser = chatinuserRepository.findByUserIdAndChatroomId(userId, chatroomId)
+				.orElseThrow(() -> new IllegalStateException(chatroomId + "채팅방이나 " + userId + "유저에 해당하는 정보가 없습니다."));
 	    dateTime datetime = new dateTime();
 	    StompMessageDto dto = new StompMessageDto();
 	    dto.setChatinuserId(chatinUser.getChatinuserId());
