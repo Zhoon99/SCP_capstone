@@ -46,6 +46,11 @@ public class ProjectController {
         return rDto;
     }
 
+    @PostMapping(value = "/modifyproject")
+    public ResultDto<?> modifyProject(@RequestBody UpdateProjectModify modify) {
+        return homeServiceImpl.modifyProject(modify);
+    }
+
     @PatchMapping(value = "/updateproject/deletemember/{projectinuserId}")
     public ResultDto<?> updateProjectDeletemember(@PathVariable Long projectinuserId) {
         ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
