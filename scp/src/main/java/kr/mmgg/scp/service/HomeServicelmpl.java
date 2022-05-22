@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.request.CreateChatRoomDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.request.UpdateProjectModify;
 import kr.mmgg.scp.dto.request.UpdateProjectModifyMember;
@@ -14,6 +15,8 @@ import kr.mmgg.scp.dto.response.HomeViewDto;
 import kr.mmgg.scp.dto.response.TeamDetailDto;
 import kr.mmgg.scp.dto.response.TeamMembersDto;
 import kr.mmgg.scp.entity.*;
+import kr.mmgg.scp.repository.ChatinuserRepository;
+import kr.mmgg.scp.repository.ChatroomRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,8 @@ import org.springframework.util.StringUtils;
 public class HomeServicelmpl implements HomeService {
 	private ProjectinUserRepository projectinUserRepository;
 	private ProjectRepository projectRepository;
+	private ChatroomRepository chatroomRepository;
+	private ChatinuserRepository chatinuserRepository;
 
 	// 홈화면 DTO
 	@Transactional
@@ -72,7 +77,18 @@ public class HomeServicelmpl implements HomeService {
 		Project project = new Project();
 		// 프로젝트 생성
 		project.setProjectName(dto.getTitle());
+		
+
+		// 채팅방 생성
+		Chatroom chatroom = new Chatroom();
+		chatroom.setChatroomName(dto.getTitle());
+		chatroom.setChatroomCommoncode("c-personal");
+		Chatroom save = chatroomRepository.save(chatroom);
+		List<ChatinUser> ciuList = new ArrayList<>();
+		ChatinUser chatinuser;
+		project.setChatroomId(save.getChatroomId());
 		Project newProject = projectRepository.save(project);
+		
 		// 프로젝트사람 생성
 		for (int i = 0; i < dto.getMember().size(); i++) {
 			ProjectInUser projectInUser = new ProjectInUser();
@@ -81,8 +97,26 @@ public class HomeServicelmpl implements HomeService {
 			projectInUser.setProjectinuserMaker(dto.getMember().get(i).getProjectinuserMaker());
 			projectInUser.setProjectinuserCommoncode(dto.getMember().get(i).getProjectinuserCommoncode());
 			piuList.add(projectInUser);
+
+			chatinuser = new ChatinUser();
+			chatinuser.setUserId(dto.getMember().get(i).getUserId());
+			chatinuser.setChatroomId(save.getChatroomId());
+			chatinuser.setChatinuserExit(0);
+			if(dto.getMember().get(i).getProjectinuserCommoncode().equals("p-leader")) {
+				chatinuser.setChatinuserCommoncode("c-leader");
+			} else {
+				chatinuser.setChatinuserCommoncode("c-member");
+			}
+			ciuList.add(chatinuser);
 		}
 		projectinUserRepository.saveAll(piuList);
+
+		if (dto.getMember().size() > 1) {
+			save = chatroomRepository.findByChatroomId(save.getChatroomId());
+			save.setChatroomCommoncode("c-group");
+		}
+		chatinuserRepository.saveAll(ciuList);
+
 		ResultDto<List<ProjectInUser>> rDto = new ResultDto<List<ProjectInUser>>();
 		return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
 	}

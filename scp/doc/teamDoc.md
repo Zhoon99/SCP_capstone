@@ -179,7 +179,7 @@
 }
 ```
 
-## Get "/team/getUsersByEmail/{search}"
+## Get "/team/getUsersByEmail/{userId}/{search}"
 
 ### • output
 
