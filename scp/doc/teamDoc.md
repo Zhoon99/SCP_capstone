@@ -240,13 +240,13 @@
             "userId": Long,
             "userNickname": "String",
             "teaminuserCommoncode": "String",
-            "teaminuserMaker": Integer
+            "teaminuserMaker": null
         },
         {
             "userId": Long,
             "userNickname": "String",
             "teaminuserCommoncode": "String",
-            "teaminuserMaker": Integer
+            "teaminuserMaker": null
         }
     ]
 }
