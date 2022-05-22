@@ -183,12 +183,12 @@ public class StompServiceImpl implements StompService {
 				.orElseThrow(() -> new IllegalStateException(chatroomId + "채팅방이나 " + userId + "유저에 해당하는 정보가 없습니다."));
 	    dateTime datetime = new dateTime();
 	    StompMessageDto dto = new StompMessageDto();
-	    dto.setChatinuserId(chatinUser.getChatinuserId());
-	    dto.setChatinuserName(user.getUserNickname());
+	    dto.setUserId(chatinUser.getUser().getUserId());
+	    dto.setUserNickname(chatinUser.getUser().getUserNickname());
 	    dto.setMessageContent(content);
 	    dto.setMessageTime(datetime.dateTime());
 	    Message message = new Message();
-	    message.setChatinuserId(dto.getChatinuserId());
+	    message.setChatinuserId(chatinUser.getChatinuserId());
 	    message.setMessageContent(content);
 		message.setMessageTime(dto.getMessageTime());
 	    messageRepository.save(message);
