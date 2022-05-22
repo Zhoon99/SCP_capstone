@@ -229,6 +229,13 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			task.setTaskAccept(0);
 			task.setTaskComplete(0);
 
+			String toEmail = projectinUserRepository.findById(dto.getProjectinuserId()).get().getUser().getUserEmail();
+			mailutils.setFrom("chjh827@gmail.com");
+			mailutils.setTo(toEmail);
+			mailutils.setSubject("할일 요청 드립니다.");
+			mailutils.setText(dto.getTaskContent(), true);
+
+			mailutils.send();
 			if (taskRepository.save(task) == null) {
 				throw new CustomException(ErrorCode.TASK_NOT_FOUND);
 			} else {
