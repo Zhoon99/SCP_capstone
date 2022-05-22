@@ -46,16 +46,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+	// 토큰 필터 빈으로 등록
 	@Bean
 	public TokenAuthenticationFilter tokenAuthenticationFilter() {
 		return new TokenAuthenticationFilter();
 	}
 
+	// 구글 로그인에서 받아온 쿠키 저장
 	@Bean
 	public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
 		return new HttpCookieOAuth2AuthorizationRequestRepository();
 	}
 
+	// 토큰으로 인증한 유저 정보 가져오기 위한 설정
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
@@ -88,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/", "/test").permitAll()
 				.antMatchers("/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-				.antMatchers("/auth/**", "/oauth2/**").permitAll()
+				.antMatchers("/auth/**", "/oauth2/**", "/topic/**", "/app/**", "/chat/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.oauth2Login()
@@ -104,7 +107,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.failureHandler(oAuth2AuthenticationFailureHandler)
 				.and()
 				.httpBasic();
-
+		// UsernamePasswordAuthenticationFilter 필터가 작동하기 전에 먼저
+		// tokenAuthenticationFilter이 작동하도록 설정
 		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
