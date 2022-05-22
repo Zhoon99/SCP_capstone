@@ -4,6 +4,8 @@ package kr.mmgg.scp.service;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.TeamDto;
 import kr.mmgg.scp.dto.request.CreateChatRoomDto;
+import kr.mmgg.scp.dto.request.UpdateProjectModify;
+import kr.mmgg.scp.dto.request.UpdateProjectModifyMember;
 import kr.mmgg.scp.dto.response.*;
 import kr.mmgg.scp.entity.*;
 import kr.mmgg.scp.repository.*;
@@ -231,14 +233,22 @@ public class TeamServiceImpl implements TeamService {
             throw new IllegalStateException("수정할 팀 정보를 가져오지 못했습니다.");
         }
 
+        Long chatroomId = teamRepository.findByTeamId(teamDetailDto.getTeamId()).get().getChatroomId();
+
         Team team = Team.builder()
                 .teamId(teamDetailDto.getTeamId())
                 .teamName(teamDetailDto.getTeamName())
+                .chatroomId(chatroomId)
                 .build();
         teamRepository.save(team);
 
         List<TeamMembersDto> newTeams = teamDetailDto.getTeamMembers();
         List<Teaminuser> existTeams = teaminuserRepository.findByTeamId(teamDetailDto.getTeamId());
+
+        Chatroom chatroom = chatroomRepository.findByChatroomId(chatroomId);
+        chatroom.setChatroomName(teamDetailDto.getTeamName());
+        List<ChatinUser> chatinuserList = new ArrayList<>();
+        ChatinUser chatinuser;
 
         if (existTeams.isEmpty()) {
             throw new CustomException(ErrorCode.TEAM_NOT_FOUND);
@@ -254,10 +264,17 @@ public class TeamServiceImpl implements TeamService {
                             .userId(i.getUserId())
                             .teamId(teamDetailDto.getTeamId())
                             .teaminuserCommoncode(i.getTeaminuserCommoncode())
-                            .teaminuserMaker(i.getTeaminuserMaker())
+                            .teaminuserMaker(j.getTeaminuserMaker())
                             .build();
                     teaminuserRepository.save(teaminuser);
                     newMembers.add(i);
+
+                    ChatinUser existChatinuser = chatinuserRepository.findByChatroomIdAndUserId(chatroomId, i.getUserId()).get();
+                    if(i.getTeaminuserCommoncode().equals("t-leader")) {
+                        existChatinuser.setChatinuserCommoncode("c-leader");
+                    } else {
+                        existChatinuser.setChatinuserCommoncode("c-member");
+                    }
                 }
             }
             if (!newMembers.contains(i)) { // 추가
@@ -265,11 +282,30 @@ public class TeamServiceImpl implements TeamService {
                         .userId(i.getUserId())
                         .teamId(teamDetailDto.getTeamId())
                         .teaminuserCommoncode(i.getTeaminuserCommoncode())
-                        .teaminuserMaker(i.getTeaminuserMaker())
+                        .teaminuserMaker(0)
                         .build();
                 teaminuserRepository.save(teaminuser);
+
+                chatinuser = new ChatinUser();
+                chatinuser.setUserId(i.getUserId());
+                chatinuser.setChatroomId(chatroomId);
+                chatinuser.setChatinuserExit(0);
+                if(i.getTeaminuserCommoncode().equals("t-leader")) {
+                    chatinuser.setChatinuserCommoncode("c-leader");
+                } else {
+                    chatinuser.setChatinuserCommoncode("c-member");
+                }
+                chatinuserList.add(chatinuser);
             }
         }
+        chatinuserRepository.saveAll(chatinuserList);
+        if (chatinuserRepository.findByChatroomId(chatroomId).size() > 2) {
+            chatroom.setChatroomCommoncode("c-group");
+        } else {
+            chatroom.setChatroomCommoncode("c-personal");
+        }
+        chatroomRepository.save(chatroom);
+
         ResultDto<?> rDto = new ResultDto<>();
         rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
         return rDto;
