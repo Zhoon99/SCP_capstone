@@ -3,13 +3,12 @@ package kr.mmgg.scp.service;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.TeamDto;
+import kr.mmgg.scp.dto.request.CreateChatRoomDto;
+import kr.mmgg.scp.dto.request.UpdateProjectModify;
+import kr.mmgg.scp.dto.request.UpdateProjectModifyMember;
 import kr.mmgg.scp.dto.response.*;
-import kr.mmgg.scp.entity.Team;
-import kr.mmgg.scp.entity.Teaminuser;
-import kr.mmgg.scp.entity.User;
-import kr.mmgg.scp.repository.TeamRepository;
-import kr.mmgg.scp.repository.TeaminuserRepository;
-import kr.mmgg.scp.repository.UserRepository;
+import kr.mmgg.scp.entity.*;
+import kr.mmgg.scp.repository.*;
 import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
@@ -27,6 +26,8 @@ public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
     private final TeaminuserRepository teaminuserRepository;
     private final UserRepository userRepository;
+    private final ChatroomRepository chatroomRepository;
+    private final ChatinuserRepository chatinuserRepository;
 
     /**
      * 팀 홈 정보 정리해서 반환
@@ -126,8 +127,10 @@ public class TeamServiceImpl implements TeamService {
      */
     @Override
     @Transactional
-    public ResultDto<List<UserToAddDto>> getUsersByEmail(String search) {
+    public ResultDto<List<UserToAddDto>> getUsersByEmail(Long userId, String search) {
+        User user = userRepository.findByUserId(userId).get();
         List<User> usersIncludingSearch = userRepository.findByUserEmailStartingWith(search);
+        usersIncludingSearch.remove(user);
 
         if (usersIncludingSearch.isEmpty()) {
             throw new IllegalStateException(search + "검색어에 해당하는 유저가 없습니다.");
@@ -147,6 +150,9 @@ public class TeamServiceImpl implements TeamService {
         return rDto;
     }
 
+    /**
+     * 팀 나가기
+     */
     @Override
     @Transactional
     public ResultDto<?> deleteTeamMember(Long teamId, Long userId) {
@@ -174,6 +180,13 @@ public class TeamServiceImpl implements TeamService {
                 .build();
         Team newTeam = teamRepository.save(team);
 
+        Chatroom chatroom = new Chatroom();
+        chatroom.setChatroomName(teamDetailDto.getTeamName());
+        chatroom.setChatroomCommoncode("c-personal");
+        Chatroom save = chatroomRepository.save(chatroom);
+        List<ChatinUser> ciuList = new ArrayList<>();
+        ChatinUser chatinuser;
+
         List<Teaminuser> teaminuserList = new ArrayList<>();
         List<TeamMembersDto> teamMembersDtoList = teamDetailDto.getTeamMembers();
         for (TeamMembersDto i : teamMembersDtoList) {
@@ -184,8 +197,25 @@ public class TeamServiceImpl implements TeamService {
                     .teaminuserMaker(i.getTeaminuserMaker())
                     .build();
             teaminuserList.add(teaminuser);
+
+            chatinuser = new ChatinUser();
+            chatinuser.setUserId(teamDetailDto.getTeamMembers().get(teamMembersDtoList.indexOf(i)).getUserId());
+            chatinuser.setChatroomId(save.getChatroomId());
+            chatinuser.setChatinuserExit(0);
+            if(i.getTeaminuserCommoncode().equals("t-leader")) {
+                chatinuser.setChatinuserCommoncode("c-leader");
+            } else {
+                chatinuser.setChatinuserCommoncode("c-member");
+            }
+            ciuList.add(chatinuser);
         }
         teaminuserRepository.saveAll(teaminuserList);
+
+        if (teamDetailDto.getTeamMembers().size() > 1) {
+            save = chatroomRepository.findByChatroomId(save.getChatroomId());
+            save.setChatroomCommoncode("c-group");
+        }
+        chatinuserRepository.saveAll(ciuList);
 
         ResultDto<?> rDto = new ResultDto<>();
         rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
@@ -203,14 +233,22 @@ public class TeamServiceImpl implements TeamService {
             throw new IllegalStateException("수정할 팀 정보를 가져오지 못했습니다.");
         }
 
+        Long chatroomId = teamRepository.findByTeamId(teamDetailDto.getTeamId()).get().getChatroomId();
+
         Team team = Team.builder()
                 .teamId(teamDetailDto.getTeamId())
                 .teamName(teamDetailDto.getTeamName())
+                .chatroomId(chatroomId)
                 .build();
         teamRepository.save(team);
 
         List<TeamMembersDto> newTeams = teamDetailDto.getTeamMembers();
         List<Teaminuser> existTeams = teaminuserRepository.findByTeamId(teamDetailDto.getTeamId());
+
+        Chatroom chatroom = chatroomRepository.findByChatroomId(chatroomId);
+        chatroom.setChatroomName(teamDetailDto.getTeamName());
+        List<ChatinUser> chatinuserList = new ArrayList<>();
+        ChatinUser chatinuser;
 
         if (existTeams.isEmpty()) {
             throw new CustomException(ErrorCode.TEAM_NOT_FOUND);
@@ -226,10 +264,17 @@ public class TeamServiceImpl implements TeamService {
                             .userId(i.getUserId())
                             .teamId(teamDetailDto.getTeamId())
                             .teaminuserCommoncode(i.getTeaminuserCommoncode())
-                            .teaminuserMaker(i.getTeaminuserMaker())
+                            .teaminuserMaker(j.getTeaminuserMaker())
                             .build();
                     teaminuserRepository.save(teaminuser);
                     newMembers.add(i);
+
+                    ChatinUser existChatinuser = chatinuserRepository.findByChatroomIdAndUserId(chatroomId, i.getUserId()).get();
+                    if(i.getTeaminuserCommoncode().equals("t-leader")) {
+                        existChatinuser.setChatinuserCommoncode("c-leader");
+                    } else {
+                        existChatinuser.setChatinuserCommoncode("c-member");
+                    }
                 }
             }
             if (!newMembers.contains(i)) { // 추가
@@ -237,16 +282,38 @@ public class TeamServiceImpl implements TeamService {
                         .userId(i.getUserId())
                         .teamId(teamDetailDto.getTeamId())
                         .teaminuserCommoncode(i.getTeaminuserCommoncode())
-                        .teaminuserMaker(i.getTeaminuserMaker())
+                        .teaminuserMaker(0)
                         .build();
                 teaminuserRepository.save(teaminuser);
+
+                chatinuser = new ChatinUser();
+                chatinuser.setUserId(i.getUserId());
+                chatinuser.setChatroomId(chatroomId);
+                chatinuser.setChatinuserExit(0);
+                if(i.getTeaminuserCommoncode().equals("t-leader")) {
+                    chatinuser.setChatinuserCommoncode("c-leader");
+                } else {
+                    chatinuser.setChatinuserCommoncode("c-member");
+                }
+                chatinuserList.add(chatinuser);
             }
         }
+        chatinuserRepository.saveAll(chatinuserList);
+        if (chatinuserRepository.findByChatroomId(chatroomId).size() > 2) {
+            chatroom.setChatroomCommoncode("c-group");
+        } else {
+            chatroom.setChatroomCommoncode("c-personal");
+        }
+        chatroomRepository.save(chatroom);
+
         ResultDto<?> rDto = new ResultDto<>();
         rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
         return rDto;
     }
 
+    /**
+     * 팀 삭제
+     */
     @Override
     public ResultDto<?> remove(Long teamId) {
         teaminuserRepository.deleteByTeamId(teamId);

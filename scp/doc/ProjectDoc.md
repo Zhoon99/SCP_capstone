@@ -131,7 +131,7 @@
 		"taskList":
 		[
 			{
-				"taskId": Long
+				"taskId": Long,
 				"projectinuserId" : Long,
 				"taskOwner_string" : String,
 				"taskContent": String,
@@ -144,7 +144,7 @@
 				"taskCreatetime": datetime
 			},
 			{
-				"taskId": Long
+				"taskId": Long,
 				"projectinuserId" : Long,
 				"taskOwner_string" : String,
 				"taskContent": String,
@@ -303,7 +303,7 @@
 ```
 # GET /taskDetail/{taskId}
 ## SCP-306 할 일 상세
-### output 2022-04-26 수정
+### output 5월 10일 수정
 ``` JSON
 {
 	"status": 200,
@@ -311,22 +311,23 @@
 	"result":{
 			"taskDetail" : {
 				"taskId" : Long,
+				"taskOwnerId" : Long,
 				"taskOwner_string" : String,
 				"taskRequester_string" : String,
 				"taskContent" : String,
 				"taskDeadline" : String,
 				"commentList" : [
 						{
-							"commentId" : Long,
 							"taskId" : Long,
-							"userName" : String,
+							"commentId" : Long,
+							"commentNickname" : String,
 							"commentTime" : DateTime(String),
 							"commentContent" : String
 						},
 						{
-							"commentId" : Long,
 							"taskId" : Long,
-							"userName" : String,
+							"commentId" : Long,
+							"commentNickname" : String,
 							"commentTime" : DateTime(String),
 							"commentContent" : String
 						}

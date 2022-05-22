@@ -1,11 +1,9 @@
 package kr.mmgg.scp.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.request.CreateChatRoomDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.request.UpdateProjectModify;
 import kr.mmgg.scp.dto.request.UpdateProjectModifyMember;
@@ -14,6 +12,8 @@ import kr.mmgg.scp.dto.response.HomeViewDto;
 import kr.mmgg.scp.dto.response.TeamDetailDto;
 import kr.mmgg.scp.dto.response.TeamMembersDto;
 import kr.mmgg.scp.entity.*;
+import kr.mmgg.scp.repository.ChatinuserRepository;
+import kr.mmgg.scp.repository.ChatroomRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +30,8 @@ import org.springframework.util.StringUtils;
 public class HomeServicelmpl implements HomeService {
 	private ProjectinUserRepository projectinUserRepository;
 	private ProjectRepository projectRepository;
+	private ChatroomRepository chatroomRepository;
+	private ChatinuserRepository chatinuserRepository;
 
 	// 홈화면 DTO
 	@Transactional
@@ -72,7 +74,18 @@ public class HomeServicelmpl implements HomeService {
 		Project project = new Project();
 		// 프로젝트 생성
 		project.setProjectName(dto.getTitle());
+		
+
+		// 채팅방 생성
+		Chatroom chatroom = new Chatroom();
+		chatroom.setChatroomName(dto.getTitle());
+		chatroom.setChatroomCommoncode("c-personal");
+		Chatroom save = chatroomRepository.save(chatroom);
+		List<ChatinUser> ciuList = new ArrayList<>();
+		ChatinUser chatinuser;
+		project.setChatroomId(save.getChatroomId());
 		Project newProject = projectRepository.save(project);
+		
 		// 프로젝트사람 생성
 		for (int i = 0; i < dto.getMember().size(); i++) {
 			ProjectInUser projectInUser = new ProjectInUser();
@@ -81,8 +94,26 @@ public class HomeServicelmpl implements HomeService {
 			projectInUser.setProjectinuserMaker(dto.getMember().get(i).getProjectinuserMaker());
 			projectInUser.setProjectinuserCommoncode(dto.getMember().get(i).getProjectinuserCommoncode());
 			piuList.add(projectInUser);
+
+			chatinuser = new ChatinUser();
+			chatinuser.setUserId(dto.getMember().get(i).getUserId());
+			chatinuser.setChatroomId(save.getChatroomId());
+			chatinuser.setChatinuserExit(0);
+			if(dto.getMember().get(i).getProjectinuserCommoncode().equals("p-leader")) {
+				chatinuser.setChatinuserCommoncode("c-leader");
+			} else {
+				chatinuser.setChatinuserCommoncode("c-member");
+			}
+			ciuList.add(chatinuser);
 		}
 		projectinUserRepository.saveAll(piuList);
+
+		if (dto.getMember().size() > 1) {
+			save = chatroomRepository.findByChatroomId(save.getChatroomId());
+			save.setChatroomCommoncode("c-group");
+		}
+		chatinuserRepository.saveAll(ciuList);
+
 		ResultDto<List<ProjectInUser>> rDto = new ResultDto<List<ProjectInUser>>();
 		return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
 	}
@@ -95,13 +126,21 @@ public class HomeServicelmpl implements HomeService {
 			throw new IllegalStateException("수정할 팀 정보를 가져오지 못했습니다.");
 		}
 
+		Long chatroomId = projectRepository.findByProjectId(updateProjectModify.getProjectId()).getChatroomId();
+
 		Project project = new Project();
 		project.setProjectId(updateProjectModify.getProjectId());
 		project.setProjectName(updateProjectModify.getProjectName());
+		project.setChatroomId(chatroomId);
 		projectRepository.save(project);
 
 		List<UpdateProjectModifyMember> newProjects = updateProjectModify.getUsers();
 		List<ProjectInUser> existProjects = projectinUserRepository.findByProjectId(updateProjectModify.getProjectId());
+
+		Chatroom chatroom = chatroomRepository.findByChatroomId(chatroomId);
+		chatroom.setChatroomName(updateProjectModify.getProjectName());
+		List<ChatinUser> chatinuserList = new ArrayList<>();
+		ChatinUser chatinuser;
 
 		if (existProjects.isEmpty()) {
 			throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
@@ -116,9 +155,17 @@ public class HomeServicelmpl implements HomeService {
 					projectInUser.setProjectinuserId(j.getProjectinuserId());
 					projectInUser.setUserId(i.getUserId());
 					projectInUser.setProjectId(updateProjectModify.getProjectId());
-					projectInUser.setProjectinuserCommoncode(i.getCommonCode());
-					projectInUser.setProjectinuserMaker(i.getMaker());
+					projectInUser.setProjectinuserCommoncode(j.getProjectinuserCommoncode());
+					projectInUser.setProjectinuserMaker(j.getProjectinuserMaker());
 					projectinUserRepository.save(projectInUser);
+
+					ChatinUser existChatinuser = chatinuserRepository.findByChatroomIdAndUserId(chatroomId, i.getUserId()).get();
+					if(i.getCommonCode().equals("p-leader")) {
+						existChatinuser.setChatinuserCommoncode("c-leader");
+					} else {
+						existChatinuser.setChatinuserCommoncode("c-member");
+					}
+
 					newMembers.add(i);
 				}
 			}
@@ -127,10 +174,29 @@ public class HomeServicelmpl implements HomeService {
 				projectInUser.setUserId(i.getUserId());
 				projectInUser.setProjectId(updateProjectModify.getProjectId());
 				projectInUser.setProjectinuserCommoncode(i.getCommonCode());
-				projectInUser.setProjectinuserMaker(i.getMaker());
+				projectInUser.setProjectinuserMaker(0);
 				projectinUserRepository.save(projectInUser);
+
+				chatinuser = new ChatinUser();
+				chatinuser.setUserId(i.getUserId());
+				chatinuser.setChatroomId(chatroomId);
+				chatinuser.setChatinuserExit(0);
+				if(i.getCommonCode().equals("p-leader")) {
+					chatinuser.setChatinuserCommoncode("c-leader");
+				} else {
+					chatinuser.setChatinuserCommoncode("c-member");
+				}
+				chatinuserList.add(chatinuser);
 			}
 		}
+		chatinuserRepository.saveAll(chatinuserList);
+		if (chatinuserRepository.findByChatroomId(chatroomId).size() > 2) {
+			chatroom.setChatroomCommoncode("c-group");
+		} else {
+			chatroom.setChatroomCommoncode("c-personal");
+		}
+		chatroomRepository.save(chatroom);
+
 		ResultDto<?> rDto = new ResultDto<>();
 		return rDto.makeResult(CustomStatusCode.MODIFY_SUCCESS);
 	}

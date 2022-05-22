@@ -6,7 +6,7 @@ import lombok.Data;
 public class ProjectDetailAllTaskDto {
 	private Long taskId;
 	private Long projectinuserId;
-	private String taskOwner_String;
+	private String taskOwner_string;
 
 	private String taskContent;
 	// private String taskOwner;

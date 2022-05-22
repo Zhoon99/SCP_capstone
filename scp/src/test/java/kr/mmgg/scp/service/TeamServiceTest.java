@@ -1,15 +1,16 @@
 
 package kr.mmgg.scp.service;
 
+import kr.mmgg.scp.dto.MessageDto;
+import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.response.TeamDetailDto;
 import kr.mmgg.scp.dto.response.TeamMembersDto;
 import kr.mmgg.scp.dto.response.TeamToAddDto;
 import kr.mmgg.scp.entity.Teaminuser;
-import kr.mmgg.scp.repository.TeamRepository;
-import kr.mmgg.scp.repository.TeaminuserRepository;
-import kr.mmgg.scp.repository.UserRepository;
+import kr.mmgg.scp.repository.*;
 import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.ErrorCode;
+import kr.mmgg.scp.util.MessageComparator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
@@ -35,6 +37,15 @@ public class TeamServiceTest {
     TeaminuserRepository teaminuserRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired MessageRepository messageRepository;
+    @Autowired ChatinuserRepository chatinuserRepository;
+    @Autowired StompService stompService;
+
+
+    @Test
+    public void 테스트3() throws Exception {
+        log.info(stompService.lookupChatroomMessages(1L).toString());
+    }
 
     @Test
     @Commit

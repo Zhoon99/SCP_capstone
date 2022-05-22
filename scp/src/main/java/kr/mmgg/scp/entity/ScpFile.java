@@ -8,20 +8,23 @@ import javax.persistence.Id;
 
 import lombok.Data;
 
-@Entity
+@Entity(name = "scpfile")
 @Data
-public class File {
+public class ScpFile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long fileId;
-	
+
 	private Long taskId;
-	
+
 	@Column(length = 50)
 	private String fileName;
-	
+
 	private Long fileSize;
-	
+
 	@Column(length = 255)
 	private String filePath;
+
+	@Column(length = 10)
+	private String fileExtension;
 }

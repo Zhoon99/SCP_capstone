@@ -105,13 +105,13 @@
     "teamMembers": [
         {
             "userId": Long,
-            "userNickname": "String",
+            "userNickname": null,
             "teaminuserCommoncode": "String",
             "teaminuserMaker": Integer
         },
         {
             "userId": Long,
-            "userNickname": "String",
+            "userNickname": null,
             "teaminuserCommoncode": "String",
             "teaminuserMaker": Integer
         }
@@ -179,7 +179,7 @@
 }
 ```
 
-## Get "/team/getUsersByEmail/{search}"
+## Get "/team/getUsersByEmail/{userId}/{search}"
 
 ### • output
 
