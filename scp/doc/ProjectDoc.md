@@ -316,6 +316,10 @@
 				"taskRequester_string" : String,
 				"taskContent" : String,
 				"taskDeadline" : String,
+				"taskFileList" : [
+					"scpFilename" : String,
+					"scpFilePath" : String
+				],
 				"commentList" : [
 						{
 							"taskId" : Long,

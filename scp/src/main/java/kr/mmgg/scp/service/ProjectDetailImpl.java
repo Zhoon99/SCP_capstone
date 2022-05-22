@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.ScpFileDto;
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
@@ -21,12 +22,15 @@ import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoMemberDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
+import kr.mmgg.scp.dto.response.ScpTaskFileListDto;
 import kr.mmgg.scp.entity.Comment;
 import kr.mmgg.scp.entity.ProjectInUser;
+import kr.mmgg.scp.entity.ScpFile;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.repository.CommentRepository;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
+import kr.mmgg.scp.repository.ScpFileRepository;
 import kr.mmgg.scp.repository.TaskRepository;
 import kr.mmgg.scp.repository.UserRepository;
 import kr.mmgg.scp.util.CustomException;
@@ -45,6 +49,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	private UserRepository userRepository;
 	private CommentRepository commentRepository;
 	private JavaMailSender javaMailSender;
+	private ScpFileRepository scpFileRepository;
 
 	// SCP-301 프로젝트 모든 할일
 	// 프로젝트안의 전체 할일 가져오기
@@ -385,6 +390,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	public ResultDto<?> taskDetail(Long taskId) {
 		Task task = taskRepository.findByTaskId(taskId)
 				.orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+		List<ScpFile> fScpFile = scpFileRepository.findByTaskId(taskId);
 		ProjectInUser projectinuser = new ProjectInUser();
 		List<Comment> comment = null;
 		List<HomeViewProjectDetailCommentListDto> hvpdclList = new ArrayList<HomeViewProjectDetailCommentListDto>(); // 코멘트dto
@@ -407,6 +413,14 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		} else {
 			new CustomException(ErrorCode.COMMENT_NOT_FOUND); // 에러발생시
 		}
+
+		List<ScpTaskFileListDto> stflList = new ArrayList<>();
+		for (ScpFile file : fScpFile) {
+			ScpTaskFileListDto stfl = new ScpTaskFileListDto();
+			stfl.setScpFilePath(file.getFilePath());
+			stfl.setScpFilename(file.getFileName());
+			stflList.add(stfl);
+		}
 		HomeViewProjectDetailDto hvpdDto = new HomeViewProjectDetailDto();
 		projectinuser = projectinUserRepository.findById(task.getTaskRequester())
 				.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -416,6 +430,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		hvpdDto.setTaskOwner_string(task.getProjectinuser().getUser().getUserNickname()); // 조인해서 데이터 가져올것
 		hvpdDto.setTaskRequester_string(projectinuser.getUser().getUserNickname()); // ##
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
+		hvpdDto.setTaskFileList(stflList);
 		hvpdDto.setCommentList(hvpdclList);
 		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto,
 				"taskDetail"); // 새로작성한
