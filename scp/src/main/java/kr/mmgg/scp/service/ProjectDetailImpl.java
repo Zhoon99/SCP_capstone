@@ -370,7 +370,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 				hvpdclDto.setTaskId(comment.get(i).getTaskId());
 //				hvpdclDto.setCommentId(comment.get(i).getTaskId());
 				hvpdclDto.setCommentNickname(comment.get(i).getUser().getUserNickname());
-				hvpdclDto.setCommentId(comment.get(i).getUserId());
+				hvpdclDto.setCommentId(comment.get(i).getCommentId());
+				hvpdclDto.setCommentuserId(comment.get(i).getUserId());
 //				hvpdclDto.setTaskOwnerId(comment.get(i).getTask().getProjectinuserId());
 //				hvpdclDto.setTaskOwner_string(comment.get(i).getTask().getProjectinuser().getUser().getUserNickname());
 //				hvpdclDto.setUserName(comment.get(i).getUser().getUserNickname());
@@ -391,8 +392,6 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
 		hvpdDto.setCommentList(hvpdclList);
 		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto, "taskDetail"); // 새로작성한
-																										// HomeViewProjectDetailDto
-																										// 반환
 	}
 
 	// 홈뷰 -> 자세히 -> 할일 확인 및 코멘트 확인 -> 코멘트 수정

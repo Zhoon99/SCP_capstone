@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.response.HomeViewDto;
+import kr.mmgg.scp.dto.response.HomeViewRealDto;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
 
@@ -23,7 +24,7 @@ public class HomeController {
     // SCP-100페이지
     @Transactional
     @RequestMapping(value = "/homeview/{userId}", method = RequestMethod.GET)
-    public ResultDto<List<HomeViewDto>> homeview(@PathVariable Long userId) {
+    public ResultDto<HomeViewRealDto> homeview(@PathVariable Long userId) {
         return homeServiceImpl.homeView(userId);
     }
 
