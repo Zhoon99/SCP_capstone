@@ -58,15 +58,19 @@ public class TokenProvider {
             return true;
         } catch (SignatureException e) {
             log.error("유효하지 않은 JWT 서명");
+            throw e;
         } catch (MalformedJwtException e) {
             log.error("유효하지 않은 JWT 토큰");
+            throw e;
         } catch (ExpiredJwtException e) {
             log.error("만료된 JWT 토큰");
+            throw e;
         } catch (UnsupportedJwtException e) {
             log.error("지원하지 않는 JWT 토큰");
+            throw e;
         } catch (IllegalArgumentException e) {
             log.error("비어있는 JWT");
+            throw e;
         }
-        return false;
     }
 }
