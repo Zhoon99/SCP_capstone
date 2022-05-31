@@ -424,6 +424,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS);
 	}
 
+	@Override
 	public ResultDto<?> modifyProject(Long projectId, ModifyProjectDto modifyProjectDto) {
 		Project project = projectRepository.getById(projectId);
 		project.setProjectName(modifyProjectDto.getTitle());
