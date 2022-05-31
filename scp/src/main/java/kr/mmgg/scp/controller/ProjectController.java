@@ -10,6 +10,7 @@ import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
+import kr.mmgg.scp.dto.request.ModifyProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
@@ -50,7 +51,11 @@ public class ProjectController {
         ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
         return rDto;
     }
-
+    @PatchMapping(value = "/modifyproject/{projectId}")
+    public ResultDto<?> modifyProject(@PathVariable Long projectId, @RequestBody ModifyProjectDto modifyProjectDto) {
+    	ResultDto<?> rDto = projectDetailImpl.modifyProject(projectId, modifyProjectDto);
+		return rDto;
+    }
     @PatchMapping(value = "")
     public ResultDto<?> updateProjectMember() {
         return null;

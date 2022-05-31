@@ -23,5 +23,4 @@ public interface ProjectinUserRepository extends JpaRepository<ProjectInUser, Lo
     
     //userId로 프로젝트Id 검색
 //    public Optional<ProjectInUser> findByuserIdAnd(Long userId);
-
 }
