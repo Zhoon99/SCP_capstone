@@ -26,12 +26,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/chat").setAllowedOrigins("http://mmgg.kr").setAllowedOrigins("http://localhost")
-				.setAllowedOrigins("*");
+		registry.addEndpoint("/chat")
+		.setAllowedOrigins("http://mmgg.kr")
+		.setAllowedOrigins("http://localhost")
+		.setAllowedOrigins("*");
 	}
 
 	@Override
 	public void configureClientInboundChannel(ChannelRegistration registration) {
+		System.out.println(registration.hashCode());
 		registration.interceptors(stompHandler);
 	}
 }

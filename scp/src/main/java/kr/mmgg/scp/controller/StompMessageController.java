@@ -24,13 +24,8 @@ public class StompMessageController {
 
   private final SimpMessagingTemplate simpMessagingTemplate;
   private final StompService stompService;
-  private final TokenProvider tokenProvider;
-  private final UserRepository userRepository;
   @MessageMapping("/{chatroomId}/{userId}")
-  public void chat(@DestinationVariable("chatroomId") Long chatroomId, @DestinationVariable("userId") Long userId, String content, @Header("Authentication") String jwt) throws Exception {
-	Long userid = tokenProvider.getUserIdFromToken(jwt);
-	User user = userRepository.getById(userid);
-	System.out.println(user.getUserNickname()+"님이 입장하셨습니다.");
+  public void chat(@DestinationVariable("chatroomId") Long chatroomId, @DestinationVariable("userId") Long userId , String content) throws Exception {
     simpMessagingTemplate.convertAndSend("/topic/" + chatroomId ,stompService.chatService(chatroomId, userId, content));
   }
 }
