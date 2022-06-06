@@ -49,11 +49,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         String token = tokenProvider.createToken(authentication);
+        Long userId = tokenProvider.getUserIdFromToken(token);
 
         clearAuthenticationAttributes(request, response);
 
         getRedirectStrategy().sendRedirect(request, response,
-                "http://woong.ml/#Authorization=" + token + ",userId=" + "2");
+                "http://woong.ml/#Authorization=" + token + ",userId=" + Long.toString(userId));
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
