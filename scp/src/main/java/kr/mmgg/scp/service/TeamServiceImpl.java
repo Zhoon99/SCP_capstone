@@ -186,17 +186,18 @@ public class TeamServiceImpl implements TeamService {
             throw new IllegalStateException("생성할 팀 정보를 가져오지 못했습니다.");
         }
 
-        Team team = Team.builder()
-                .teamName(teamDetailDto.getTeamName())
-                .build();
-        Team newTeam = teamRepository.save(team);
-
         Chatroom chatroom = new Chatroom();
         chatroom.setChatroomName(teamDetailDto.getTeamName());
         chatroom.setChatroomCommoncode("c-personal");
         Chatroom save = chatroomRepository.save(chatroom);
         List<ChatinUser> ciuList = new ArrayList<>();
         ChatinUser chatinuser;
+
+        Team team = Team.builder()
+                .teamName(teamDetailDto.getTeamName())
+                .chatroomId(save.getChatroomId())
+                .build();
+        Team newTeam = teamRepository.save(team);
 
         List<Teaminuser> teaminuserList = new ArrayList<>();
         List<TeamMembersDto> teamMembersDtoList = teamDetailDto.getTeamMembers();

@@ -13,10 +13,7 @@ public class AdminInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        log.info("Interceptor test : " + request.getRequestURI());
-
-        System.out.println(request.getAttribute("userId"));
-
+        log.info("Interceptor URL : " + request.getRequestURI());
         return true;
     }
 }

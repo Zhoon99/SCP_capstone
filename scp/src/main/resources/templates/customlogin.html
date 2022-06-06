@@ -1,10 +1,83 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-<title>로그인 페이지</title>
+<title>SCP LOGIN</title>
+<style>
+
+
+
+    a{
+        all: unset;
+        color: black;
+    }
+
+    body{
+        width: 98vw;
+        height: 95vh;
+        background-color: #9FD6CD;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    body div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login{
+        font-size: 30px;
+        font-weight: 500;
+        text-align: center;
+        color: white;
+    }
+
+    a:hover{
+        color: white;
+        background-color: #ee8787;
+        box-shadow: 7px 7px 7px #555555;
+    }
+
+    h1 {
+        color: white;
+        font-size: 50px;
+        margin: 0px;
+    }
+
+    h1 span {
+        color:#EF9A9A;
+    }
+
+    a{
+        width: 300px;
+        height: 50px;
+        border: 1px #EF9A9A solid;
+        border-radius: 10px;
+        box-shadow: 4px 4px 4px #555555;
+        background-color: #EF9A9A;
+        padding: 0px;
+        margin: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.1s;
+    }
+</style>
+
 </head>
 <body>
-    <a href="/oauth2/authorization/google">구글 로그인</a>
+    <div>
+    <span>
+        <h1><span>SCP</span> PROJECT</h1>
+    </span>
+    <div>
+        <a href="/oauth2/authorization/google"> <p class="login">GOOGLE LOGIN</p></a>
+    </div>
+    </div>
+
 </body>
 </html>
