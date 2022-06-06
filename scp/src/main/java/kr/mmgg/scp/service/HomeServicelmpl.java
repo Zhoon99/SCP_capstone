@@ -41,9 +41,9 @@ public class HomeServicelmpl implements HomeService {
 	@Override
 	public ResultDto<HomeViewRealDto> homeView(Long userId) {
 		List<ProjectInUser> piuUserIdList = projectinUserRepository.findByUserId(userId);
-		if (piuUserIdList.isEmpty()) {
-			throw new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND);
-		}
+//		if (piuUserIdList.isEmpty()) {
+//			throw new CustomException(ErrorCode.PROJECT_IN_USER_NOT_FOUND);
+//		}
 		List<ProjectInUser> piuProjectIdList;
 		HomeViewDto homeViewDto = null;
 		HomeViewRealDto homeViewRealDto = new HomeViewRealDto();
