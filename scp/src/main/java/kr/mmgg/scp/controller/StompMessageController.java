@@ -1,22 +1,12 @@
 package kr.mmgg.scp.controller;
 
-import kr.mmgg.scp.dto.response.StompMessageDto;
-import kr.mmgg.scp.entity.ChatinUser;
-import kr.mmgg.scp.entity.Message;
-import kr.mmgg.scp.entity.User;
-import kr.mmgg.scp.repository.ChatinuserRepository;
-import kr.mmgg.scp.repository.MessageRepository;
-import kr.mmgg.scp.repository.UserRepository;
-import kr.mmgg.scp.security.TokenProvider;
-import kr.mmgg.scp.service.StompService;
-import kr.mmgg.scp.service.UserService;
-import kr.mmgg.scp.util.dateTime;
-import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+
+import kr.mmgg.scp.service.StompService;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,9 +1,10 @@
 package kr.mmgg.scp.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
@@ -11,12 +12,11 @@ import kr.mmgg.scp.dto.request.UpdateProjectModify;
 import kr.mmgg.scp.dto.request.UpdateProjectModifyMember;
 import kr.mmgg.scp.dto.response.HomeViewDto;
 import kr.mmgg.scp.dto.response.HomeViewRealDto;
-import kr.mmgg.scp.dto.response.TeamDetailDto;
-import kr.mmgg.scp.dto.response.TeamMembersDto;
-import kr.mmgg.scp.entity.*;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import kr.mmgg.scp.entity.ChatinUser;
+import kr.mmgg.scp.entity.Chatroom;
+import kr.mmgg.scp.entity.Project;
+import kr.mmgg.scp.entity.ProjectInUser;
+import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.repository.ChatinuserRepository;
 import kr.mmgg.scp.repository.ChatroomRepository;
 import kr.mmgg.scp.repository.ProjectRepository;
@@ -26,7 +26,6 @@ import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.ErrorCode;
 import lombok.AllArgsConstructor;
-import org.springframework.util.StringUtils;
 
 @Service
 @AllArgsConstructor

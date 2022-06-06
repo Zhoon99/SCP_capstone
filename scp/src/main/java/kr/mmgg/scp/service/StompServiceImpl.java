@@ -1,5 +1,12 @@
 package kr.mmgg.scp.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import kr.mmgg.scp.dto.MessageDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateChatRoomDto;
@@ -10,7 +17,6 @@ import kr.mmgg.scp.dto.response.lookupRoomDto;
 import kr.mmgg.scp.entity.ChatinUser;
 import kr.mmgg.scp.entity.Chatroom;
 import kr.mmgg.scp.entity.Message;
-import kr.mmgg.scp.entity.Teaminuser;
 import kr.mmgg.scp.entity.User;
 import kr.mmgg.scp.repository.ChatinuserRepository;
 import kr.mmgg.scp.repository.ChatroomRepository;
@@ -19,13 +25,6 @@ import kr.mmgg.scp.util.CustomStatusCode;
 import kr.mmgg.scp.util.MessageComparator;
 import kr.mmgg.scp.util.dateTime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

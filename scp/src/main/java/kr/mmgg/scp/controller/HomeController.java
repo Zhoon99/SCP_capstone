@@ -1,7 +1,5 @@
 package kr.mmgg.scp.controller;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.mmgg.scp.dto.ResultDto;
-import kr.mmgg.scp.dto.response.HomeViewDto;
 import kr.mmgg.scp.dto.response.HomeViewRealDto;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;

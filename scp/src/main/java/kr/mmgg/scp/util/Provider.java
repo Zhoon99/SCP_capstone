@@ -1,7 +1,6 @@
 package kr.mmgg.scp.util;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 

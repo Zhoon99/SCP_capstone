@@ -10,9 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import kr.mmgg.scp.dto.ScpFileDto;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.entity.ScpFile;
 import kr.mmgg.scp.repository.ScpFileRepository;

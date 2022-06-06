@@ -1,23 +1,34 @@
 
 package kr.mmgg.scp.service;
 
-import kr.mmgg.scp.dto.ResultDto;
-import kr.mmgg.scp.dto.TeamDto;
-import kr.mmgg.scp.dto.request.CreateChatRoomDto;
-import kr.mmgg.scp.dto.request.UpdateProjectModify;
-import kr.mmgg.scp.dto.request.UpdateProjectModifyMember;
-import kr.mmgg.scp.dto.response.*;
-import kr.mmgg.scp.entity.*;
-import kr.mmgg.scp.repository.*;
-import kr.mmgg.scp.util.CustomException;
-import kr.mmgg.scp.util.CustomStatusCode;
-import kr.mmgg.scp.util.ErrorCode;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import kr.mmgg.scp.dto.ResultDto;
+import kr.mmgg.scp.dto.TeamDto;
+import kr.mmgg.scp.dto.response.TeamDetailDto;
+import kr.mmgg.scp.dto.response.TeamHomeDto;
+import kr.mmgg.scp.dto.response.TeamMembersDto;
+import kr.mmgg.scp.dto.response.TeamToAddDto;
+import kr.mmgg.scp.dto.response.UserToAddDto;
+import kr.mmgg.scp.entity.ChatinUser;
+import kr.mmgg.scp.entity.Chatroom;
+import kr.mmgg.scp.entity.Team;
+import kr.mmgg.scp.entity.Teaminuser;
+import kr.mmgg.scp.entity.User;
+import kr.mmgg.scp.repository.ChatinuserRepository;
+import kr.mmgg.scp.repository.ChatroomRepository;
+import kr.mmgg.scp.repository.TeamRepository;
+import kr.mmgg.scp.repository.TeaminuserRepository;
+import kr.mmgg.scp.repository.UserRepository;
+import kr.mmgg.scp.util.CustomException;
+import kr.mmgg.scp.util.CustomStatusCode;
+import kr.mmgg.scp.util.ErrorCode;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

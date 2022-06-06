@@ -1,5 +1,7 @@
 package kr.mmgg.scp.security.oauth2;
 
+import static kr.mmgg.scp.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
@@ -21,8 +23,6 @@ import kr.mmgg.scp.util.CookieUtils;
 import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
-
-import static kr.mmgg.scp.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
 @Slf4j

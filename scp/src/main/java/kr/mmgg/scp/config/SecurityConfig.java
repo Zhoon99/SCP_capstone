@@ -1,6 +1,5 @@
 package kr.mmgg.scp.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +21,6 @@ import kr.mmgg.scp.security.oauth2.CustomOAuth2UserService;
 import kr.mmgg.scp.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import kr.mmgg.scp.security.oauth2.OAuth2AuthenticationFailureHandler;
 import kr.mmgg.scp.security.oauth2.OAuth2AuthenticationSuccessHandler;
-import kr.mmgg.scp.util.Role;
 import lombok.RequiredArgsConstructor;
 
 //https://ozofweird.tistory.com/entry/Spring-Boot-Spring-Boot-JWT-OAuth2-2

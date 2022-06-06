@@ -5,7 +5,6 @@ import java.util.List;
 import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
 import kr.mmgg.scp.dto.request.UpdateProjectModify;
-import kr.mmgg.scp.dto.response.HomeViewDto;
 import kr.mmgg.scp.dto.response.HomeViewRealDto;
 import kr.mmgg.scp.entity.ProjectInUser;
 

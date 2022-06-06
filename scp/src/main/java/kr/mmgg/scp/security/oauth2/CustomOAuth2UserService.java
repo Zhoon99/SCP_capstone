@@ -2,8 +2,6 @@ package kr.mmgg.scp.security.oauth2;
 
 import java.util.Optional;
 
-import javax.security.sasl.AuthenticationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -22,7 +20,6 @@ import kr.mmgg.scp.util.CustomException;
 import kr.mmgg.scp.util.ErrorCode;
 import kr.mmgg.scp.util.Provider;
 import kr.mmgg.scp.util.Role;
-import lombok.RequiredArgsConstructor;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {

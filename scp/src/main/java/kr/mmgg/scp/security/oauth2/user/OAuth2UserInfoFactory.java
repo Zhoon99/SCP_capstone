@@ -1,6 +1,5 @@
 package kr.mmgg.scp.security.oauth2.user;
 
-import java.security.AuthProvider;
 import java.util.Map;
 
 import kr.mmgg.scp.util.CustomException;

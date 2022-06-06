@@ -1,12 +1,11 @@
 package kr.mmgg.scp.util;
 
-import kr.mmgg.scp.dto.MessageDto;
-import lombok.SneakyThrows;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+
+import kr.mmgg.scp.dto.MessageDto;
+import lombok.SneakyThrows;
 
 public class MessageComparator implements Comparator<MessageDto> {
 
