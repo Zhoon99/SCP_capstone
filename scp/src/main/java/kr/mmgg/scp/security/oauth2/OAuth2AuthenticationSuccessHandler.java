@@ -43,14 +43,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
+        determineTargetUrl(request, response, authentication);
         if (response.isCommitted()) {
             log.info("응답이 이미 커밋되었습니다.");
         }
 
+        String token = tokenProvider.createToken(authentication);
+
         clearAuthenticationAttributes(request, response);
 
-        getRedirectStrategy().sendRedirect(request, response, "http://woong.ml/");
+        getRedirectStrategy().sendRedirect(request, response,
+                "http://woong.ml/#Authorization=" + token + ",userId=" + "2");
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
@@ -64,11 +67,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = tokenProvider.createToken(authentication);
-
-        CookieUtils.addCookie(response, "JWT", token, 180);
-
-        return UriComponentsBuilder.fromUriString(targetUrl).queryParam("token", token).build().toUriString();
+        // return UriComponentsBuilder.fromUriString(targetUrl).queryParam("token",
+        // token).build().toUriString();
+        return "";
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
