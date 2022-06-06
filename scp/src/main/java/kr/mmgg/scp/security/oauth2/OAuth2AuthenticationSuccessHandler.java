@@ -50,7 +50,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         clearAuthenticationAttributes(request, response);
 
-        getRedirectStrategy().sendRedirect(request, response, "http://kmeoung.ddns.net:4284");
+        getRedirectStrategy().sendRedirect(request, response, "http://woong.ml/");
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
