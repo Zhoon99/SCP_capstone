@@ -9,6 +9,7 @@ public class HomeViewProjectDetailCommentListDto {
 //	private String taskOwner_string;
 	private Long commentId;
 	private String commentNickname;
+	private Long commentuserId;
 	private String commentTime;
 	private String commentContent;
 }

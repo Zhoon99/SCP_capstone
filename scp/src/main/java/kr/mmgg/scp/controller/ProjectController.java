@@ -1,7 +1,7 @@
 package kr.mmgg.scp.controller;
 
 import kr.mmgg.scp.dto.request.UpdateProjectModify;
-import kr.mmgg.scp.service.ProjectDetailService;
+import kr.mmgg.scp.service.ProjectDetailImpl;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +10,11 @@ import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
 import kr.mmgg.scp.dto.request.CreateProjectDto;
+import kr.mmgg.scp.dto.request.ModifyProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.entity.ProjectInUser;
-import kr.mmgg.scp.service.HomeService;
 import kr.mmgg.scp.service.HomeServicelmpl;
 import lombok.AllArgsConstructor;
 import java.util.List;
@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @AllArgsConstructor
 public class ProjectController {
 
-    private HomeService homeServiceImpl;
-    private ProjectDetailService projectDetailImpl;
+    private HomeServicelmpl homeServiceImpl;
+    private ProjectDetailImpl projectDetailImpl;
 
     // SCP-300 프로젝트 추가
     // TODO: request DTO 작성
@@ -46,17 +46,16 @@ public class ProjectController {
         return rDto;
     }
 
-    @PostMapping(value = "/modifyproject")
-    public ResultDto<?> modifyProject(@RequestBody UpdateProjectModify modify) {
-        return homeServiceImpl.modifyProject(modify);
-    }
-
     @PatchMapping(value = "/updateproject/deletemember/{projectinuserId}")
     public ResultDto<?> updateProjectDeletemember(@PathVariable Long projectinuserId) {
         ResultDto<?> rDto = projectDetailImpl.updateProjectDeleteMember(projectinuserId);
         return rDto;
     }
-
+    @PatchMapping(value = "/modifyproject/{projectId}")
+    public ResultDto<?> modifyProject(@PathVariable Long projectId, @RequestBody ModifyProjectDto modifyProjectDto) {
+    	ResultDto<?> rDto = projectDetailImpl.modifyProject(projectId, modifyProjectDto);
+		return rDto;
+    }
     @PatchMapping(value = "")
     public ResultDto<?> updateProjectMember() {
         return null;
@@ -151,7 +150,7 @@ public class ProjectController {
 
     // 댓글 삭제
     @RequestMapping(value = "/commentdelete/{commentId}", method = RequestMethod.DELETE)
-    public ResultDto<?> commentDelete(@PathVariable Long commentId) {
+    public ResultDto<?> deleteComment(@PathVariable Long commentId) {
         return projectDetailImpl.commentDelete(commentId);
     }
 

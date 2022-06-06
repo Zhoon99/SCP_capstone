@@ -5,6 +5,7 @@ import kr.mmgg.scp.dto.ResultDto;
 import kr.mmgg.scp.dto.UserDto;
 import kr.mmgg.scp.dto.request.CommentModifyDto;
 import kr.mmgg.scp.dto.request.CommentWriteDto;
+import kr.mmgg.scp.dto.request.ModifyProjectDto;
 import kr.mmgg.scp.dto.response.ProjectDetailAllTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailMyTaskDto;
 import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
@@ -40,4 +41,6 @@ public interface ProjectDetailService {
 	public ResultDto<?> taskDetail(Long taskId);
 
 	public ResultDto<?> commentModify(Long commentId, CommentModifyDto cmDto);
+	
+	public ResultDto<?> modifyProject(Long projectId, ModifyProjectDto modifyProjectDto);
 }
