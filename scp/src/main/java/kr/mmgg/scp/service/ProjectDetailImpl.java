@@ -253,8 +253,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			if (taskRepository.save(task) == null) {
 				throw new CustomException(ErrorCode.TASK_NOT_FOUND);
 			} else {
-				ResultDto<?> rDto = new ResultDto<>();
-				return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS);
+				ResultDto<Task> rDto = new ResultDto<>();
+				return rDto.makeResult(CustomStatusCode.CREATE_SUCCESS, task, "createdTask");
 			}
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
