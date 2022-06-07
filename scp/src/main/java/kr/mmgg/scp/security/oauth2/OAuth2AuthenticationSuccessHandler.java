@@ -52,6 +52,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Long userId = tokenProvider.getUserIdFromToken(token);
 
         CookieUtils.addCookie(response, "JSESSIONID", token, 180);
+        CookieUtils.addCookie(response, "SCP-TOKEN", token, 180);
         CookieUtils.addCookie(response, "uid", Long.toString(userId), 180);
 
         clearAuthenticationAttributes(request, response);
