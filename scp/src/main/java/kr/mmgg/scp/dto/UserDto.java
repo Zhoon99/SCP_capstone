@@ -9,6 +9,7 @@ import lombok.*;
 @Data
 public class UserDto {
     private String userNickname;
+    private Long userId;
     private String userEmail;
     private String userPassword;
 
@@ -16,6 +17,7 @@ public class UserDto {
         this.userNickname = user.getUserNickname();
         this.userEmail = user.getUserEmail();
         this.userPassword = user.getUserPassword();
+        this.userId = user.getUserId();
     }
 
 }
