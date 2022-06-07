@@ -28,7 +28,7 @@ public class CookieUtils {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         // js에서 document.cookie로 접근 못하게 함
-        cookie.setHttpOnly(true);
+        // cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }

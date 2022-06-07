@@ -51,10 +51,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String token = tokenProvider.createToken(authentication);
         Long userId = tokenProvider.getUserIdFromToken(token);
 
+        CookieUtils.addCookie(response, "JSESSIONID", token, 180);
+        CookieUtils.addCookie(response, "uid", Long.toString(userId), 180);
+
         clearAuthenticationAttributes(request, response);
 
         getRedirectStrategy().sendRedirect(request, response,
-                "http://woong.ml/#Authorization=" + token + ",userId=" + Long.toString(userId));
+                "http://kmeoung.tplinkdns.com:8090");
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
