@@ -84,7 +84,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				// 로그인폼 비활성화
-				.formLogin().disable()
 				.formLogin().loginPage("/customlogin").permitAll()
 				.and()
 				.authorizeRequests()

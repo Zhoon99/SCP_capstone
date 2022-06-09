@@ -70,7 +70,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             throw new CustomException(ErrorCode.PAGE_NOT_FOUND);
         }
 
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        redirectUri.orElse(getDefaultTargetUrl());
 
         // return UriComponentsBuilder.fromUriString(targetUrl).queryParam("token",
         // token).build().toUriString();
