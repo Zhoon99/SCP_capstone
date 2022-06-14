@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().mvcMatchers("/static/files/**"); // files에 있는 모든 파일들은 시큐리티 적용을 무시한다.
-		web.ignoring().mvcMatchers("/controller/FileHandlingController.java"); // files에 있는 모든 파일들은 시큐리티 적용을 무시한다.
+		web.ignoring().mvcMatchers("**/controller/FileHandlingController"); // files에 있는 모든 파일들은 시큐리티 적용을 무시한다.
 		web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // 정적 리소스들에 대해서 시큐리티 적용 무시
 	}
 
