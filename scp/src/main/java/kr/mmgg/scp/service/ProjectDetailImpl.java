@@ -23,11 +23,15 @@ import kr.mmgg.scp.dto.response.ProjectDetailSendTaskDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoDto;
 import kr.mmgg.scp.dto.response.ProjectUpdateGetInfoMemberDto;
 import kr.mmgg.scp.dto.response.RequestTaskDto;
+import kr.mmgg.scp.entity.ChatinUser;
 import kr.mmgg.scp.entity.Comment;
+import kr.mmgg.scp.entity.Project;
 import kr.mmgg.scp.entity.ProjectInUser;
 import kr.mmgg.scp.entity.Task;
 import kr.mmgg.scp.entity.User;
+import kr.mmgg.scp.repository.ChatinuserRepository;
 import kr.mmgg.scp.repository.CommentRepository;
+import kr.mmgg.scp.repository.ProjectRepository;
 import kr.mmgg.scp.repository.ProjectinUserRepository;
 import kr.mmgg.scp.repository.TaskRepository;
 import kr.mmgg.scp.repository.UserRepository;
@@ -47,6 +51,8 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	private UserRepository userRepository;
 	private CommentRepository commentRepository;
 	private JavaMailSender javaMailSender;
+	private ProjectRepository projectRepository;
+	private ChatinuserRepository chatinuserRepository;
 
 	// SCP-301 프로젝트 모든 할일
 	// 프로젝트안의 전체 할일 가져오기
@@ -434,13 +440,43 @@ public class ProjectDetailImpl implements ProjectDetailService {
 
 	@Override
 	public ResultDto<?> commentDelete(Long commentId) {
-		// TODO Auto-generated method stub
-		return null;
+		commentRepository.deleteById(commentId);
+		return new ResultDto<>().makeResult(CustomStatusCode.DELETE_SUCCESS);
 	}
 
 	@Override
 	public ResultDto<?> modifyProject(Long projectId, ModifyProjectDto modifyProjectDto) {
-		// TODO Auto-generated method stub
-		return null;
+		Project project = projectRepository.getById(projectId);
+		project.setProjectName(modifyProjectDto.getTitle());
+		Project p = projectRepository.save(project); // 프로젝트 수정
+		List<ProjectInUser> piulist = new ArrayList<ProjectInUser>();
+		ProjectInUser piu;
+		List<ChatinUser> ciulist = new ArrayList<ChatinUser>();
+		ChatinUser ciu;
+		for (int i = 0; i < modifyProjectDto.getMember().size(); i++) {
+			if (projectinUserRepository
+					.findByUserIdAndProjectId(modifyProjectDto.getMember().get(i).getUserId(), projectId).isEmpty()) {
+				piu = new ProjectInUser();
+				piu.setProjectId(p.getProjectId());
+				piu.setProjectinuserCommoncode(modifyProjectDto.getMember().get(i).getProjectinuserCommoncode());
+				piu.setProjectinuserMaker(modifyProjectDto.getMember().get(i).getProjectinuserMaker());
+				piu.setUserId(modifyProjectDto.getMember().get(i).getUserId());
+				piulist.add(piu);
+				ciu = new ChatinUser();
+				if (modifyProjectDto.getMember().get(i).getProjectinuserCommoncode().equals("p-leader")) {
+					ciu.setChatinuserCommoncode("c-leader");
+				} else {
+					ciu.setChatinuserCommoncode("c-member");
+				}
+				ciu.setChatinuserExit(0);
+				ciu.setChatroomId(p.getChatroomId());
+				ciu.setUserId(modifyProjectDto.getMember().get(i).getUserId());
+				ciulist.add(ciu);
+			}
+		}
+		chatinuserRepository.saveAll(ciulist);
+		projectinUserRepository.saveAll(piulist);
+
+		return new ResultDto<>().makeResult(CustomStatusCode.MODIFY_SUCCESS);
 	}
 }
