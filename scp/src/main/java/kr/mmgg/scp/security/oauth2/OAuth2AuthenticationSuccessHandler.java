@@ -52,13 +52,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Long userId = tokenProvider.getUserIdFromToken(token);
 
         CookieUtils.addCookie(response, "JSESSIONID", token, 180);
-        CookieUtils.addCookie(response, "SCP-TOKEN", token, 180);
         CookieUtils.addCookie(response, "uid", Long.toString(userId), 180);
+        response.setHeader("Access-Control-Allow-Origin", "*");
 
         clearAuthenticationAttributes(request, response);
 
         getRedirectStrategy().sendRedirect(request, response,
-                "http://kmeoung.tplinkdns.com:8090");
+                "http://kmeoung.tplinkdns.com");
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
