@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import kr.mmgg.scp.security.CustomUserDetailsService;
@@ -87,6 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
+				.cors()
+				.and()
 				.cors().configurationSource(corsConfigurationSource())
 				.and()
 				// 로그인폼 비활성화
@@ -114,7 +117,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// UsernamePasswordAuthenticationFilter 필터가 작동하기 전에 먼저
 		// tokenAuthenticationFilter이 작동하도록 설정
 		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+		http.authorizeRequests()
+				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
 	}
 
 	// CORS 허용 적용
