@@ -14,6 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import kr.mmgg.scp.security.CustomUserDetailsService;
 import kr.mmgg.scp.security.TokenAuthenticationFilter;
@@ -84,6 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
+				.cors().configurationSource(corsConfigurationSource())
+				.and()
 				// 로그인폼 비활성화
 				.formLogin().loginPage("/customlogin").permitAll()
 				.and()
@@ -110,5 +115,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// tokenAuthenticationFilter이 작동하도록 설정
 		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
+	}
+
+	// CORS 허용 적용
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+
+		configuration.addAllowedOrigin("*");
+		configuration.addAllowedHeader("*");
+		configuration.addAllowedMethod("*");
+		configuration.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 }
