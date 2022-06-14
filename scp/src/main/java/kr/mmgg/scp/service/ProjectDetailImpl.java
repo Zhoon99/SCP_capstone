@@ -234,7 +234,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			task.setTaskId(null);
 			// task.setTaskOwner(userRepository.findById(dto.getUserId()).get().getUserNickname());
 			// // 받는 사람
-			task.setTaskRequester(projectinuser.getProjectinuserId()); // 보낸 사람
+			task.setTaskRequester(dto.getUserId()); // 보낸 사람
 			task.setProjectinuserId(dto.getProjectinuserId());
 			task.setTaskContent(dto.getTaskContent());
 			task.setTaskCreatetime(datetime.dateTime());
@@ -428,13 +428,15 @@ public class ProjectDetailImpl implements ProjectDetailService {
 			stflList.add(stfl);
 		}
 		HomeViewProjectDetailDto hvpdDto = new HomeViewProjectDetailDto();
-		projectinuser =  projectinUserRepository.findById(task.getTaskRequester()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+		projectinuser = projectinUserRepository.findById(task.getTaskRequester())
+				.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 		hvpdDto.setTaskId(task.getTaskId());
 		hvpdDto.setTaskContent(task.getTaskContent());
 		hvpdDto.setTaskOwnerId(task.getProjectinuserId());
 		hvpdDto.setTaskOwner_string(task.getProjectinuser().getUser().getUserNickname()); // 조인해서 데이터 가져올것
 		hvpdDto.setTaskRequester_string(projectinuser.getUser().getUserNickname()); // ##
 		hvpdDto.setTaskDeadline(task.getTaskDeadline());
+		hvpdDto.setTaskFileList(stflList);
 		hvpdDto.setCommentList(hvpdclList);
 		return new ResultDto<>().makeResult(CustomStatusCode.LOOKUP_SUCCESS, hvpdDto, "taskDetail"); // 새로작성한
 	}
