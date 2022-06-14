@@ -85,12 +85,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http
 				// 토큰은 사용하기위해 sesseion 비활성화
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
 				.cors()
 				.and()
-				.cors().configurationSource(corsConfigurationSource())
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				// 로그인폼 비활성화
 				.formLogin().loginPage("/customlogin").permitAll()
@@ -117,22 +115,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// UsernamePasswordAuthenticationFilter 필터가 작동하기 전에 먼저
 		// tokenAuthenticationFilter이 작동하도록 설정
 		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-		http.authorizeRequests()
-				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
 	}
 
-	// CORS 허용 적용
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-
-		configuration.addAllowedOrigin("*");
-		configuration.addAllowedHeader("*");
-		configuration.addAllowedMethod("*");
-		configuration.setAllowCredentials(true);
-
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
 }
