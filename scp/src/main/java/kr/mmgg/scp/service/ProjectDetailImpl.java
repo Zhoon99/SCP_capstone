@@ -132,8 +132,9 @@ public class ProjectDetailImpl implements ProjectDetailService {
 	// 해당 프로젝트안에서 받은 할일 확인하기
 	// ResultDto 완성
 	@Override
-	public ResultDto<?> receiveTask(Long projectId, Long projectinuserId) {
-		List<Task> tlist = taskRepository.findByProjectinuserIdAndTaskAccept(projectinuserId, 0);
+	public ResultDto<?> receiveTask(Long projectId, Long userId) {
+		Optional<ProjectInUser> piu = projectinUserRepository.findByUserIdAndProjectId(userId, projectId);
+		List<Task> tlist = taskRepository.findByProjectinuserIdAndTaskAccept(piu.get().getProjectinuserId(), 0);
 		if (tlist.isEmpty()) {
 			throw new CustomException(ErrorCode.TASK_NOT_FOUND);
 		}
@@ -141,7 +142,7 @@ public class ProjectDetailImpl implements ProjectDetailService {
 		ProjectDetailReceiveTaskDto pdrtTask;
 		for (int i = 0; i < tlist.size(); i++) {
 			pdrtTask = new ProjectDetailReceiveTaskDto();
-			if (tlist.get(i).getProjectinuser().getProjectId() == projectId || tlist.get(i).getTaskAccept() == 0) {
+			if (tlist.get(i).getProjectinuser().getProjectId() == projectId) {
 				pdrtTask.setProjectinuserId(tlist.get(i).getProjectinuserId());
 				pdrtTask.setTaskOwner_string(projectinUserRepository.findById(tlist.get(i).getProjectinuserId()).get()
 						.getUser().getUserNickname());
